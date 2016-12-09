@@ -1,0 +1,29 @@
+{
+	"name": "pceuropa/yii2-forms",
+	"description": "Form bootstrap creator/builder. Sort by drag and drop",
+	"keywords": [
+		"yii2",
+		"extension",
+		"form creator",
+		"form builder",
+		"drag end drop",
+		"bootstrap form"
+	],
+	"version": "1.0.0",
+	"homepage": "https://github.com/pceuropa/yii2-forms",
+	"type": "yii2-extension",
+	"license": "MIT",
+	"minimum-stability": "dev",
+	"authors": [
+		{
+		  "name": "Rafal Marguzewicz",
+		  "email": "info@pceuropa.net",
+		  "homepage": "https://yii2-forms.pceuropa.net/"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+		  "pceuropa\\forms\\": ""
+		}
+	}
+}
