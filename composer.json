@@ -13,7 +13,6 @@
 	"homepage": "https://github.com/pceuropa/yii2-forms",
 	"type": "yii2-extension",
 	"license": "MIT",
-	"minimum-stability": "dev",
 	"authors": [
 		{
 		  "name": "Rafal Marguzewicz",
