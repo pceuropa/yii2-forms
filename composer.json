@@ -10,14 +10,15 @@
 		"bootstrap form"
 	],
 	"version": "1.0.0",
-	"homepage": "https://github.com/pceuropa/yii2-forms",
+	"homepage": "https://pceuropa.net/yii2-extensions/yii2-forms",
 	"type": "yii2-extension",
+	"minimum-stability": "dev",
 	"license": "MIT",
 	"authors": [
 		{
 		  "name": "Rafal Marguzewicz",
 		  "email": "info@pceuropa.net",
-		  "homepage": "https://yii2-forms.pceuropa.net/"
+		  "homepage": "https://pceuropa.net/"
 		}
 	],
 	"autoload": {
