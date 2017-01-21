@@ -1,0 +1,6 @@
+ <div class="form-group">
+    <label class="col-sm-3 control-label">Description</label>
+    <div class="col-sm-9">
+      <input id="helpBlock" type="text" class="form-control input-sm data-source" >
+	</div>
+</div>
