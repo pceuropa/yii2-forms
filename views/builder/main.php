@@ -105,8 +105,6 @@ $this->registerCss("
 
 ");
 
-$this->registerJsFile("panelx/js/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-
 if (false){
 //	$this->registerJsFile("panelx/js/forms/forms.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("panelx/js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
