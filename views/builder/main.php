@@ -1,5 +1,7 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-
+<?php
+	pceuropa\forms\FormBuilderAsset::register($this);
+?>
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
@@ -58,6 +60,7 @@
 
 <?php
 
+
 $this->registerCss("
 	div.options, .update-buttons, #update-tab, #delete-tab, #select-field, #preview-field, #name-field-empty {display:none}
 
@@ -105,18 +108,16 @@ $this->registerCss("
 $this->registerJsFile("panelx/js/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 
 if (false){
-	$this->registerJsFile("panelx/js/forms/forms.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-} else {
+//	$this->registerJsFile("panelx/js/forms/forms.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("panelx/js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("panelx/js/forms/form.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("panelx/js/forms/fields.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("panelx/js/forms/events.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("panelx/js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 }
 
 
 
-$this->registerJsFile("panelx/js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-//$this->registerJsFile("panelx/js/forms/app.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 
 
 
