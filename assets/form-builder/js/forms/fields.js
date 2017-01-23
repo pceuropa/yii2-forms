@@ -12,6 +12,7 @@ var factory = function(o) {
 };
 
 factory.prototype = {
+	version: '1.0.0',
 	constructor: factory,
 	view: true,
 	init: function () {
@@ -38,7 +39,6 @@ factory.prototype = {
 		
 	},
 
-
 	set: function (o) {
         o = o || {};
 	    for (var prop in o) {
@@ -64,8 +64,6 @@ factory.prototype = {
 		}
 		
 	},
-	
-   
 
 
 // RENDER SECTION : preview Field, 	Item update

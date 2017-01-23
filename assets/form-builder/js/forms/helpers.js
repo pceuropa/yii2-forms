@@ -1,6 +1,7 @@
 "use strict";
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 var h = {
+		version: '1.0.0',
 		isString: function(s) {
 				return typeof myVar === s || s instanceof String
 		},
@@ -59,9 +60,6 @@ var h = {
 		capitalizeFirstLetter: function (s) {
     		return s.charAt(0).toUpperCase() + s.slice(1);
 		}
-
-
-	
 };
 
 String.prototype.replaceAll = function(search, replacement) {

@@ -5,7 +5,7 @@
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-		<h1>Form Builder</h1>
+		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
 		<div id="preview-form"></div>
 		<div id="preview-field"></div>
 		<div id="errors">
@@ -13,30 +13,27 @@
 		</div>
 	</section>
 	
-
 	<asside class="col-md-4">
-		<div id="sidebar" class="sidebar-nav-fixed affix">
+		<div id="sidebar">
 			
 			<select id="select-field" class="pull-right form-control input-sm">
-				<option value="input">Input</option>
-				<option value="textarea">TextArea</option>
-				<option value="radio">Radio</option>
-				<option value="checkbox">Checkbox</option>
-				<option value="select">Select</option>
-				<option value="description">Description</option>
-				<option value="submit">Submit Button</option>
+				<option value="input"><?= Yii::t('builder', 'Input') ?></option>
+				<option value="textarea"><?= Yii::t('builder', 'TextArea') ?></option>
+				<option value="radio"><?= Yii::t('builder', 'Radio') ?></option>
+				<option value="checkbox"><?= Yii::t('builder', 'Checkbox') ?></option>
+				<option value="select"><?= Yii::t('builder', 'Select') ?></option>
+				<option value="description"><?= Yii::t('builder', 'Description') ?></option>
+				<option value="submit"><?= Yii::t('builder', 'Submit Button') ?></option>
 			</select>
 		
-			<ul id="tabs-options" class="list-inline">
-				<li id="form-tab" class="btn active-tab">Form</li>
-				<li id="field-tab" class="btn">Field</li>
-				<li id="update-tab" class="btn">Update</li>
-				<li id="delete-tab" class="btn">Delete</li>
+			<ul id="tabs" class="list-inline">
+				<li id="form-tab" class="btn active-tab"><?= Yii::t('builder', 'Form') ?></li>
+				<li id="field-tab" class="btn"><?= Yii::t('builder', 'Field') ?></li>
+				<li id="update-tab" class="btn"><?= Yii::t('builder', 'Update') ?></li>
+				<li id="delete-tab" class="btn"><?= Yii::t('builder', 'Delete') ?></li>
 			</ul>
-			
 		
-			<div id="options-form" class="options form-horizontal active-option"><?= $this->render('options/form'); ?></div>
-			
+			<div id="form" class="options form-horizontal active-option"><?= $this->render('options/form'); ?></div>
 			<div id="input" class="options form-horizontal"><?= $this->render('options/input'); ?></div>
 			<div id="textarea" class="options form-horizontal"><?= $this->render('options/textarea'); ?></div>
 			<div id="radio" class="options form-horizontal"><?= $this->render('options/multi-field'); ?></div>
@@ -44,47 +41,49 @@
 			<div id="select" class="options form-horizontal"><?= $this->render('options/select'); ?></div>
 			<div id="description" class="options form-horizontal"><?= $this->render('options/description'); ?></div>
 			<div id="submit" class="options form-horizontal"><?= $this->render('options/submit'); ?></div>
-			
 			<div id="update" class="options form-horizontal">update</div>
 			<div id="delete" class="options form-horizontal">
-				
                 <?= $this->render('options/buttons/_delete'); ?>
                 <?= $this->render('options/buttons/_back'); ?>
 			</div>
-			
-			
-
 		</div> <!-- end id.sidebar -->
 	</aside>
 </div>
 
 <?php
 
-
 $this->registerCss("
 	div.options, .update-buttons, #update-tab, #delete-tab, #select-field, #preview-field, #name-field-empty {display:none}
 
 	#preview-form {min-height: 50px;border:dashed 1px #C8EBFB;margin-bottom:50px}
 	#preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
-	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
 	
-	#preview-field {margin-bottom:200px}
+	#preview-form.edit-mode div.row > div{opacity: 0.3;}
+	#preview-form.edit-mode div.row > div.edit-now {opacity: 1;}
+	
+	
+	
+	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
 	#preview-field .show {display:block}
 	
-
-	#sidebar > ul 	 { margin:0 0 0 5px;  }
-	#sidebar > ul li { color:#8C8C95;}
-	#sidebar > ul li#btn-update {color: #DC932C;}
-	#sidebar > ul li#btn-delete {color: #d43f3a;}
-	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC; margin-bottom:-4px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
-	
-	.name-error {color: red}
-	.empty {border: solid 1px #D42323 }
 	div.options {border-top:solid 1px #ccc; border-left:solid 1px #ccc; padding:10px;}
 	div.options.active-option {display: block}
 	
-	#select-field {width: 130px; margin: 0 50px -10px 0 }
+	#sidebar > ul { margin:0 0 0 5px;  }
+	#sidebar > ul li { color:#B6B6C0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 6px 10px}
+	#sidebar > ul li#field-tab.active-tab  {display:none}
+	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC;  padding: 6px 25px; margin-bottom:-4px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
+	
+	#select-field { font-weight: bold;  width: 130px; margin: 0 40px -20px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px;box-shadow: none;}
 	#select-field .show {display:inline-block}
+	
+	@media screen and (min-width: 1024px){
+	  #sidebar { position: fixed;}
+	  #preview-field {margin-bottom:200px}
+	}
+
+	.name-error {color: red}
+	.empty {border: solid 1px #D42323 }
 	
 	#items.update div.create-buttons {display:none}
 	#items.update div.update-buttons {display:block}
@@ -105,30 +104,22 @@ $this->registerCss("
 
 ");
 
-$this->registerJsFile("panelx/js/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 
 if (false){
-//	$this->registerJsFile("panelx/js/forms/forms.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("panelx/js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("panelx/js/forms/form.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("panelx/js/forms/fields.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("panelx/js/forms/events.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("panelx/js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/form.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/fields.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/controller.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	
 }
-
-
-
-
-
 
 if ($easy_mode){
 	$this->registerCss(".expert {display:none}");
 }
 
-$this->registerJs("
-	var form = new MyFORM.Form();
-	
-", 4);
+$this->registerJs(" var form = new MyFORM.Form(); ", 4);
 
 if (!$update){
 	$this->registerJs("form.init();", 4);
@@ -138,12 +129,8 @@ if (!$update){
 }
 
 
-		
-	
-	
-
 if ($test_mode){
-	$this->registerJsFile("panelx/js/forms/test.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/test.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJs("
 	
 	form.generate(MyFORM.test);

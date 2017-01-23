@@ -3,7 +3,8 @@ var MyFORM =  MyFORM || {};
 console.log('template');
 
 MyFORM.template = function (form){
-var temp = [{
+var version = '1.0.0',
+ 	temp = [{
 	"title": "Template1",
 	"body": [
 	    [
@@ -58,8 +59,8 @@ var div1 = document.createElement("div"),
 			
 			return options.innerHTML;
 		})
-		
-		$("#options-form .widgets").append( div1.outerHTML );
+		$(document).ready(function(){  
+		$("#form .widgets").append( div1.outerHTML );
 		
 			$("#template").change(function(){
 				if(!form.body.length){
@@ -67,6 +68,8 @@ var div1 = document.createElement("div"),
 					form.render()
 				} 
 			})
+		});
+		
 })()
 
 return temp;

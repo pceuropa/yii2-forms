@@ -7,7 +7,6 @@ console.log('form');
 
 	var hello = 'hello Vege',
 		version = '1.0.0',
-		
 	
 	Form = function (){
 		this.title =  "FormBuilder";

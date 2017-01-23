@@ -27,6 +27,7 @@ class FormBuilder extends \yii\base\Widget {
 		
 	public function init() {
 		parent::init();
+		$this->registerTranslations();
 	}
 
 	public function run() {
@@ -132,6 +133,18 @@ class FormBuilder extends \yii\base\Widget {
 		
 		return $this->render('builder/main', $options );
 	}
+	
+	public function registerTranslations() {
+	
+        Yii::$app->i18n->translations['builder*'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => '@vendor/pceuropa/yii2-forms/messages',
+            
+        ];
+    }
+
+   
 }
     
 ?>

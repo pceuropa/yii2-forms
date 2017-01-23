@@ -4,16 +4,17 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
-console.log('controller');
+	console.log('controller');
 
 
-	var itemPointer = [], dataItem = {},
+	var version = '1.0.0',
+		itemPointer = [], dataItem = {},
         key = 0,
 		preview_form = $('#preview-form'),
 		preview_field = $('#preview-field'),
 
 		sidebar_div_options = $('#sidebar div.options'),
-		options_form = $('#options-form'),
+		options_form = $('#form'),
 		
 		select_field = $('select#select-field'),
 
@@ -48,7 +49,7 @@ sidebar_div_options
     .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('#items input').unbind(); } )
     .on('click',    '.back',    			function(e){ back(e); $('#items input').unbind();}) 
     
- $('ul#tabs-options').on('click',    'li',    function(e){  activeTab(e.target);});   
+ $('ul#tabs').on('click',    'li',    function(e){  activeTab(e.target);});   
     
  $('#sidebar')
     .on('click',    '#form-tab',            function(){  actionForm() })   
@@ -68,7 +69,7 @@ function preventEmptyName(e) {
 	
 function activeTab(target) {
 			select_field.removeClass('show');
-			$('#tabs-options li.active-tab').removeClass('active-tab');
+			$('#tabs li.active-tab').removeClass('active-tab');
 			$(target).addClass('active-tab');
 	}
 	
@@ -89,7 +90,7 @@ function activeAction(target) {
 
 // FORM TAB
 function actionForm(){
-	activeAction('#options-form');
+	activeAction('#form');
 
     options_form.find('span').find('input, select').on( 'keyup change', function() {
 	    form[this.id] = this.value;
@@ -140,7 +141,7 @@ select_field.change(function () {
 		field.uiHelper();
 		field.render();
 
-        itemPointer = field.body.hasOwnProperty('items') ?  field.body.items : [];
+        itemPointer = field.body.hasOwnProperty('items') ? field.body.items : [];
 	});
 	
    function addItem(e){
@@ -258,8 +259,6 @@ select_field.change(function () {
 			
 			renderSelectUpdateItem(e);
 		}
-			
-			$(e.target.parentNode.parentNode).addClass('border');
 			
 			activeTab('#update-tab');
 			activeAction(update_div);

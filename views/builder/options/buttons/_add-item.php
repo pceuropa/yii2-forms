@@ -1,2 +1,2 @@
-<button type="button" class="add-item btn" disabled>Add item</button>
+<button type="button" class="add-item btn" disabled><?= Yii::t('builder', 'Add item') ?></button>
 
