@@ -66,7 +66,7 @@ $this->registerCss("
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
 	#preview-field .show {display:block}
 	
-	div.options {border-top:solid 1px #ccc; border-left:solid 1px #ccc; padding:10px;}
+	div.options { border:solid 1px #ccc; padding:10px;}
 	div.options.active-option {display: block}
 	
 	#sidebar > ul { margin:0 0 0 5px;  }

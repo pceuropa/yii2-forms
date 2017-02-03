@@ -11,13 +11,18 @@
 	</div>
 </div>
 
+<span>
 	<div class="form-group">
-		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Title') ?></label>
-		<div class="col-sm-9">
-		  <input id="title" type="text" class="form-control input-sm" >
-		</div>
+		<label><?= Yii::t('builder', 'Title') ?></label>
+	  <input id="title" type="text" class="form-control input-sm" >
 	</div>
-
+	
+	<div class="form-group">
+		<label><?= Yii::t('builder', 'Adress url') ?></label>
+	  <input id="url" type="text" class="form-control input-sm" >
+	</div>
+	
+	
 	<div class="form-group expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>
 		<div class="col-sm-9">
@@ -40,3 +45,5 @@
 		require('fields/_class.php');
 		require('buttons/_save-form.php');
 	?>
+	
+	</span>

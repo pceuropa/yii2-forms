@@ -13,8 +13,9 @@ class FormModel extends \yii\db\ActiveRecord {
             [['body'], 'string'],
             [['date_start', 'date_end'], 'safe'],
             [['maximum'], 'integer'],
-            [['author', 'seo_title', 'seo_url'], 'string', 'max' => 100],
+            [['author', 'seo_title', 'seo_url'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 400],
+            [['seo_url'], 'unique'],
         ];
     }
 

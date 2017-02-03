@@ -14,40 +14,43 @@ use pceuropa\forms\models\FormModel;
 
 class FormBuilder extends \yii\base\Widget {
     
-    //set
     public $action = 'create';
 	public $test_mode = false;
 	public $easy_mode = true; 	// if false more options
-	
-	//get
 	public $table_name = 'form_';
-	public $data_json;
 	public $model;				// model active record 
 	public $success = false;  	// for response
 		
 	public function init() {
 		parent::init();
 		$this->registerTranslations();
+		$this->model = new FormModel();
 	}
 
 	public function run() {
 		return $this->formBuilderRender();
 	}
 	
+	public function load($data) {
+		$this->model->body = $data['form_data'];
+		$this->model->title = (isset($data['title'])) ? $data['title'] : null;
+		$this->model->seo_url = (isset($data['url'])) ? $data['url'] : null; 
+		$this->model->seo_title = (isset($data['title'])) ? $data['title'] : null; 
+	
+	}
+	
+	
     public function save() {
-		$this->model = new FormModel();
-		$this->model->body = $this->data_json;
 		if ($this->model->save()){
-			$this->success = true;
-			return true;
+			
+			return $this->success = true;
 		}else {
 			return $this->model->getErrors();
-		};
+		}
 	}
 	
     protected function tableShema(){
-			$table_shema = Json::decode($this->data_json)['body'];
-    		//$table_shema = FormBase::filterInvalidFields($table_shema); ?????????
+		$table_shema = Json::decode($this->model->body)['body'];
     	return FormBase::tableShema($table_shema);
     }
     

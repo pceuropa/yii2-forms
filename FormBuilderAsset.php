@@ -6,7 +6,11 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
     public $baseUrl = '@web';
     public $js = [
         'js/forms/Sortable.min.js',
-		'js/forms/forms.min.js',
+		//'js/forms/forms.min.js',
+		'js/forms/form.js',
+		'js/forms/field.js',
+		'js/forms/controller.js',
+		'js/forms/template.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -1,27 +1,30 @@
 "use strict";
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
+
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form');
+console.log('form: 1.1.0');
+var Form = function (){
 
-	var hello = 'hello Vege',
-		version = '1.0.0',
-	
-	Form = function (){
+		this.url = null;
 		this.title =  "FormBuilder";
 		this.action = "";
 		this.method = "post";
 		this.language = "English"; 
 		this.body = [];
+		
+		
 	};
-
+	
 	Form.prototype = {
 		// filter after save
-
-		questionsNames: [],
+		hello: 'hello Vege',
+		questionsNames: [],  // array for false autosave
 		constructor: Form,
 		viewMode: 'html',
+		time_out: 1,
+		div_form: $("#preview-form"),
 		map: { index: "0", row: "0" },
 		config: {
 			get: false, 
@@ -37,8 +40,20 @@ console.log('form');
 		
 		this.config = config || this.config;
 		this.get();
-	
+		console.log(this.config);
+		
+		if(this.config.autosave){
+			this.autosaveButton();
+			Form.prototype.time_out = 1000;
+		}
+		
 		return MyFORM.controller(this, new MyFORM.field.factory());
+		
+	},
+	autosaveButton: function () {
+		if(this.config.autosave){
+			$("#save-form").html('autosave mode').prop('disabled', true);
+		}
 		
 	},
     clear: function (o) {
@@ -64,6 +79,7 @@ console.log('form');
         }
         return notReference;
     },
+    
 	filter: function (o){
 		var questions = this.questionsNames;
 	  	o = o.replace( new RegExp(/\W/, 'g') , '_');
@@ -77,9 +93,11 @@ console.log('form');
 	
 		return o;
 	},
+	
 	scenerio: function () {
 		return this.config.save && this.config.autosave;
 	},
+	
 	get: function (){
 			var form = this;
 			if(this.config.get){
@@ -94,26 +112,25 @@ console.log('form');
 	save: function (){
 			var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
 			
-			if(this.config.save){
-				data = {request_data: JSON.stringify(form), _csrf : csrfToken };
+			if(!this.config.save) return false;
+			
+			data = {form_data: JSON.stringify(form), title: form.title, url: form.url,  _csrf : csrfToken };
 
-				$.post( document.URL, data, function (r){
-					if (r.success === true) { 
-						console.log('save from base correct');
-						form.operations++; 
-						form.afterSuccessSave();
-						if (r.url){ window.location.href = r.url;}
-					}
-				});
-			}
+			$.post( document.URL, data, function (r){
+				if (r.success === true) { 
+					console.log('save in base correct');
+					form.successSave();
+					if (r.url){ window.location.href = r.url;}
+				}
+			});
+				
 	},
 	
 	editName: function(old_name, new_name){
 		var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
-			console.log(this.config.save);
 			
-			if(this.config.save){
-				data = {change_name: {old: old_name, new: new_name}, _csrf : csrfToken };
+			if(this.config.autosave){
+				data = {change_name: {old: old_name, new: new_name, body: JSON.stringify(form)}, _csrf : csrfToken };
 
 				$.post( document.URL, data, function (r){
 					if (r.success === true) { 
@@ -121,21 +138,22 @@ console.log('form');
 					}
 				});
 			}
+			
 	},
 	
 	
-	postData: function () {
-		return null
-	},
-	
-	afterSuccessSave: function () {
-		window.setTimeout(function() {
-		  	$( "#save-form" ).addClass( "btn-success" ).prop('disabled', true ).text('Saved form correctly');
-		  }, 111)
+	successSave: function () {
 		
-		window.setTimeout(function() {
-		  	$( "#save-form" ).removeClass( "btn-success" ).prop('disabled', false ).text('Save form');
-		  }, 1111)
+		var save_form = $( "#save-form" ), clone = save_form.clone();
+		
+		save_form
+			.addClass("btn-success" )
+			.prop('disabled', true )
+			.text('Saved form correctly');
+		
+		window.setTimeout(function() { save_form.replaceWith(clone); }, 1111);
+		
+		
 	},
 		
 	add: function (o){
@@ -144,7 +162,7 @@ console.log('form');
 			
 					this.body.push([this.clear(o)]);
 				
-					if (o.hasOwnProperty('name')){
+					if (this.config.autosave){
 						$.post( document.URL, {add: o} );
 					} 
 				
@@ -168,50 +186,37 @@ console.log('form');
 			o.name = first.name + '_2'
 			
 			this.body[row].splice(index + 1, 0, o); // wstawiamy obiekt na odpowiednie miejsce bez usuwania
-			this.render();
 			
 			if(this.config.autosave){
-				this.save();
-				
 				if (o.hasOwnProperty('name')){
-						$.post( document.URL, {add_field: o} );
-					} 
+					$.post( document.URL, {add_field: o} );
+				}
 			}
+			this.render();
 			
 	},
  
 	deleteField: function(row, index){
+	
 		var field = this.body[row][index]
-		
 			try {
-				if(this.body[row].splice(index, 1)){
+			
+				if( this.body[row].splice(index, 1) ){
+				
+					if(this.config.autosave && this.config.save){
+						$.post( document.URL, {delete: field.name}, function (r) {
+							if (r.success != true) {console.log(r);}
+						});
+					};
 					console.log('Delete item [', row , index, ']');
 					this.render();
-					
-					if(this.config.autosave && this.config.save){
-						$.ajax({
-						  url: document.URL,
-						  type: 'post',
-						  dataType:'JSON',
-						  data: {delete: field.name},
-						  success: function (r) {
-									if (r.success === false) {console.log(r);}
-									if (r.success === true) {console.log(r);}
-								},
-							error: function (XMLHttpRequest, textStatus, errorThrown) {
-								alert(textStatus);
-							}
-						});
-					}
 				}
-			}
-			catch(err){
-				console.log('Item [', row , index, '] not exsist');
 				
 			}
 			
-			if(this.config.autosave){
-				this.save();
+			catch(err){
+				console.log('Item [', row , index, '] not exsist');
+				
 			}
 		},
 
@@ -246,11 +251,6 @@ console.log('form');
 					}
 			this.body[row][index].items.splice(id, 0, clone);
 			this.render();
-			
-			if(this.config.autosave){
-				this.save();
-			}
-		
 		},
 
     // depraced
@@ -267,8 +267,9 @@ console.log('form');
 			this.id = o.id || '';
 			this.body['class'] = o['class'] || '';
 			this.body = o.body || {};
-		    if(this.body.length > 0){
-		    	this.render();
+			
+		    if(this.body.length !== 0){
+		    	this.render('off');
 		    }
 		},
 
@@ -277,7 +278,28 @@ console.log('form');
 
 
 // <---- View
-
+	render: function(){
+			switch(Form.prototype.viewMode){
+				case 'html': this.div_form.html(this.html()); this.sort(this); break;
+			    case 'text': this.div_form.html('<pre><code> </code></pre>').find('code').text(this.html()); break;
+				case 'json': this.div_form.html('<pre><code> </code></pre>').find('code').text(JSON.stringify(this, null, 4)); break;
+				case 'yii2': this.div_form.html('<pre><code> </code></pre>').find('code').text('Yii2'); break;
+			    default: 	throw "View mode error, check form.viewMode";
+			}
+			console.log('render');
+			
+			if(this.config.autosave && arguments[0] !== 'off' ){
+				this.save();
+			}
+			
+			this.preventNotValidaData();
+			
+			
+	},
+	preventNotValidaData: function () {
+		$("#save-form").prop('disabled', !(h.isString(this.title) && h.isString(this.url)))	;
+	},
+	
 	attr: function(){
 			var i, temp = '', max = arguments.length;
 	
@@ -298,7 +320,7 @@ console.log('form');
 
 	rows: function(){
 		    var rows = '', form = this;
-			if(form.body.length == 0) return;
+			if(form.body.length == 0) return '';
 			
 			h.each(form.body, function (i){ rows += form.row(i) })
 	    return rows;
@@ -330,34 +352,13 @@ console.log('form');
 			
 		return field.html();
 		},
-	render: function(){
-			var divForm = $("#preview-form");
-			
-			switch(Form.prototype.viewMode){
-			    case 'text': divForm.html('<pre><code> </code></pre>').find('code').text(this.view('html')); break;
-				case 'json': divForm.html('<pre><code> </code></pre>').find('code').text(this.view('json')); break;
-				case 'yii2': divForm.html('<pre><code> </code></pre>').find('code').text('Yii2'); break;
-			    default: 	 divForm.html(this.view('html')); this.sort(this); break;
-			}
-			
 		
-			
-			
-	},
+	
 
-	view: function (mode){
-			 switch(mode){
-				case 'html': 
-					return '<form  action="' + this.action + '" method="' + this.method + '" ' + this.attr('id', 'class') + '>' +
-							this.rows() + '\n</form>';; break;
-				case 'json': return JSON.stringify(this, null, 4); break;
-				case 'h1': return this.title; break;
-				default: null;
-			} 
-
+	html: function (){
+			 return '<form  action="' + this.action + '" method="' + this.method + '" ' + this.attr('id', 'class') + '>' +
+							this.rows() + '\n</form>';
 		},
-
-		
 	setEdit: function (row, index){
 			Form.prototype.beforeEndDiv = this.edit(row, index);
 		},
@@ -421,7 +422,6 @@ console.log('form');
 	};
 
 return {
-		version: version,
 		Form: Form,
 	}
 

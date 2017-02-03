@@ -1,13 +1,13 @@
 "use strict";
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 var h = {
-		version: '1.0.0',
+		version: '1.0.1',
 		isString: function(s) {
-				return typeof myVar === s || s instanceof String
+				return typeof s === "string" || s instanceof String
 		},
 		
 		is: function(v) {
-			return (v === null || v === undefined || v === '')
+			return (v !== null && v !== undefined && v !== '')
 		},
 		
 		isObject: function (o) {
@@ -59,8 +59,44 @@ var h = {
 		},
 		capitalizeFirstLetter: function (s) {
     		return s.charAt(0).toUpperCase() + s.slice(1);
-		}
+		},
 };
+
+(function($){
+    $.fn.extend({
+        donetyping: function(callback, timeout){
+            
+            timeout = timeout || 1e3; // 1 second default timeout
+            
+            var timeoutReference,
+                doneTyping = function(el){
+                
+                    if (!timeoutReference) return;
+                    timeoutReference = null;
+                    callback.call(el);
+                };
+                
+            return this.each(function(i,el){
+            
+                $(el).on('keyup keypress paste', function(e){
+                    
+                    if (timeoutReference) clearTimeout(timeoutReference); // stop timeout
+                    
+                    timeoutReference = setTimeout(function(){
+                        doneTyping(el);
+                    }, timeout);
+                    
+                }).on('blur',function(){
+                    doneTyping(el);
+                });
+                
+            });
+            
+            
+        }
+    });
+})(jQuery);
+
 
 String.prototype.replaceAll = function(search, replacement) {
     return this.replace(new RegExp(search, 'g'), replacement);

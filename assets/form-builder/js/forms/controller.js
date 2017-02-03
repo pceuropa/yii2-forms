@@ -2,12 +2,13 @@
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 // TODO
 
+
+
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
-	console.log('controller');
+	
 
-
-	var version = '1.0.0',
+	var version = '1.1.0',
 		itemPointer = [], dataItem = {},
         key = 0,
 		preview_form = $('#preview-form'),
@@ -25,6 +26,7 @@ MyFORM.controller = function(form, field){
 		
 		update_div = $('#update'),
 		delete_div = $('#delete');
+		console.log('controller:', version);
 
 //Actions:
 // 1. -------- FORM -----------------
@@ -33,32 +35,35 @@ preview_form
     .delegate('.clone', 	'click', function(e){ clone(e) })
     .delegate('.delete', 	'click', function(e){ del(e)   });
 
-
 // 2-1-a view-mode
-        $('#view-mode').change(function (){
-	        form.setView(this.value);
-	        form.render();
-        })
+ $('#tabs')
+ 	.on('click',    'li',    function(e){  activeTab(e.target);});  
+ 	
+$('#view-mode')
+	.change(function (){
+        form.setView(this.value);
+        form.render('off');
+    })
 
 sidebar_div_options
     .on('click',    '#add-to-form',         function(){  form.add(field.body); actionField(); })
-    .on('mouseenter',  '#prevent-empty-name',  function(e){ preventEmptyName(e); })
+    .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e); })
     .on('click',    '.add-item',            function(e){ addItem(e);}    )    
     .on('change',   'select.change-item',   function(e){ selectChangeItem(e)} )   
     .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('#items input').unbind(); }  )    
     .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('#items input').unbind(); } )
     .on('click',    '.back',    			function(e){ back(e); $('#items input').unbind();}) 
-    
- $('ul#tabs').on('click',    'li',    function(e){  activeTab(e.target);});   
+
     
  $('#sidebar')
-    .on('click',    '#form-tab',            function(){  actionForm() })   
+    .on('click',    '#form-tab',            function(){  activeAction('#form'); })   
     .on('click',    '#field-tab',           function(){  actionField() })   
    // .on('keyup change', 'input.itemField',  function(){ })  
     .on('click', 	'#save-form', function(){ form.save() })  
 
-//Funcitions: 
 
+
+//Funcitions: 
  
 function preventEmptyName(e) {
 	var el = $(e.delegateTarget).find("#name");
@@ -89,14 +94,13 @@ function activeAction(target) {
 	}	
 
 // FORM TAB
-function actionForm(){
-	activeAction('#form');
+options_form.find('span').find('input, select').donetyping(function() {
 
-    options_form.find('span').find('input, select').on( 'keyup change', function() {
 	    form[this.id] = this.value;
 	    form.render();
-    });
-};
+    }, form.time_out);
+    
+    
 
 // not use
 function helperAttribNameFields(id) {
@@ -111,15 +115,13 @@ function actionField() {
 
 select_field.change(function () {
     
-		select_field.addClass('show');
-		
 		var field_selector = $('#' + this.value);
 		
-			activeAction(field_selector);
+		select_field.addClass('show');
+		activeAction(field_selector);
+		window.scrollTo(0,document.body.scrollHeight);
 		
-        window.scrollTo(0,document.body.scrollHeight);
-        
-        field_selector.find('.row').show();
+        field_selector.find('.row').show();   /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         field_selector.find('#update-buttons').hide();
 
 		field_selector.find('span').find('input, select, textarea').on('keyup change', 
@@ -283,26 +285,20 @@ select_field.change(function () {
 			$('#update span input, #update span select').donetyping(function(){
 			  		
 			  		if(this.id === 'name') {
-            			this.nextElementSibling.innerHTML = (this.value === '') ? 'Field name isn\'t empty'  : '' ;
             			if(name != this.value){ form.editName(name, this.value); }
             		} 
             		
             		field[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
 				    form.render();
-			})
+			}, form.time_out)
 			.on('change', function (){
 			 		field[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
 			 		form.render();
-			 
-			 });;
+			
+			 });
 			
 			// $('#update span').find('input, textarea, select').on('keyup change', function (){});
             
-            
-            	// click edit end keyup
-            	// name != this.value
-            	
-				
 	}
 
 // CLone FIELD in Form
@@ -314,14 +310,12 @@ select_field.change(function () {
 
 // Del FIELD in Form
 	function del(e){
-		var map = e.target.dataset,
-			field = form.body[map.row][map.index];
+		var map = e.target.dataset;
 
 			activeTab(delete_tab);
 			activeAction('#delete');
 
-
-		$('button#btn-delete-confirm').click(function () {
+		$('button#btn-delete-confirm').unbind().click(function () {
 			form.deleteField(map.row, map.index);
 			form.render();
 			field_tab.click();
@@ -329,36 +323,6 @@ select_field.change(function () {
 		});	
 
 	}
+	
 
-(function($){
-    $.fn.extend({
-        donetyping: function(callback, timeout){
-            timeout = timeout || 1e3; // 1 second default timeout
-            var timeoutReference,
-                doneTyping = function(el){
-                
-                    if (!timeoutReference) return;
-                    timeoutReference = null;
-                    callback.call(el);
-                };
-                console.log('text1');
-                
-            return this.each(function(i,el){
-                var $el = $(el);
-                $el.is(':input') && $el.on('keyup keypress paste',function(e){
-                    if (e.type == 'keyup' && e.keyCode != 8) return;
-                    
-                    if (timeoutReference) clearTimeout(timeoutReference);
-                    
-                    timeoutReference = setTimeout(function(){
-                        doneTyping(el);
-                    }, timeout);
-                    
-                }).on('blur',function(){
-                    doneTyping(el);
-                });
-            });
-        }
-    });
-})(jQuery);
 };

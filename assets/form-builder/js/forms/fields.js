@@ -3,7 +3,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-
+	console.log('field: 1.0.0');
 
 var factory = function(o) {
 	this.body = o  || {};
@@ -12,7 +12,6 @@ var factory = function(o) {
 };
 
 factory.prototype = {
-	version: '1.0.0',
 	constructor: factory,
 	view: true,
 	init: function () {
