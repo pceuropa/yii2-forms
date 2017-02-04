@@ -7,6 +7,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
     public $js = [
         'js/forms/Sortable.min.js',
 		//'js/forms/forms.min.js',
+		'js/forms/helpers.js',
 		'js/forms/form.js',
 		'js/forms/field.js',
 		'js/forms/controller.js',
