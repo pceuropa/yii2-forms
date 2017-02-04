@@ -109,7 +109,7 @@ if (false){
 	$this->registerJsFile("js/forms/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("js/forms/form.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/fields.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile("js/forms/field.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("js/forms/controller.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	$this->registerJsFile("js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
 	
