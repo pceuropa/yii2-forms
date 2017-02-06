@@ -4,7 +4,6 @@ use yii\helpers\ArrayHelper;
 
 class FormBase {
     
-    
     public function filterInvalidFields($array){
     	$fields = [];
     	foreach ($array as $row => $r) {
@@ -22,7 +21,7 @@ class FormBase {
 		return $fields;
     }
     
-    public function dataFields($array){
+    public function onlyDataFields($array){
     	$array = ArrayHelper::getColumn($array, 'name');;
 		return $array;
     }

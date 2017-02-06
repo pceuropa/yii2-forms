@@ -35,18 +35,17 @@ class Form extends \yii\base\Widget {
     	$array = Json::decode($this->body)['body'];
     	
     	$merge_array = FormBase::filterInvalidFields($array);
-    	$data_fields = FormBase::dataFields($merge_array);
+    	$data_fields = FormBase::onlyDataFields($merge_array);
     	
     	$this->model = new \yii\base\DynamicModel($data_fields);
     	
     	foreach ($merge_array as $key => $value) {
     	
-    	
     		if (isset($value["require"]) && $value["require"]){
-    		
     		
     			$this->model->addRule($value["name"], 'required');
     		}
+    		
     		$this->model->addRule($value["name"], FormBase::getValidator($value) );
     	    
     	}
