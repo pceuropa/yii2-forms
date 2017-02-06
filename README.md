@@ -8,10 +8,23 @@ Form Builder for Yii2
 
 ## Features
 
- * Creating forms , 
- * Sorting, editing, and deleting using drag and drop
- * No jQuery for drag and drop ([RubaXa/Sortable](https://github.com/RubaXa/Sortable))
- * CRUD operations by jQuery Ajax
+ * Creating forms (class FormBuilder), 
+ ** Drag and drop - Sorting, editing, and deleting items of form
+ ** CRUD operations by jQuery Ajax
+ ** List of forms (GridView)
+ 
+ * Storage data submited from form in databases
+ ** Creating database tables after create form (yii\db\Command::createTable)
+ ** Delete database tables after delete form (yii\db\Command::dropColumn)
+ ** Rename column after change the name of field   (yii\db\Command::renameColumn)
+ ** Add column after add new field to form  (yii\db\Command:: addColumn)
+ ** Drop column after delete field in form  (yii\db\Command:: dropColumn)
+ 
+ 
+ * Render forms e.g frontend (class Form)
+ ** Validation forms (dynamic model)
+ ** Save data from forms in database
+ ** GridView of submitted data from the form.
  
 ## Installation Form Builder
 ```
