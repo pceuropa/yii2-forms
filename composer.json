@@ -9,7 +9,7 @@
 		"drag end drop",
 		"bootstrap form"
 	],
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"homepage": "https://pceuropa.net/yii2-extensions/yii2-forms",
 	"type": "yii2-extension",
 	"minimum-stability": "dev",
