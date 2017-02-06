@@ -9,12 +9,12 @@ Form Builder for Yii2
 ## Features
 
 
-### Creating forms (class FormBuilder), 
+1.Creating forms (class FormBuilder)
  * Drag and drop - Sorting, editing, and deleting items of form
  * CRUD operations by jQuery Ajax
  * List of forms (GridView)
  
-### Storage data submited from form in databases
+2. Storage data submited from form in databases
  * Creating database tables after create form (yii\db\Command::createTable)
  * Delete database tables after delete form (yii\db\Command::dropColumn)
  * Rename column after change the name of field   (yii\db\Command::renameColumn)
@@ -22,7 +22,7 @@ Form Builder for Yii2
  * Drop column after delete field in form  (yii\db\Command:: dropColumn)
  
  
-### Render forms e.g frontend (class Form)
+3.Render forms e.g frontend (class Form)
  * Validation forms (dynamic model)
  * Save data from forms in database
  * GridView of submitted data from the form.
