@@ -173,7 +173,16 @@ use pceuropa\forms\models\FormModelSearch;
 
 
 ### 3. Getting started
-/forms/index
-/forms/create
-/forms/update
+- [/forms/index](https://pceuropa.net/yii2-extensions/yii2-forms/create)
+- [/forms/view](https://pceuropa.net/yii2-extensions/yii2-forms/form/questions)
+- [/forms/create](https://pceuropa.net/yii2-extensions/yii2-forms/create)
+- [/forms/update](https://pceuropa.net/yii2-extensions/yii2-forms/update/1)
+- /forms/delete
+- [/forms/list](https://pceuropa.net/yii2-extensions/yii2-forms/list/1)
+
+ 
+ 
+ 
+ 
+ 
 
