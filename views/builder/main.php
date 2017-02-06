@@ -1,5 +1,6 @@
-<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
+<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net  1.1.0-->
 <?php
+
 	pceuropa\forms\FormBuilderAsset::register($this);
 ?>
 <div id="MyForm" class="row">
