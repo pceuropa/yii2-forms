@@ -139,7 +139,7 @@ class FormBuilder extends \yii\base\Widget {
 	
 	public function registerTranslations() {
 	
-        Yii::$app->i18n->translations['builder*'] = [
+        Yii::$app->i18n->translations['builder'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
             'basePath' => '@vendor/pceuropa/yii2-forms/messages',
