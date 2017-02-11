@@ -1,12 +1,11 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net  1.1.0-->
 <?php
-
 	pceuropa\forms\FormBuilderAsset::register($this);
 ?>
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
+		<h1><?= Yii::t('builder', 'Form Builder') ?> <small><?= $this->render('options/buttons/_showme'); ?></small></h1>
 		<div id="preview-form"></div>
 		<div id="preview-field"></div>
 		<div id="errors">
@@ -106,29 +105,12 @@ $this->registerCss("
 ");
 
 
-if (false){
-	$this->registerJsFile("js/forms/Sortable.min.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/helpers.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/form.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/field.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/controller.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile("js/forms/template.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	
-}
-
 if ($easy_mode){
 	$this->registerCss(".expert {display:none}");
 }
 
 $this->registerJs(" var form = new MyFORM.Form(); ", 4);
-
-if (!$update){
-	$this->registerJs("form.init();", 4);
-} else {
-	$this->registerJs("form.init({get: true, save: true, autosave: true,create_url: document.URL, 
-			update_url: document.URL});", 4);
-}
-
+$this->registerJs("form.init(".\yii\helpers\Json::encode($config)  .");", 4);
 
 if ($test_mode){
 	$this->registerJsFile("js/forms/test.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);

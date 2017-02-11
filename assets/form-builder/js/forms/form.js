@@ -4,12 +4,12 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.1.0');
+console.log('form: 1.2.0');
 var Form = function (){
 
-		this.url = null;
+		//this.url = null;
 		this.title =  "FormBuilder";
-		this.action = "";
+		//this.action = "";
 		this.method = "post";
 		this.language = "English"; 
 		this.body = [];
@@ -20,57 +20,64 @@ var Form = function (){
 	Form.prototype = {
 		// filter after save
 		hello: 'hello Vege',
-		questionsNames: [],  // array for false autosave
+		fields_with_data: [],  // array for false autosave
 		constructor: Form,
 		viewMode: 'html',
 		time_out: 1,
 		div_form: $("#preview-form"),
+		options_form: $("#form"),
 		map: { index: "0", row: "0" },
-		config: {
+		c: {
 			get: false, 
 			save: true, 
 			autosave: false, 
-			create_url: document.URL, 
-			update_url: document.URL
+			controller_url: document.URL, 
 		},
 	// create get false, save true, autsave false
 	// update get true, save true, autsave false/true
 	
 	init: function (config) {
 		
-		this.config = config || this.config;
+		h.inheritAll(this.c, config)
 		this.get();
-		console.log(this.config);
+		console.log(this.c);
 		
-		if(this.config.autosave){
+		if(this.c.autosave){
 			this.autosaveButton();
 			Form.prototype.time_out = 1000;
 		}
 		
-		return MyFORM.controller(this, new MyFORM.field.factory());
+		return MyFORM.controller(this, new MyFORM.field.factory() );
 		
 	},
+
+	
 	autosaveButton: function () {
-		if(this.config.autosave){
+		if(this.c.autosave){
 			$("#save-form").html('autosave mode').prop('disabled', true);
 		}
 		
 	},
+	
     clear: function (o) {
         var notReference = {} 
+        
         for (var prop in o) {
             if (o.hasOwnProperty(prop) && o[prop]){
             	
 		        if(prop === 'name'){
-		        	o[prop] = this.filter(o[prop]);
+		        	o[prop] = this.uniqueName( o[prop] );
 		        }
 		        
 		        if(prop === 'items'){
+		        
 				    for (var i = 0; i < o[prop].length; i++) {
-						if(o[prop][i].value === ''){
+				    
+						if( !h.is( o[prop][i].value ) ){
 		    	        		o[prop][i].value = (i + 1);
 		    	        	}
 			    	}
+			    	
 	        	}
 	        	
 	        	notReference[prop] = o[prop];
@@ -80,48 +87,49 @@ var Form = function (){
         return notReference;
     },
     
-	filter: function (o){
-		var questions = this.questionsNames;
-	  	o = o.replace( new RegExp(/\W/, 'g') , '_');
+	uniqueName: function (name){
+		var q = this.fields_with_data,
+	  		name = h.replaceSpaces(name);
 	  	
-		for (var prop in questions) {
-			if(questions[prop] === o){
-				o = o + '_2'
-			}
-		}
-		questions.push(o);
-	
-		return o;
+	  	if( $.inArray(name, this.fields_with_data) ){
+	  		name = name + '_2'
+	  	}
+		this.fields_with_data.push(name);
+		return name;
 	},
 	
-	scenerio: function () {
-		return this.config.save && this.config.autosave;
-	},
 	
 	get: function (){
 			var form = this;
-			if(this.config.get){
-				$.getJSON(document.URL, function(r){
+			if(this.c.get){
+				$.getJSON(this.c.controller_url, function(r){
+				
 					console.log('upload from base correct');
 					form.generate(r)
 				});
 			}
+			
+			
 		},
 	
 	
 	save: function (){
 			var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
 			
-			if(!this.config.save) return false;
+			if(!this.c.save) return false;
 			
 			data = {form_data: JSON.stringify(form), title: form.title, url: form.url,  _csrf : csrfToken };
 
-			$.post( document.URL, data, function (r){
+			$.post( this.c.controller_url, data, function (r){
+				
 				if (r.success === true) { 
 					console.log('save in base correct');
 					form.successSave();
 					if (r.url){ window.location.href = r.url;}
-				}
+				} else {
+					form.errorSave(r.success);
+				} 
+				
 			});
 				
 	},
@@ -129,10 +137,10 @@ var Form = function (){
 	editName: function(old_name, new_name){
 		var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
 			
-			if(this.config.autosave){
-				data = {change_name: {old: old_name, new: new_name, body: JSON.stringify(form)}, _csrf : csrfToken };
+			if(this.c.autosave){
+				data = {change: {old: old_name, new: new_name, body: JSON.stringify(form)}, _csrf : csrfToken };
 
-				$.post( document.URL, data, function (r){
+				$.post( this.c.controller_url, data, function (r){
 					if (r.success === true) { 
 						console.log('new name change correct');
 					}
@@ -141,6 +149,24 @@ var Form = function (){
 			
 	},
 	
+	
+	setValueInputOptions: function () {
+		this.options_form.find('#title').val(this.title);
+		this.options_form.find('#url').val(this.url);
+	},
+	errorSave: function (o) {
+		console.log(h.firstProp(o));
+		
+		var save_form = $( "#save-form" ), clone = save_form.clone();
+		
+		save_form
+			.addClass("btn-danger" )
+			.prop('disabled', true )
+			.text(h.firstValue(o));
+		
+		window.setTimeout(function() { save_form.replaceWith(clone); }, 3111);
+	
+	},
 	
 	successSave: function () {
 		
@@ -162,8 +188,8 @@ var Form = function (){
 			
 					this.body.push([this.clear(o)]);
 				
-					if (this.config.autosave){
-						$.post( document.URL, {add: o} );
+					if (this.c.autosave){
+						$.post( this.c.controller_url, {add: o});
 					} 
 				
 					this.render();
@@ -177,21 +203,24 @@ var Form = function (){
 		
 	cloneField: function(row, index){
 	
-			var first = this.body[row][index], 
-				o = jQuery.extend(true, {}, first); ;
+			var 
+				first = this.body[row][index], 
+				o = jQuery.extend(true, {}, first);
 			
 			if (o.hasOwnProperty('label')){
 				o.label = first.label + '_2'
 			} 
+			
 			o.name = first.name + '_2'
 			
 			this.body[row].splice(index + 1, 0, o); // wstawiamy obiekt na odpowiednie miejsce bez usuwania
 			
-			if(this.config.autosave){
+			if(this.c.autosave){
 				if (o.hasOwnProperty('name')){
-					$.post( document.URL, {add_field: o} );
+					$.post( this.c.controller_url, {add_field: o} );
 				}
 			}
+			
 			this.render();
 			
 	},
@@ -203,8 +232,8 @@ var Form = function (){
 			
 				if( this.body[row].splice(index, 1) ){
 				
-					if(this.config.autosave && this.config.save){
-						$.post( document.URL, {delete: field.name}, function (r) {
+					if(this.c.autosave && this.c.save){
+						$.post( this.c.controller_url, {delete: field.name}, function (r) {
 							if (r.success != true) {console.log(r);}
 						});
 					};
@@ -260,25 +289,18 @@ var Form = function (){
 		},
 
 	generate: function(o){
- 	
-			this.title = o.title || '';;
-			this.action = o.action || '';
-			this.method = o.method || '';
-			this.id = o.id || '';
-			this.body['class'] = o['class'] || '';
-			this.body = o.body || {};
-			
-		    if(this.body.length !== 0){
-		    	this.render('off');
-		    }
+ 			h.inheritAll(this, o);
+		    if(this.body.length !== 0) this.render('off')
+		    
+		    this.setValueInputOptions();
+			this.fields_with_data = h.getAllProperty('name', this.body);
 		},
-
-
-
 
 
 // <---- View
 	render: function(){
+	console.log(this);
+	
 			switch(Form.prototype.viewMode){
 				case 'html': this.div_form.html(this.html()); this.sort(this); break;
 			    case 'text': this.div_form.html('<pre><code> </code></pre>').find('code').text(this.html()); break;
@@ -288,7 +310,7 @@ var Form = function (){
 			}
 			console.log('render');
 			
-			if(this.config.autosave && arguments[0] !== 'off' ){
+			if(this.c.autosave && arguments[0] !== 'off' ){
 				this.save();
 			}
 			

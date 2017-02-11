@@ -13,9 +13,9 @@ class FormModel extends \yii\db\ActiveRecord {
             [['body'], 'string'],
             [['date_start', 'date_end'], 'safe'],
             [['maximum'], 'integer'],
-            [['author', 'seo_title', 'seo_url'], 'string', 'max' => 255],
+            [['author', 'meta_title', 'url'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 400],
-            [['seo_url'], 'unique'],
+            [['url'], 'unique'],
         ];
     }
 
@@ -28,8 +28,8 @@ class FormModel extends \yii\db\ActiveRecord {
             'date_start' => Yii::t('app', 'Date'),
             'date_end' => Yii::t('app', 'Date Expire'),
             'maximum' => Yii::t('app', 'Max'),
-            'seo_title' => Yii::t('app', 'Seo Title'),
-            'seo_url' => Yii::t('app', 'Seo Url'),
+            'meta_title' => Yii::t('app', 'Meta Title'),
+            'url' => Yii::t('app', 'Url'),
         ];
     }
 

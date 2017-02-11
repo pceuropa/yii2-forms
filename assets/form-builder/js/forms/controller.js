@@ -8,14 +8,14 @@ var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
 
-	var version = '1.1.0',
+	var version = '1.2.0',
 		itemPointer = [], dataItem = {},
         key = 0,
-		preview_form = $('#preview-form'),
+		preview_form = form.div_form,
 		preview_field = $('#preview-field'),
 
 		sidebar_div_options = $('#sidebar div.options'),
-		options_form = $('#form'),
+		options_form = form.options_form,
 		
 		select_field = $('select#select-field'),
 
@@ -37,7 +37,7 @@ preview_form
 
 // 2-1-a view-mode
  $('#tabs')
- 	.on('click',    'li',    function(e){  activeTab(e.target);});  
+ 	.on('click',    'li',    function(e){ activeTab(e.target);});  
  	
 $('#view-mode')
 	.change(function (){
@@ -78,6 +78,7 @@ function activeTab(target) {
 			$(target).addClass('active-tab');
 	}
 	
+	
 function activeAction(target) {
 		
 		if(!$(target).hasClass('active-option')){
@@ -93,14 +94,49 @@ function activeAction(target) {
 		
 	}	
 
+
 // FORM TAB
 options_form.find('span').find('input, select').donetyping(function() {
-
 	    form[this.id] = this.value;
 	    form.render();
     }, form.time_out);
     
     
+    
+$(".demonstration").click(function () {
+	console.log('text');
+	
+	var 
+	step1 = setInterval(function(){ myTimer() }, 200),
+	//Zstep2 = setInterval(function(){ myTimer() }, 200),
+	title = 'example_title',
+	url = 'unique_url',
+	i = 0, j = 0, string = '', string1 = '';
+	
+	function myTimer() {
+		string += title[i];
+		
+		options_form.find('#title').val(string);
+		i++;
+		
+		if(title.length == i){
+			clearInterval(step1);
+			
+			string1 = url[j]
+			options_form.find('#url').val(string1);
+			j++;
+			
+				if(url.length == j){
+				 	clearInterval(step1);
+			 	}
+		}
+		
+	}
+	
+	//window.setTimeout(function() { $("#form-tab").click(); }, 111)
+	
+	
+})
 
 // not use
 function helperAttribNameFields(id) {

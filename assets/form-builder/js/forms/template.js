@@ -1,9 +1,9 @@
 var MyFORM =  MyFORM || {};
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
-console.log('template');
+
 
 MyFORM.template = function (form){
-var version = '1.0.0',
+var version = '1.0.1',
  	temp = [{
 	"title": "Template1",
 	"body": [
@@ -71,7 +71,7 @@ var div1 = document.createElement("div"),
 		});
 		
 })()
-
+console.log('template: ' + version);
 return temp;
 };
 		

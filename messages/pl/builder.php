@@ -32,8 +32,8 @@ return [
     'Preview field' => 'Podgląd pola',  
     'Method' => 'Metoda wysyłki',  
     'Action' => 'Adres odbioru',  
-    '' => '',  
-    '' => '',  
+    'Template' => 'Szablon',  
+    'Address Url' => 'Adres Url',  
    
 ];
 

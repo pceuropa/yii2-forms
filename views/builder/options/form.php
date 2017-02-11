@@ -1,5 +1,5 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<div class="form-group">
+<div>
 	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'View') ?></label>
 	<div class="col-sm-9">
 		<select id="view-mode" class="form-control input-sm">
@@ -10,15 +10,15 @@
 		</select>
 	</div>
 </div>
-
+<br /><br />
 <span>
-	<div class="form-group">
+	<div>
 		<label><?= Yii::t('builder', 'Title') ?></label>
 	  <input id="title" type="text" class="form-control input-sm" >
 	</div>
-	
-	<div class="form-group">
-		<label><?= Yii::t('builder', 'Adress url') ?></label>
+	<br />
+	<div>
+		<label><?= Yii::t('builder', 'Address Url') ?></label>
 	  <input id="url" type="text" class="form-control input-sm" >
 	</div>
 	
@@ -39,11 +39,11 @@
 		  <input id="action" type="text" class="form-control input-sm" >
 		</div>
 	</div>
+	<br />
 	<div class="widgets"></div>
 	<?php
 		require('fields/_id.php');
 		require('fields/_class.php');
 		require('buttons/_save-form.php');
 	?>
-	
 	</span>
