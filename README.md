@@ -10,6 +10,7 @@ Form Builder for Yii2
 
 
 1. Creating forms (class FormBuilder)
+* Form generator
  * Drag and drop - Sorting, editing, and deleting items of form
  * CRUD operations by jQuery Ajax
  * List of forms (GridView)
