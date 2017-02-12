@@ -5,8 +5,37 @@
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-		<h1><?= Yii::t('builder', 'Form Builder') ?> <small><?= $this->render('options/buttons/_showme'); ?></small></h1>
-		<div id="preview-form"></div>
+		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
+		<div id="preview-form">
+		<div class="manual" >
+			<h3>Manual</h3>
+			<ol>
+			  <li><b>Opcje formularza (kolumna prawa)</b>
+			  		<ul>
+			  		  <li><b>Widok</b> - zmienia rodzaj wyświetlanego kodu.</li>
+			  		  <li><b>Tytuł</b>  - nie pojawia się w kodzie formularza, służy do rozróznienia w liscie formularzy. Jeżeli potrzebujesz tytułu skożystaj z Pole -> Opis</li>
+			  		  <li><b>Adres url</b> - adres url formularza</li>
+			  		  <li><b>Zapisz formularz</b> - opcja zapisania formularza aktywna po wypełnieniu pól tytuł i adres url</li>
+			  		</ul>
+			  	
+			  </li>
+			  <li><b>Opcje pola</b>
+			  		<ul>
+			  		  <li><b>Menu wyboru</b> pozwala wybrać dany element</li>
+			  		  <li><b>Nazwa</b> - atrybut nie widoczny w formularzu, potrzebny do rozróznienia otrzymywanych danych z wypełnionych danych</li>
+			  		  <li><b>Etykieta</b> - napis pojawiający się nad polem</li>
+			  		  <li><b>Tekst domyślny</b> - domyślnie wypełnione pole</li>
+			  		  <li><b>Szerokość</b> - pole może mieć szerokość np 50% w tedy na ekranie komputera mogą być 2 pola w jednej linni. Na ekranie smarfona pole zawsze ma szerokość 100%</li>
+			  		</ul>
+	    		</li>
+			  <li></li>
+			  <li></li>
+			</ol>
+		</div>
+		
+		
+		
+		</div>
 		<div id="preview-field"></div>
 		<div id="errors">
 			<div id="name-field-empty" class="alert alert-info" role="alert">Field name is empty, plz write entything.</div>
@@ -70,11 +99,12 @@ $this->registerCss("
 	div.options.active-option {display: block}
 	
 	#sidebar > ul { margin:0 0 0 5px;  }
-	#sidebar > ul li { color:#B6B6C0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 6px 10px}
+	#sidebar > ul li { color:#3894B0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 4px 10px; margin-bottom: -3px;}
+	#sidebar > ul li:hover { background-color:#eee}
 	#sidebar > ul li#field-tab.active-tab  {display:none}
-	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC;  padding: 6px 25px; margin-bottom:-4px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
+	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC;  padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
 	
-	#select-field { font-weight: bold;  width: 130px; margin: 0 40px -20px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px;box-shadow: none;}
+	#select-field {color: #3F56AA; font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;}
 	#select-field .show {display:inline-block}
 	
 	@media screen and (min-width: 1024px){
@@ -90,6 +120,8 @@ $this->registerCss("
 	
 	.ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
 	.edit-field span { color:#A6E0FB; margin-left: 7px;}
+	#editor { 
+            max-width: 100%; }
 	
 	.border {border:solid 1px #ccc}
 	.add-item {
@@ -101,7 +133,12 @@ $this->registerCss("
 	.glyphicon-pencil { cursor: e-resize;}
 	.glyphicon-duplicate { cursor: pointer;}
 	.glyphicon-trash { cursor: no-drop;}
-
+	.manual {
+		background-color: #FAFAFA;
+		color: #ADADAD;
+		padding: 10px;
+		margin:0;
+	}
 ");
 
 
@@ -113,21 +150,12 @@ $this->registerJs(" var form = new MyFORM.Form(); ", 4);
 $this->registerJs("form.init(".\yii\helpers\Json::encode($config)  .");", 4);
 
 if ($test_mode){
-	$this->registerJsFile("js/forms/test.js", ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJs("
-	
-	form.generate(MyFORM.test);
-	form.deleteField(0, 1)
-	form.body = [];
-	form.generate(MyFORM.test)
-	form.add(MyFORM.test.body[0][0]);
-	form.add(MyFORM.test.body[2][1]);
-", 4);
-
+	$this->registerJs(" MyFORM.test(form);", 4);
 }
-
-$this->registerJs(" MyFORM.template(form);", 4);	
 	
-
-
+$this->registerJs(" MyFORM.template(form);", 4);	
+$this->registerJsFile('panelx/js/editor/vue-html5-editor.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('http://cdn.bootcss.com/vue/1.0.26/vue.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+$this->registerCssFile('http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css');
 ?>		
+

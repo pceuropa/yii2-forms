@@ -7,10 +7,9 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-
 	var version = '1.2.0',
-		itemPointer = [], dataItem = {},
-        key = 0,
+		item_pointer = [],
+        key_item_change = 0,				// selectChangeItem()
 		preview_form = form.div_form,
 		preview_field = $('#preview-field'),
 
@@ -26,7 +25,25 @@ MyFORM.controller = function(form, field){
 		
 		update_div = $('#update'),
 		delete_div = $('#delete');
+		//quill = new Quill('.editor', { theme: 'snow'}),
+		
 		console.log('controller:', version);
+
+
+
+Vue.use(VueHtml5Editor ,{
+        hiddenModules: [
+            "image",
+            "full-screen",
+        ]
+    })
+    
+  var editor = new Vue({
+        el: "#textdescription",
+        data: {
+            content: "",
+        }
+    })
 
 //Actions:
 // 1. -------- FORM -----------------
@@ -61,16 +78,12 @@ sidebar_div_options
    // .on('keyup change', 'input.itemField',  function(){ })  
     .on('click', 	'#save-form', function(){ form.save() })  
 
-
-
-//Funcitions: 
  
 function preventEmptyName(e) {
 	var el = $(e.delegateTarget).find("#name");
 			el.toggleClass('empty');
 			window.setTimeout(function() { el.toggleClass('empty') }, 2000)
 	}
-	
 	
 function activeTab(target) {
 			select_field.removeClass('show');
@@ -101,42 +114,7 @@ options_form.find('span').find('input, select').donetyping(function() {
 	    form.render();
     }, form.time_out);
     
-    
-    
-$(".demonstration").click(function () {
-	console.log('text');
-	
-	var 
-	step1 = setInterval(function(){ myTimer() }, 200),
-	//Zstep2 = setInterval(function(){ myTimer() }, 200),
-	title = 'example_title',
-	url = 'unique_url',
-	i = 0, j = 0, string = '', string1 = '';
-	
-	function myTimer() {
-		string += title[i];
-		
-		options_form.find('#title').val(string);
-		i++;
-		
-		if(title.length == i){
-			clearInterval(step1);
-			
-			string1 = url[j]
-			options_form.find('#url').val(string1);
-			j++;
-			
-				if(url.length == j){
-				 	clearInterval(step1);
-			 	}
-		}
-		
-	}
-	
-	//window.setTimeout(function() { $("#form-tab").click(); }, 111)
-	
-	
-})
+
 
 // not use
 function helperAttribNameFields(id) {
@@ -147,7 +125,7 @@ function actionField() {
    // $('.change-item').hide();
 	select_field.change();
 };
-
+	
 
 select_field.change(function () {
     
@@ -155,31 +133,35 @@ select_field.change(function () {
 		
 		select_field.addClass('show');
 		activeAction(field_selector);
-		window.scrollTo(0,document.body.scrollHeight);
+		window.scrollTo(0, document.body.scrollHeight);
 		
         field_selector.find('.row').show();   /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         field_selector.find('#update-buttons').hide();
 
-		field_selector.find('span').find('input, select, textarea').on('keyup change', 
+		
+
+		field_selector.find('span').find('input, select, textarea, div#textdescription').on('keyup change', 
 			function() {
+			
 				field_selector.find('#add-to-form').prop( 'disabled', field_selector.find('#name').val() === '' ? true : false );
-				field.body[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
+									
+				field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
 				field.render();
-				
 			}
 		);
+		
 		
 		field_selector.find('#items').find('input#text').on('keyup change', 
 			function() {
-				field_selector.find('button.add-item').prop( 'disabled', $(this).val() === '' ? true : false );
+				field_selector.find('button.add-item').prop('disabled', $(this).val() === '' ? true : false );
 			}
 		);
 		
-		field =  new MyFORM.field.factory({field: this.value});
+		field = new MyFORM.field.factory({field: this.value});
 		field.uiHelper();
 		field.render();
 
-        itemPointer = field.body.hasOwnProperty('items') ? field.body.items : [];
+        item_pointer = field.body.hasOwnProperty('items') ? field.body.items : [];
 	});
 	
    function addItem(e){
@@ -189,7 +171,7 @@ select_field.change(function () {
 			for (var i = 0; i < inputs.length; i++) {
 					o[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
 				}
-        itemPointer.push(o)
+        item_pointer.push(o)
         
         e.delegateTarget.id == 'update' ? form.render() : field.render();
         renderSelectUpdateItem(e);
@@ -204,8 +186,8 @@ select_field.change(function () {
             (function () {
                 var i = 0, temp = '', options = '';
 
-                for (i; i < itemPointer.length; i++) {
-		            temp = itemPointer[i].text ? itemPointer[i].text : '';
+                for (i; i < item_pointer.length; i++) {
+		            temp = item_pointer[i].text ? item_pointer[i].text : '';
 		            options += '<option value="' + i + '">'+(i + 1) +'. ' + temp +'</option>';
 	            }
 
@@ -216,12 +198,10 @@ select_field.change(function () {
     }
     
    function selectChangeItem(e){ // select item to change
-        var item = itemPointer[e.currentTarget.value];
-        console.log(e);
-        console.log(item);
+        var item = item_pointer[e.currentTarget.value];
         
         toggleButtonsUpdateItem(e);
-        key = e.currentTarget.value;
+        key_item_change = e.currentTarget.value;
         
         for (var prop in item) {
             
@@ -242,14 +222,14 @@ select_field.change(function () {
     
    function cloneItem(e){
         
-        var o = form.clear(itemPointer[key]);
-        itemPointer.splice(key, 0, o)
+        var o = form.clear(item_pointer[key_item_change]);
+        item_pointer.splice(key_item_change, 0, o)
         toggleButtonsUpdateItem(e);
         renderSelectUpdateItem(e);
     }
 
     function deleteItem(e){
-        itemPointer.splice(key, 1);
+        item_pointer.splice(key_item_change, 1);
         toggleButtonsUpdateItem(e);
         renderSelectUpdateItem(e);
     }
@@ -259,8 +239,6 @@ select_field.change(function () {
         var target = e.delegateTarget;
         target = (target.id == 'preview-form') ? '#update' : target;
         
-        
-        console.log(e);
         $(target).find('#items').toggleClass( "update" );
         
         if(e.delegateTarget.id == 'update'){
@@ -284,24 +262,24 @@ select_field.change(function () {
 
 // EDIT FIELD in FORM
     function edit(e){
-		var map = e.target.dataset, id = 0; 
-        var name = form.body[map.row][map.index].name;
+		var 
+		map = e.target.dataset, id = 0;
         field = form.body[map.row][map.index];
+        
         
         update_div
             .html( $('#'+ field.field).html() )
             .find('#add-to-form').remove();
+    	
             
 		if(field.hasOwnProperty('items')){
-			itemPointer = field.items;
-			
+			item_pointer = field.items;
 			renderSelectUpdateItem(e);
 		}
 			
-			activeTab('#update-tab');
-			activeAction(update_div);
+		activeTab('#update-tab');
+		activeAction(update_div);	
 			
-			console.log(e);
 			
             // set data in input
 			for (var prop in field) {
@@ -321,7 +299,7 @@ select_field.change(function () {
 			$('#update span input, #update span select').donetyping(function(){
 			  		
 			  		if(this.id === 'name') {
-            			if(name != this.value){ form.editName(name, this.value); }
+            			if(field.name != this.value){ form.editName( field.name, this.value); }
             		} 
             		
             		field[this.id] = (this.type === 'checkbox') ? this.checked : this.value;

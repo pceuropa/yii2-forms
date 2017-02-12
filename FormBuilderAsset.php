@@ -11,7 +11,8 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/form.js',
 		'js/forms/field.js',
 		'js/forms/controller.js',
-		'js/forms/template.js',
+		'js/forms/examples.js',
+		'js/forms/test.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

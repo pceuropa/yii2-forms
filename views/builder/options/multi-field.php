@@ -12,7 +12,7 @@
 
 
 <div id="items" class="well">
-	<b>Items</b>
+	<b><?= Yii::t('builder', 'Items') ?> </b>
 
 	<?php
 		require('items/_text.php');

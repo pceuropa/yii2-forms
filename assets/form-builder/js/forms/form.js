@@ -4,7 +4,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.0');
+console.log('form: 1.2.1');
 var Form = function (){
 
 		//this.url = null;
@@ -40,8 +40,6 @@ var Form = function (){
 		
 		h.inheritAll(this.c, config)
 		this.get();
-		console.log(this.c);
-		
 		if(this.c.autosave){
 			this.autosaveButton();
 			Form.prototype.time_out = 1000;
@@ -299,8 +297,6 @@ var Form = function (){
 
 // <---- View
 	render: function(){
-	console.log(this);
-	
 			switch(Form.prototype.viewMode){
 				case 'html': this.div_form.html(this.html()); this.sort(this); break;
 			    case 'text': this.div_form.html('<pre><code> </code></pre>').find('code').text(this.html()); break;
@@ -308,8 +304,6 @@ var Form = function (){
 				case 'yii2': this.div_form.html('<pre><code> </code></pre>').find('code').text('Yii2'); break;
 			    default: 	throw "View mode error, check form.viewMode";
 			}
-			console.log('render');
-			
 			if(this.c.autosave && arguments[0] !== 'off' ){
 				this.save();
 			}

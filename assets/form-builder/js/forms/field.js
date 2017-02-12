@@ -351,7 +351,7 @@ var description = {
 		},
 		
 		html: function() { 
-			return this.div() + this.is(this.body.description) + this.divEnd();;
+			return this.div() + this.is(this.body.textdescription) + this.divEnd();;
 		}
 	}
 
