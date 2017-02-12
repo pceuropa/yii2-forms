@@ -1,5 +1,5 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<span>
+<span class='input-field'>
 	<?php
 		require('fields/_description.php');
 		require('fields/_width.php');

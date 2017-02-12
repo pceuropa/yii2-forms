@@ -1,5 +1,5 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<span>
+<span class='input-field'>
   	<?php
   		require('fields/_name.php');
 		require('fields/_label.php');
@@ -10,7 +10,7 @@
 	?>
 </span>
 
-<div id="items" class="well">
+<div class="input-item well">
 	<b>Items</b>
 	
 	<?php

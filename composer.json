@@ -21,9 +21,6 @@
 		  "homepage": "https://pceuropa.net/"
 		}
 	],
-	"require-dev": {
-        "bizley/quill": "^2.0",
-    },
 	"autoload": {
 		"psr-4": {
 		  "pceuropa\\forms\\": ""

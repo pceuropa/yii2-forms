@@ -1,5 +1,5 @@
 <!--  Copyright (c) 2017 Rafal Marguzewicz pceuropa.net -->
-<span>
+<span class='input-field'>
   	<?php
 		require('fields/_name.php');
 		require('fields/_label.php');
@@ -11,15 +11,14 @@
 </span>
 
 
-<div id="items" class="well">
-	<b><?= Yii::t('builder', 'Items') ?> </b>
+<div class="input-item well">
+	<b><?= Yii::t('builder', 'Items') ?></b>
 
 	<?php
 		require('items/_text.php');
 		require('items/_value.php');
 		require('items/_checked.php');
     ?>
-
 
     <div class="create-buttons row">
         <div class="col-md-5">
@@ -37,9 +36,6 @@
 	    ?>
     </div>
 
-
 </div>
-
-
 
 <?php require('buttons/_add-to-form.php'); ?>
