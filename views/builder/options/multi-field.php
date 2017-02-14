@@ -1,4 +1,3 @@
-<!--  Copyright (c) 2017 Rafal Marguzewicz pceuropa.net -->
 <span class='input-field'>
   	<?php
 		require('fields/_name.php');
@@ -9,7 +8,6 @@
 		require('fields/_class.php');
 	?>
 </span>
-
 
 <div class="input-item well">
 	<b><?= Yii::t('builder', 'Items') ?></b>

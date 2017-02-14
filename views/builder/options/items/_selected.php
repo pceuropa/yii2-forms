@@ -1,9 +1,5 @@
 	<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <div class="checkbox">
-        <label>
-          <input class="itemField" type="checkbox" id="checked"> <?= Yii::t('builder', 'Selected') ?>
-        </label>
-      </div>
+    <div class="col-sm-offset-3 col-sm-8">
+      <div class="checkbox"> <label> <input class="item-of-field" type="checkbox" id="checked"> <?= Yii::t('builder', 'Selected') ?> </label> </div>
     </div>
   	</div>

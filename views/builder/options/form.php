@@ -1,7 +1,6 @@
-<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<div>
-	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'View') ?></label>
-	<div class="col-sm-9">
+<div class="form-group"> 
+	<label class="col-sm-4 control-label"><?= Yii::t('builder', 'View') ?></label>
+	<div class="col-sm-8">
 		<select id="view-mode" class="form-control input-sm">
 			<option value="html" ><?= Yii::t('builder', 'HTML') ?></option>
 			<option value="text"><?= Yii::t('builder', 'Text') ?></option>
@@ -10,18 +9,19 @@
 		</select>
 	</div>
 </div>
-<br /><br />
+
 <span>
+
 	<div>
 		<label><?= Yii::t('builder', 'Title') ?></label>
-	  <input id="title" type="text" class="form-control input-sm" >
+	  	<input id="title" type="text" class="form-control input-sm" >
 	</div>
 	<br />
-	<div>
-		<label><?= Yii::t('builder', 'Address Url') ?></label>
-	  <input id="url" type="text" class="form-control input-sm" >
-	</div>
 	
+	<div>
+		<label><?= Yii::t('builder', 'Address URL') ?></label>
+	  	<input id="url" type="text" class="form-control input-sm" >
+	</div>
 	
 	<div class="form-group expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>
@@ -40,10 +40,10 @@
 		</div>
 	</div>
 	<br />
-	<div class="widgets"></div>
+	<div id="widget-form-options"></div>
 	<?php
 		require('fields/_id.php');
 		require('fields/_class.php');
 		require('buttons/_save-form.php');
 	?>
-	</span>
+</span>

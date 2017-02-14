@@ -1,5 +1,5 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<span class='input-field'>
+<span class='input-field form-group'>
 	<?php
 		require('fields/_name.php');
 		require('fields/_label.php');

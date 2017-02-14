@@ -5,40 +5,21 @@
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
+		<div id="widget-form-header" class="pull-right"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></div>
 		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
+	
 		<div id="preview-form">
 		<div class="manual" >
-			<h3>Manual</h3>
-			<ol>
-			  <li><b>Opcje formularza (kolumna prawa)</b>
-			  		<ul>
-			  		  <li><b>Widok</b> - zmienia rodzaj wyświetlanego kodu.</li>
-			  		  <li><b>Tytuł</b>  - nie pojawia się w kodzie formularza, służy do rozróznienia w liscie formularzy. Jeżeli potrzebujesz tytułu skożystaj z Pole -> Opis</li>
-			  		  <li><b>Adres url</b> - adres url formularza</li>
-			  		  <li><b>Zapisz formularz</b> - opcja zapisania formularza aktywna po wypełnieniu pól tytuł i adres url</li>
-			  		</ul>
-			  	
-			  </li>
-			  <li><b>Opcje pola</b>
-			  		<ul>
-			  		  <li><b>Menu wyboru</b> pozwala wybrać dany element</li>
-			  		  <li><b>Nazwa</b> - atrybut nie widoczny w formularzu, potrzebny do rozróznienia otrzymywanych danych z wypełnionych danych</li>
-			  		  <li><b>Etykieta</b> - napis pojawiający się nad polem</li>
-			  		  <li><b>Tekst domyślny</b> - domyślnie wypełnione pole</li>
-			  		  <li><b>Szerokość</b> - pole może mieć szerokość np 50% w tedy na ekranie komputera mogą być 2 pola w jednej linni. Na ekranie smarfona pole zawsze ma szerokość 100%</li>
-			  		</ul>
-	    		</li>
-			  <li></li>
-			  <li></li>
-			</ol>
+			<?= $this->render('_manual'); ?>
 		</div>
 		
+		<span id='previewfield'><?= Yii::t('builder', 'Preview field')  ?>:</span> <div id="preview-field">
 		
 		
 		</div>
-		<div id="preview-field"></div>
+		
 		<div id="errors">
-			<div id="name-field-empty" class="alert alert-info" role="alert">Field name is empty, plz write entything.</div>
+			<div id="name-field-empty" class="alert alert-info" role="alert"></div>
 		</div>
 	</section>
 	
@@ -57,7 +38,7 @@
 		
 			<ul id="tabs" class="list-inline">
 				<li id="form-tab" class="btn active-tab"><?= Yii::t('builder', 'Form') ?></li>
-				<li id="field-tab" class="btn"><?= Yii::t('builder', 'Field') ?></li>
+				<li id="field-tab" class="btn"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?= Yii::t('builder', 'Field') ?></li>
 				<li id="update-tab" class="btn"><?= Yii::t('builder', 'Update') ?></li>
 				<li id="delete-tab" class="btn"><?= Yii::t('builder', 'Delete') ?></li>
 			</ul>
@@ -111,18 +92,16 @@ $this->registerCss("
 	  #sidebar { position: fixed;}
 	  #preview-field {margin-bottom:200px}
 	}
-
+	span#previewfield {margin: 0 10px 10px 0; float:left}
 	.name-error {color: red}
 	.empty {border: solid 1px #D42323 }
 	
-	#items.update div.create-buttons {display:none}
-	#items.update div.update-buttons {display:block}
+	.input-item.update div.create-buttons {display:none}
+	.input-item.update div.update-buttons {display:block}
 	
 	.ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
 	.edit-field span { color:#A6E0FB; margin-left: 7px;}
-	#editor { 
-            max-width: 100%; }
-	
+	#editor { max-width: 100%; }
 	.border {border:solid 1px #ccc}
 	.add-item {
 		color: #fff;

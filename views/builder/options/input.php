@@ -1,12 +1,11 @@
-<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
-<span class='input-field'>
+<span class="input-field form-group">
 <?php
 	require('fields/_name.php');
 	require('fields/_type.php');
 	require('fields/_label.php');
 	require('fields/_placeholder.php');
-	require('fields/_help-block.php');
 	require('fields/_value.php');
+	require('fields/_help-block.php');
 	require('fields/_width-and-require.php');
 	require('fields/_id.php');
 	require('fields/_class.php');

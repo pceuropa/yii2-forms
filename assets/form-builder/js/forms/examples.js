@@ -1,11 +1,11 @@
 var MyFORM =  MyFORM || {};
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
-
 MyFORM.template = function (form){
-var version = '1.0.1',
+var version = '1.1.1',
+	id_selector = "#examples-form",
  	temp = [{
-	"title": "Template1",
+	"title": "example 1",
 	"body": [
 	    [
 	        { "field": "input", "name": "imie", "type": "text", "label": "Imię", "width": "col-md-6", },
@@ -20,7 +20,7 @@ var version = '1.0.1',
 	    ],
 	]},
 	{
-	"title": "Template2",
+	"title": "example 2",
 	"body": [
 	    [
 	        { "field": "input", "name": "imie", "type": "text", "label": "Imię1", "width": "col-md-6", },
@@ -35,44 +35,43 @@ var version = '1.0.1',
 
 var div1 = document.createElement("div"),
 
-			innerHTML = '<label class="col-sm-4 control-label">Template</label>' +
-						'<div class="col-sm-8">' +
-							'<select id="template" class="form-control input-sm"><option>Example template</option></select>' +
-						'</div> ';
+	innerHTML = '<label class="col-sm-4 control-label">Examples</label>' +
+				'<div class="col-sm-8">' +
+					'<select id="examples-form" class="form-control input-sm"><option> </option></select>' +
+				'</div> ';
 						
-(function(){
+	(function(){
 
-		div1.setAttribute('class', 'form-group');
-		div1.innerHTML = innerHTML;
+			div1.setAttribute('class', 'form-group');
+			div1.innerHTML = innerHTML;
 		
-		$(div1).find('#template').append( function() {
-			var option, t, options = document.createElement('div');
+			$(div1).find(id_selector).append( function() {
+				var option, t, options = document.createElement('div');
 			
-			h.each(temp, function (i) {
-				t = temp[i];
-			    option = document.createElement('option');
-			    h.setAttribute(option, 'value', i);
-			    option.appendChild(document.createTextNode(t.title));
-			    options.appendChild(option);
+				h.each(temp, function (i) {
+					t = temp[i];
+					option = document.createElement('option');
+					h.setAttribute(option, 'value', i);
+					option.appendChild(document.createTextNode(t.title));
+					options.appendChild(option);
+				})
+				return options.innerHTML;
 			})
+			$(document).ready(function(){  
+			$("#form #widget-form-options").append( div1.outerHTML );
+		
+				$(id_selector).change(function(){
+					if(!form.body.length){
+						form.body = temp[this.value].body
+						form.render()
+					} 
+				})
+			});
+		
+	})()
 	
-			
-			return options.innerHTML;
-		})
-		$(document).ready(function(){  
-		$("#form .widgets").append( div1.outerHTML );
-		
-			$("#template").change(function(){
-				if(!form.body.length){
-					form.body = temp[this.value].body
-					form.render()
-				} 
-			})
-		});
-		
-})()
-console.log('template: ' + version);
-return temp;
+	console.log('template: ' + version);
+	return temp;
 };
 		
 		

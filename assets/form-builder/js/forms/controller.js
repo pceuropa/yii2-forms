@@ -2,17 +2,15 @@
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 // TODO
 
-
-
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.0',
-		item_pointer = [],
-        key_item_change = 0,				// selectChangeItem()
+	var version = '1.2.1',
+        key_item_change = 0,
+        update_mode = false,				// selectChangeItem()
 		preview_form = form.div_form,
 		preview_field = $('#preview-field'),
-
+		field_selector,
 		sidebar_div_options = $('#sidebar div.options'),
 		options_form = form.options_form,
 		
@@ -63,22 +61,33 @@ $('#view-mode')
     })
 
 sidebar_div_options
-    .on('click',    '#add-to-form',         function(){  form.add(field.body); actionField(); })
+    .on('click',    '#add-to-form',         function(){  form.add( field.body); actionField();})
     .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e); })
     .on('click',    '.add-item',            function(e){ addItem(e);}    )    
     .on('change',   'select.change-item',   function(e){ selectChangeItem(e)} )   
-    .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('#items input').unbind(); }  )    
-    .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('#items input').unbind(); } )
-    .on('click',    '.back',    			function(e){ back(e); $('#items input').unbind();}) 
+    .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('.input-item input').unbind(); }  )    
+    .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('.input-item input').unbind(); } )
+    .on('click',    '.back',    			function(e){ back(e); $('.input-item input').unbind();}) 
 
     
  $('#sidebar')
     .on('click',    '#form-tab',            function(){  activeAction('#form'); })   
-    .on('click',    '#field-tab',           function(){  actionField() })   
-   // .on('keyup change', 'input.itemField',  function(){ })  
+    .on('click',    '#field-tab',           function(){  select_field.change(); })   
     .on('click', 	'#save-form', function(){ form.save() })  
 
  
+function render() {
+console.log(update_mode);
+
+	if(update_mode){
+		form.render()
+	} else {
+		field.render()
+	}
+}
+
+
+
 function preventEmptyName(e) {
 	var el = $(e.delegateTarget).find("#name");
 			el.toggleClass('empty');
@@ -86,15 +95,16 @@ function preventEmptyName(e) {
 	}
 	
 function activeTab(target) {
-			select_field.removeClass('show');
-			$('#tabs li.active-tab').removeClass('active-tab');
-			$(target).addClass('active-tab');
+		update_mode = (target === '#update-tab')
+		select_field.removeClass('show');
+		$('#tabs li.active-tab').removeClass('active-tab');
+		$(target).addClass('active-tab');
 	}
 	
 	
 function activeAction(target) {
 		
-		if(!$(target).hasClass('active-option')){
+		if(!$(target).hasClass('active-option')) {
 			$('.active-option').removeClass('active-option');
 			$(target).addClass('active-option');
 		}
@@ -114,139 +124,132 @@ options_form.find('span').find('input, select').donetyping(function() {
 	    form.render();
     }, form.time_out);
     
-
-
-// not use
-function helperAttribNameFields(id) {
-	$('#name').val('question' + form.questions)
-};
-
-function actionField() { 
-   // $('.change-item').hide();
-	select_field.change();
-};
-	
-
+// Field TAB
 select_field.change(function () {
     
-		var field_selector = $('#' + this.value);
+		field_selector = $('#' + this.value);
 		
 		select_field.addClass('show');
 		activeAction(field_selector);
-		window.scrollTo(0, document.body.scrollHeight);
+		window.scrollTo(0, document.body.scrollHeight - 50);
 		
-        field_selector.find('.row').show();   /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        field_selector.find('#update-buttons').hide();
-
-		
-
-		field_selector.find('span').find('input, select, textarea, div#textdescription').on('keyup change', 
-			function() {
-			
-				field_selector.find('#add-to-form').prop( 'disabled', field_selector.find('#name').val() === '' ? true : false );
-									
-				field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
-				field.render();
-			}
-		);
-		
-		
-		field_selector.find('#items').find('input#text').on('keyup change', 
-			function() {
-				field_selector.find('button.add-item').prop('disabled', $(this).val() === '' ? true : false );
-			}
-		);
+		field_selector.find('.input-item').removeClass( "update" );
 		
 		field = new MyFORM.field.factory({field: this.value});
-		field.uiHelper();
+		field.setDataFromSource();
 		field.render();
 
-        item_pointer = field.body.hasOwnProperty('items') ? field.body.items : [];
 	});
 	
+	
+		
+//field_selector.find('.add-item').prop('disabled', $(this).val() === '' ? true : false );
+
+$('.input-field').find('input, select, #textdescription').donetyping(function(){
+  		console.log(field)
+			  		
+  		if(this.id === 'name') {
+			if(field.body.name != this.value){ form.editName( field.body.name, this.value); }
+		} 
+            		
+				    
+    	field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
+				    
+	  	field_selector.find('#add-to-form').prop( 'disabled', field_selector.find('#name').val() === '' ? true : false );
+		
+		render();
+				    
+}, form.time_out).on('change', function (){
+
+ 		field.body[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
+ 		
+ 		render();
+ 		
+			
+});
+			 		
+	
    function addItem(e){
-        var o = {};
+    	var o = {},
+    	inputs = document.getElementById(e.delegateTarget.id).getElementsByClassName('item-of-field');
+		
+		for (var i = 0; i < inputs.length; i++) {
+		
+			o[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
+		}
+			
+        field.body.items.push(o)
         
-			var inputs = document.getElementById(e.delegateTarget.id).getElementsByClassName('itemField');
-			for (var i = 0; i < inputs.length; i++) {
-					o[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
-				}
-        item_pointer.push(o)
-        
-        e.delegateTarget.id == 'update' ? form.render() : field.render();
-        renderSelectUpdateItem(e);
-    }
+        render();
+        renderSelectUpdateItem();
+	}
 
-   function renderSelectUpdateItem(e) {
-
-        var target = e.delegateTarget;
-        target = (target.id == 'preview-form') ? '#update' : target;
+   
+   
+   function renderSelectUpdateItem() {
+		var f = field.body;
+	if(f.items.length != 0){
         
-        $(target).find('.select-item-to-change').html(
+        $("#"+ f.field).find('.select-item-to-change').html(
             (function () {
                 var i = 0, temp = '', options = '';
 
-                for (i; i < item_pointer.length; i++) {
-		            temp = item_pointer[i].text ? item_pointer[i].text : '';
+                for (i; i < f.items.length; i++) {
+		            temp = f.items[i].text ? f.items[i].text : '';
 		            options += '<option value="' + i + '">'+(i + 1) +'. ' + temp +'</option>';
 	            }
 
 	            return '<select class="change-item form-control input-sm"><option selected>Change item</option>'+ options + '</select>';  
-            })()
-        );
-        
+		        })()
+		    );
+		}
     }
     
    function selectChangeItem(e){ // select item to change
-        var item = item_pointer[e.currentTarget.value];
+        var item = field.body.items[e.currentTarget.value];
+        	key_item_change = e.currentTarget.value;
+        	
+        	toggleButtonsUpdateItem(e);
         
-        toggleButtonsUpdateItem(e);
-        key_item_change = e.currentTarget.value;
         
         for (var prop in item) {
             
-            if(typeof item[prop] === 'string'){
-				$(e.delegateTarget).find('#items').find('input#'+prop).val(item[prop]);
-			} else {
-			    $(e.delegateTarget).find('#items').find('input#'+prop).prop('checked', item[prop]);
-			}
+            (typeof item[prop] === 'string') ? 
+            	$(e.delegateTarget).find('.input-item').find('input#'+prop).val(item[prop]):
+            	$(e.delegateTarget).find('.input-item').find('input#'+prop).prop('checked', item[prop]);
         }
 
-        $(e.delegateTarget).find('#items input').on('keyup change', 
+        $(e.delegateTarget).find('.input-item input').on('keyup change', 
 	        function() {
 		        item[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
-		        e.delegateTarget.id == 'update' ? form.render() : field.render();
+		        render();
 	        }
         );
     }
     
+	function toggleButtonsUpdateItem(e) {  
+        var f = field.body;
+        
+        $("#"+ f.field).find('.input-item').toggleClass( "update" );
+        render();
+    }
+    
+    
    function cloneItem(e){
         
-        var o = form.clear(item_pointer[key_item_change]);
-        item_pointer.splice(key_item_change, 0, o)
+        var o = form.clear(field.body.items[key_item_change]);
+        field.body.items.splice(key_item_change, 0, o)
         toggleButtonsUpdateItem(e);
-        renderSelectUpdateItem(e);
+        renderSelectUpdateItem();
     }
 
     function deleteItem(e){
-        item_pointer.splice(key_item_change, 1);
+        field.body.items.splice(key_item_change, 1);
         toggleButtonsUpdateItem(e);
-        renderSelectUpdateItem(e);
+        renderSelectUpdateItem();
     }
 
-    function toggleButtonsUpdateItem(e) {  
-        
-        var target = e.delegateTarget;
-        target = (target.id == 'preview-form') ? '#update' : target;
-        
-        $(target).find('#items').toggleClass( "update" );
-        
-        if(e.delegateTarget.id == 'update'){
-            form.render(); // reset select-change-item
-        } else {
-            field.render();
-        }
-    }
+   
     
 
     function back(e) {
@@ -255,61 +258,52 @@ select_field.change(function () {
             field_tab.click();
         } else {
             toggleButtonsUpdateItem(e)
-            $(e.delegateTarget).find('#items input').val('')
+            $(e.delegateTarget).find('.input-item input').val('')
             $(e.delegateTarget).find('input#checked').prop('checked', false)
         }
     }
 
 // EDIT FIELD in FORM
     function edit(e){
-		var 
-		map = e.target.dataset, id = 0;
-        field = form.body[map.row][map.index];
+		var field_selector, map = e.target.dataset, id = 0;
+		
+		
+        field.body = form.body[map.row][map.index];
         
+        field_selector = $("#" + field.body.field)
+        console.log(field.body.field);
+        console.log(field_selector);
         
-        update_div
-            .html( $('#'+ field.field).html() )
-            .find('#add-to-form').remove();
+        activeTab('#update-tab');
+		activeAction(field_selector);
+			
+        field_selector.find('#add-to-form').remove();
     	
             
-		if(field.hasOwnProperty('items')){
-			item_pointer = field.items;
-			renderSelectUpdateItem(e);
+		if(field.body.hasOwnProperty('items')){
+			renderSelectUpdateItem();
 		}
 			
-		activeTab('#update-tab');
-		activeAction(update_div);	
-			
-			
-            // set data in input
-			for (var prop in field) {
+			if(field.body.field != 'description'){
+				for (var prop in field.body) {
             
-				if (field.hasOwnProperty(prop) && prop !== 'field'){
+					if (field.body.hasOwnProperty(prop) && prop !== 'field'){
+					
+						if(typeof field.body[prop] === 'string'){
+							field_selector.find('#' + prop).val(field.body[prop]);
+						}
 
-					if(typeof field[prop] === 'string'){
-						$('#update #'+ prop).val(field[prop]);
-					}
-
-					if(typeof field[prop] === 'boolean'){
-						$('#update #'+ prop).prop('checked', field[prop]);
-					}
-				} 
+						if(typeof field.body[prop] === 'boolean'){
+							field_selector.find('#' + prop).prop('checked', field.body[prop]);
+						}
+					} 
+				}
+			} else {
+				editor.content = field.body.textdescription
 			}
 			
-			$('#update span input, #update span select').donetyping(function(){
-			  		
-			  		if(this.id === 'name') {
-            			if(field.name != this.value){ form.editName( field.name, this.value); }
-            		} 
-            		
-            		field[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
-				    form.render();
-			}, form.time_out)
-			.on('change', function (){
-			 		field[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
-			 		form.render();
 			
-			 });
+			
 			
 			// $('#update span').find('input, textarea, select').on('keyup change', function (){});
             

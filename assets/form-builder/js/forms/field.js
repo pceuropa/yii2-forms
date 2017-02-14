@@ -3,7 +3,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-	console.log('field: 1.0.0');
+	console.log('field: 1.0.1');
 
 var factory = function(o) {
 	this.body = o  || {};
@@ -18,24 +18,13 @@ factory.prototype = {
 		this.set(MyFORM.field[this.body.field])
 	},
 	
-	uiHelper: function () {
-		var field = this;
+	setDataFromSource: function () {
 
-		(function data() {
-			var inputs = document.getElementById(field.body.field).getElementsByClassName("data-source");
-			for (var i = 0; i < inputs.length; i++) {
-					field.body[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
-				}
-		})();
-
-		(function helpForUser() {
-			if($("#" + field.body.field + " #name").val() == '' ){
-				$(this).css( "color", "red" );
-				$(this).val(field.body.field) ;
+		var inputs = document.getElementById(this.body.field).getElementsByClassName("data-source");
+		for (var i = 0; i < inputs.length; i++) {
+				this.body[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
+				
 			}
-
-		})();
-		
 	},
 
 	set: function (o) {
@@ -68,11 +57,12 @@ factory.prototype = {
 // RENDER SECTION : preview Field, 	Item update
 	render: function(){  // render field
 		var preview  = $("#preview-field"), field = this;
+			console.log(field);
 			
 			if(this.view){
-				preview.html('<p>Preview field: (<a>html</a>) </p>' + field.html());
+				preview.html('(<a>html</a>) <br/>' + field.html());
 			} else {
-				preview.html('<p>Preview field: (<a>text</a>)</p><pre><code> </code></pre></p>').find('code').text(field.html());	
+				preview.html('(<a>text</a>)</p><pre><code> </code></pre>').find('code').text(field.html());	
 			}
 
 		preview.find('a').click(function () {
@@ -285,7 +275,8 @@ var input = {
 
 var textarea = {
 	html: function() {
-		var value = this.value ? this.value : '';
+	
+		var value = this.body.value ? this.body.value : '';
 		return  this.div() +
 				this.labelAttr() +
 				'\t<textarea ' + this.attr('name', 'id', 'class', 'data', 'rows', 'placeholder', 'require') + '>' + value + '</textarea>'+
