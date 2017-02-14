@@ -1,14 +1,14 @@
 {
 	"name": "pceuropa/yii2-forms",
-	"description": "Form builder or code generator for Yii2. List GridView of forms. Saving form data in a database.",
+	"description": "Form builder or code generator for Yii2. List GridView of forms. Saving form data in a databases.",
 	"keywords": [
 		"yii2",
 		"extension",
 		"form creator",
 		"form builder",
 		"drag end drop",
-		"bootstrap form"
-		"without model"
+		"bootstrap form",
+		"without model",
 		"dynamic model"
 	],
 	"version": "1.2.2",
