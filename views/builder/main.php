@@ -124,17 +124,13 @@ $this->registerCss("
 if ($easy_mode){
 	$this->registerCss(".expert {display:none}");
 }
-
-$this->registerJs(" var form = new MyFORM.Form(); ", 4);
-$this->registerJs("form.init(".\yii\helpers\Json::encode($config)  .");", 4);
+	$this->registerJs(" var form = new MyFORM.Form(); ", 4);
+	$this->registerJs("form.init(".\yii\helpers\Json::encode($config)  .");", 4);
 
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4);
 }
 	
-$this->registerJs(" MyFORM.template(form);", 4);	
-$this->registerJsFile('panelx/js/editor/vue-html5-editor.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-$this->registerJsFile('http://cdn.bootcss.com/vue/1.0.26/vue.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-$this->registerCssFile('http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css');
+	$this->registerJs(" MyFORM.template(form);", 4);	
 ?>		
 

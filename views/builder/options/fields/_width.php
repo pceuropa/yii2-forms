@@ -1,6 +1,6 @@
 <div class="form-group">
-	<label class="col-sm-2 control-label"><?= Yii::t('builder', 'Width') ?></label>
-		<div class="col-sm-10">
+	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Width') ?></label>
+		<div class="col-sm-3">
 			<select id="width" class="form-control input-sm data-source">
 					<option value="col-md-12" selected>100%</option>
 					<option value="col-md-9">75%</option>
