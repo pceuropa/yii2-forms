@@ -3,7 +3,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-	console.log('field: 1.0.1');
+	console.log('field: 1.1.1');
 
 var factory = function(o) {
 	this.body = o  || {};
@@ -18,46 +18,57 @@ factory.prototype = {
 		this.set(MyFORM.field[this.body.field])
 	},
 	
-	setDataFromSource: function () {
-
-		var inputs = document.getElementById(this.body.field).getElementsByClassName("data-source");
-		for (var i = 0; i < inputs.length; i++) {
-				this.body[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
-				
-			}
-	},
-
-	set: function (o) {
+	set: function (o) {  // get all property.value
         o = o || {};
 	    for (var prop in o) {
 			this[prop] = o[prop];
 		}
 	},
 	
-	addItem: function () {
-		try {
-			var items = document.getElementById(this.body.field).getElementsByClassName("itemField"), item = {};
+	setDataFieldFrom: function (cl) {
+
+		var inputs = document.getElementById(this.body.field).getElementsByClassName(cl),
+			input;
+		for (var i = 0; i < inputs.length; i++) {
+		
+				input = inputs[i]
+				if(input.type === 'checkbox'){
+					if ( input.checked === true ) this.body[input.id] = input.checked;
+				} else {
+					if( h.is(input.value) ) this.body[input.id] = input.value;
+						
+				}
+			}
+	},
+	
+	setDataItemFrom: function (cl) {
+		var o = {},
+    	inputs = document.getElementById(this.body.field).getElementsByClassName(cl),
+    	input;
+		
+		for (var i = 0; i < inputs.length; i++) {
+			input = inputs[i]
 			
-			for (var i = 0; i < items.length; i++) {
-				item[items[i].id] = (items[i].type === 'checkbox') ? items[i].checked : items[i].value;
+			if(input.type === 'checkbox'){
+				if ( input.checked === true ) o[input.id] = input.checked;
+			} else {
+				if ( h.is(input.value) ) o[input.id] = input.value;
 			}
 			
-			this.body.items.push(item);
-			this.render();
 		}
-		catch(e) {
-            console.log(e);
-            
-			alert('Error add item to field: bad id of div')
-		}
-		
+		return o
 	},
-
+	addItem: function (field, item) {
+		
+		if(!h.is(item.value)){
+			item.value = field.body.items.length + 1
+		}
+		field.body.items.push(item);
+	},
 
 // RENDER SECTION : preview Field, 	Item update
 	render: function(){  // render field
 		var preview  = $("#preview-field"), field = this;
-			console.log(field);
 			
 			if(this.view){
 				preview.html('(<a>html</a>) <br/>' + field.html());
@@ -87,7 +98,6 @@ factory.prototype = {
 					        text = field.body.items[i].text ? field.body.items[i].text : '';
 					        itemOption += '<option value="' + i + '">'+(i + 1) +'. ' + text +'</option>';
 				        }
-
 				        return '<select class="change-item form-control input-sm"> <option selected>Change item</option>'+ itemOption + '</select>';  
                     })()
                 );
@@ -178,7 +188,7 @@ factory.prototype = {
 	},
 	valueEl: function (i) {
 		var el = this.body.items[i].value;
-		return el ? ' value="'+ el + '"' : ' value="'+ (i +1) + '"';
+		return el ? ' value="'+ el + '"' : '';
 	},
 	idEl: function (i) {
 		var el = this.body.items[i].id;
@@ -347,10 +357,12 @@ var description = {
 	}
 
 var submit = {
-	
+		color:	function () {
+			return this.body['color'] ? 'style="color:'+ this.body['color'] +';"'  : '';
+		},
 		html: function() {
 		return  this.div() +
-				'\t<button type="submit" class="btn btn-default">' + this.is(this.body.label) + '</button>' +
+				'\t<button type="submit" ' + this.color() + ' class="btn ' +  this.is(this.body.backgroundcolor) + '">' + this.is(this.body.label) + '</button>' +
 				this.divEnd();
 		}
 	}

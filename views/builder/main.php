@@ -1,11 +1,20 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net  1.1.0-->
 <?php
+use yii\helpers\Json;
 	pceuropa\forms\FormBuilderAsset::register($this);
 ?>
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-		<div id="widget-form-header" class="pull-right"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></div>
+		<div id="widget-form-header" class="pull-right"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+		
+		
+		<button class="btn"  data-clipboard-target="#json-code">
+    Cut to clipboard
+</button>
+
+
+</div>
 		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
 	
 		<div id="preview-form">
@@ -52,10 +61,12 @@
 			<div id="description" class="options form-horizontal"><?= $this->render('options/description'); ?></div>
 			<div id="submit" class="options form-horizontal"><?= $this->render('options/submit'); ?></div>
 			<div id="update" class="options form-horizontal">update</div>
+			
 			<div id="delete" class="options form-horizontal">
-                <?= $this->render('options/buttons/_delete'); ?>
-                <?= $this->render('options/buttons/_back'); ?>
+                <?= $this->render('options/button/_delete'); ?>
+                <?= $this->render('options/button/_back'); ?>
 			</div>
+			
 		</div> <!-- end id.sidebar -->
 	</aside>
 </div>
@@ -72,7 +83,6 @@ $this->registerCss("
 	#preview-form.edit-mode div.row > div.edit-now {opacity: 1;}
 	
 	
-	
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
 	#preview-field .show {display:block}
 	
@@ -85,6 +95,8 @@ $this->registerCss("
 	#sidebar > ul li#field-tab.active-tab  {display:none}
 	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC;  padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
 	
+	#sidebar.update #add-to-form{display:none}
+	
 	#select-field {color: #3F56AA; font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;}
 	#select-field .show {display:inline-block}
 	
@@ -95,6 +107,7 @@ $this->registerCss("
 	span#previewfield {margin: 0 10px 10px 0; float:left}
 	.name-error {color: red}
 	.empty {border: solid 1px #D42323 }
+	.green {border: solid 1px #399D6E }
 	
 	.input-item.update div.create-buttons {display:none}
 	.input-item.update div.update-buttons {display:block}
@@ -125,12 +138,32 @@ if ($easy_mode){
 	$this->registerCss(".expert {display:none}");
 }
 	$this->registerJs(" var form = new MyFORM.Form(); ", 4);
-	$this->registerJs("form.init(".\yii\helpers\Json::encode($config)  .");", 4);
+	$this->registerJs("form.init(".Json::encode($config).");", 4);
 
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4);
 }
 	
 	$this->registerJs(" MyFORM.template(form);", 4);	
+	
+	//$this->registerJsFile('/panelx/js/prism.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJsFile('/panelx/js/clipboard.min.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
+	$this->registerJs("
+	
+	var clipboard = new Clipboard('.btn');
+
+    clipboard.on('success', function(e) {
+    console.log('text');
+    
+        console.log(e);
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+	
+	", 3);
+	//$this->registerCssFile('/panelx/css/prism.css');
+	
 ?>		
 

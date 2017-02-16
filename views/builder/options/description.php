@@ -1,10 +1,9 @@
-<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
 <span class='input-field'>
 	<?php
-		require('fields/_description.php');
-		require('fields/_width.php');
-		require('fields/_class.php');
-		require('fields/_id.php');
+		require('field/_description.php');
+		require('field/_width.php');
+		require('field/_class.php');
+		require('field/_id.php');
 	?>
 </span>
-<?php require('buttons/_add-to-form.php'); ?>
+<?php require('button/_add-to-form.php'); ?>

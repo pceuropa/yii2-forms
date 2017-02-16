@@ -40,10 +40,12 @@
 		</div>
 	</div>
 	<br />
+		<?php
+			require('field/_id.php');
+			require('field/_class.php');
+		?>
 	<div id="widget-form-options"></div>
-	<?php
-		require('fields/_id.php');
-		require('fields/_class.php');
-		require('buttons/_save-form.php');
+<?php
+		require('button/_save-form.php');
 	?>
 </span>

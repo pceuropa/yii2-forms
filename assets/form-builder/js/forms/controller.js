@@ -1,16 +1,16 @@
 'use strict';
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
-// TODO
 
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.1',
+	var version = '1.2.2',
         key_item_change = 0,
-        update_mode = false,				// selectChangeItem()
+        update_mode = false,				// selectItemToChange()
 		preview_form = form.div_form,
 		preview_field = $('#preview-field'),
 		field_selector,
+		sidebar = $('#sidebar'),
 		sidebar_div_options = $('#sidebar div.options'),
 		options_form = form.options_form,
 		
@@ -29,7 +29,7 @@ MyFORM.controller = function(form, field){
 
 
 
-Vue.use(VueHtml5Editor ,{
+Vue.use(VueHtml5Editor, {
         hiddenModules: [
             "image",
             "full-screen",
@@ -61,24 +61,24 @@ $('#view-mode')
     })
 
 sidebar_div_options
-    .on('click',    '#add-to-form',         function(){  form.add( field.body); actionField();})
-    .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e); })
-    .on('click',    '.add-item',            function(e){ addItem(e);}    )    
-    .on('change',   'select.change-item',   function(e){ selectChangeItem(e)} )   
-    .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('.input-item input').unbind(); }  )    
-    .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('.input-item input').unbind(); } )
-    .on('click',    '.back',    			function(e){ back(e); $('.input-item input').unbind();}) 
-
+    .on('click',    '#add-to-form',         function(){ form.add( field.body) })
+    .on('click',    '.add-item',            function(){ addItem() }    ) 
+       
+    .on('change',   '.change-item',   		function(e){ selectItemToChange(e)} )   
+    .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('.input-item input').unbind() }  )    
+    .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('.input-item input').unbind() } )
+    .on('click',    '.back',    			function(e){ back(e); $('.input-item input').unbind() }) 
     
+    .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e) })
+    .on('mouseenter','#widget-form-options', function(e){ preventEmptyTitleUrl(e) })
+
  $('#sidebar')
-    .on('click',    '#form-tab',            function(){  activeAction('#form'); })   
-    .on('click',    '#field-tab',           function(){  select_field.change(); })   
+    .on('click',    '#form-tab',            function(){  activeAction('#form') })   
+    .on('click',    '#field-tab',           function(){  select_field.change() })   
     .on('click', 	'#save-form', function(){ form.save() })  
 
  
 function render() {
-console.log(update_mode);
-
 	if(update_mode){
 		form.render()
 	} else {
@@ -87,15 +87,37 @@ console.log(update_mode);
 }
 
 
-
 function preventEmptyName(e) {
 	var el = $(e.delegateTarget).find("#name");
+		if(el.val() == ''){
 			el.toggleClass('empty');
 			window.setTimeout(function() { el.toggleClass('empty') }, 2000)
+		}
+			
+	}
+function preventEmptyTitleUrl(e) {
+	var title = $(e.delegateTarget).find("#title"),
+		url = $(e.delegateTarget).find("#url");
+		
+		if(title.val() == ''){
+			title.addClass('empty');
+			window.setTimeout(function() { title.removeClass('empty') }, 2000)
+		}
+		
+		if(url.val() == ''){
+			url.addClass('empty');
+			window.setTimeout(function() { url.removeClass('empty') }, 2000)
+		}
+		
 	}
 	
 function activeTab(target) {
+
 		update_mode = (target === '#update-tab')
+		if(!update_mode){
+			sidebar.removeClass('update')
+		}
+		
 		select_field.removeClass('show');
 		$('#tabs li.active-tab').removeClass('active-tab');
 		$(target).addClass('active-tab');
@@ -119,10 +141,11 @@ function activeAction(target) {
 
 
 // FORM TAB
-options_form.find('span').find('input, select').donetyping(function() {
+options_form.find('span').find('input, select').donetyping(function(){
 	    form[this.id] = this.value;
 	    form.render();
     }, form.time_out);
+    
     
 // Field TAB
 select_field.change(function () {
@@ -131,12 +154,13 @@ select_field.change(function () {
 		
 		select_field.addClass('show');
 		activeAction(field_selector);
+		
 		window.scrollTo(0, document.body.scrollHeight - 50);
 		
 		field_selector.find('.input-item').removeClass( "update" );
 		
 		field = new MyFORM.field.factory({field: this.value});
-		field.setDataFromSource();
+		field.setDataFieldFrom("data-source")  // class
 		field.render();
 
 	});
@@ -146,16 +170,18 @@ select_field.change(function () {
 //field_selector.find('.add-item').prop('disabled', $(this).val() === '' ? true : false );
 
 $('.input-field').find('input, select, #textdescription').donetyping(function(){
-  		console.log(field)
 			  		
-  		if(this.id === 'name') {
-			if(field.body.name != this.value){ form.editName( field.body.name, this.value); }
-		} 
+  		 
+        if(update_mode && this.id === 'name'){
+        	if(field.body.name != this.value){ form.editName( field.body.name, this.value) }
+        }
             		
 				    
     	field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
-				    
-	  	field_selector.find('#add-to-form').prop( 'disabled', field_selector.find('#name').val() === '' ? true : false );
+		if(!update_mode){
+			$("#" + field.body.field).find('#add-to-form').prop( 'disabled', $("#" + field.body.field).find('#name').val() === '' ? true : false );
+		}
+	  	
 		
 		render();
 				    
@@ -167,25 +193,16 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
  		
 			
 });
-			 		
 	
-   function addItem(e){
-    	var o = {},
-    	inputs = document.getElementById(e.delegateTarget.id).getElementsByClassName('item-of-field');
-		
-		for (var i = 0; i < inputs.length; i++) {
-		
-			o[inputs[i].id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
-		}
+   function addItem(){
 			
-        field.body.items.push(o)
-        
-        render();
+        var o = field.setDataItemFrom('item-of-field'); // class
+        field.addItem(field, o);
         renderSelectUpdateItem();
+        render();
+        
 	}
 
-   
-   
    function renderSelectUpdateItem() {
 		var f = field.body;
 	if(f.items.length != 0){
@@ -205,18 +222,19 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
 		}
     }
     
-   function selectChangeItem(e){ // select item to change
-        var item = field.body.items[e.currentTarget.value];
+   function selectItemToChange(e){ // select item to change
+        var item = field.body.items[e.currentTarget.value],
+        	el = $(e.delegateTarget).find('.input-item');
+        
         	key_item_change = e.currentTarget.value;
         	
-        	toggleButtonsUpdateItem(e);
-        
+        	toggleButtonsUpdateItem();
         
         for (var prop in item) {
             
-            (typeof item[prop] === 'string') ? 
-            	$(e.delegateTarget).find('.input-item').find('input#'+prop).val(item[prop]):
-            	$(e.delegateTarget).find('.input-item').find('input#'+prop).prop('checked', item[prop]);
+            (h.isBoolean( item[prop]) ) ?
+            	el.find('input#' + prop).prop('checked', item[prop]):
+            	el.find('input#' + prop).val(item[prop]);
         }
 
         $(e.delegateTarget).find('.input-item input').on('keyup change', 
@@ -227,37 +245,34 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
         );
     }
     
-	function toggleButtonsUpdateItem(e) {  
-        var f = field.body;
+	function toggleButtonsUpdateItem(){  
         
-        $("#"+ f.field).find('.input-item').toggleClass( "update" );
+        $('#' + field.body.field).find('.input-item').toggleClass( "update" );
         render();
     }
-    
     
    function cloneItem(e){
         
         var o = form.clear(field.body.items[key_item_change]);
-        field.body.items.splice(key_item_change, 0, o)
-        toggleButtonsUpdateItem(e);
+        o.value = field.body.items.length + 1
+        field.body.items.push(o)
+        
+        toggleButtonsUpdateItem();
         renderSelectUpdateItem();
     }
 
     function deleteItem(e){
         field.body.items.splice(key_item_change, 1);
-        toggleButtonsUpdateItem(e);
+        toggleButtonsUpdateItem();
         renderSelectUpdateItem();
     }
-
-   
-    
 
     function back(e) {
     
         if(e.delegateTarget.id == 'delete'){
             field_tab.click();
         } else {
-            toggleButtonsUpdateItem(e)
+            toggleButtonsUpdateItem()
             $(e.delegateTarget).find('.input-item input').val('')
             $(e.delegateTarget).find('input#checked').prop('checked', false)
         }
@@ -267,18 +282,15 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
     function edit(e){
 		var field_selector, map = e.target.dataset, id = 0;
 		
+		sidebar.addClass( "update" );
 		
         field.body = form.body[map.row][map.index];
         
         field_selector = $("#" + field.body.field)
-        console.log(field.body.field);
-        console.log(field_selector);
         
         activeTab('#update-tab');
 		activeAction(field_selector);
 			
-        field_selector.find('#add-to-form').remove();
-    	
             
 		if(field.body.hasOwnProperty('items')){
 			renderSelectUpdateItem();

@@ -1,15 +1,15 @@
 <!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net -->
 <span class='input-field form-group'>
 	<?php
-		require('fields/_name.php');
-		require('fields/_label.php');
-		require('fields/_value.php');
-		require('fields/_placeholder.php');
-		require('fields/_help-block.php');
-		require('fields/_rows.php');
-		require('fields/_width-and-require.php');
-		require('fields/_id.php');
-		require('fields/_class.php');
+		require('field/_name.php');
+		require('field/_label.php');
+		require('field/_value.php');
+		require('field/_placeholder.php');
+		require('field/_help-block.php');
+		require('field/_rows.php');
+		require('field/_width-and-require.php');
+		require('field/_id.php');
+		require('field/_class.php');
 	?>
 </span>
-<?php require('buttons/_add-to-form.php'); ?>
+<?php require('button/_add-to-form.php'); ?>

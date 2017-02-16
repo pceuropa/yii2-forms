@@ -78,8 +78,9 @@ class FormBuilder extends \yii\base\Widget {
 	
 	public function addColumn($field = false) { // type
 		
-		$column = $field['name'];
-		$type = FormBase::getColumnType($field);
+		if (isset($field['name'])){
+			$column = $field['name'];
+			$type = FormBase::getColumnType($field);
 		
         	$query = Yii::$app->db->createCommand()->addColumn($this->table_prefix, $column, $type ); 
         
@@ -89,6 +90,8 @@ class FormBuilder extends \yii\base\Widget {
 		    } catch (\Exception $e) {
 		       return $this->success = $e->errorInfo[2];
 		    }
+		}
+		
 	}
 	
 	public function renameColumn($oldName, $newName ) {

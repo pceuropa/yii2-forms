@@ -1,7 +1,7 @@
 "use strict";
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 var h = {
-		version: '1.2.0',
+		version: '1.2.1',
 		
 		isString: function(s) {
 				return typeof s === "string" || s instanceof String
@@ -11,6 +11,9 @@ var h = {
 			return (v !== null && v !== undefined && v !== '')
 		},
 		
+		isBoolean: function (v) {
+			return typeof v === "boolean"
+		},
 		
 		isArray: function (o) {
 			if (!Array.isArray) {
@@ -67,6 +70,8 @@ var h = {
 		replaceSpaces: function (o) {
 			return o.replace( new RegExp(/\W/, 'g'), '_')
 		},
+		
+		
 		inheritAll: function (o, inherit) {
 			for (var prop in inherit) {
 				if (inherit.hasOwnProperty(prop)){
@@ -83,7 +88,10 @@ var h = {
 			}
 			
 			},
-			
+		
+		setData: function (value) {  // set only not empty data
+			return 
+		},	
 		setAttribute: function (el, attribute, value) {
 			if(this.isObject(el) || this.isString(attribute) || this.is(value) ){
 				el.setAttribute(attribute, value);
