@@ -146,24 +146,5 @@ if ($test_mode){
 	
 	$this->registerJs(" MyFORM.template(form);", 4);	
 	
-	//$this->registerJsFile('/panelx/js/prism.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJsFile('/panelx/js/clipboard.min.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJs("
-	
-	var clipboard = new Clipboard('.btn');
-
-    clipboard.on('success', function(e) {
-    console.log('text');
-    
-        console.log(e);
-    });
-
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
-	
-	", 3);
-	//$this->registerCssFile('/panelx/css/prism.css');
-	
 ?>		
 
