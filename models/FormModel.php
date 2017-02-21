@@ -37,8 +37,10 @@ class FormModel extends \yii\db\ActiveRecord {
 	    if (($model = FormModel::find()->where(['form_id' => $id])->one()) !== null) {
 	        return $model;
 	    } else {
-	        return (object) ['form' => '{}',];
-	    }
+            throw new \yii\web\NotFoundHttpException('The requested form does not exist.');
+        }
 	}
+	
+
 	
 }

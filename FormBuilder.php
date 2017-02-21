@@ -76,17 +76,23 @@ class FormBuilder extends \yii\base\Widget {
 		}
 	}
 	
+	
+	// sprawdzic zapisywanie
 	public function addColumn($field = false) { // type
 		
 		if (isset($field['name'])){
 			$column = $field['name'];
+			//$this->model->body = $field['body'];
 			$type = FormBase::getColumnType($field);
 		
         	$query = Yii::$app->db->createCommand()->addColumn($this->table_prefix, $column, $type ); 
         
 		    try {
-		       $query->execute();
-		       return $this->success = true;
+		       if ($query->execute()){
+				   	//$this->save();
+				   	return $this->success = true;
+			   }
+		       
 		    } catch (\Exception $e) {
 		       return $this->success = $e->errorInfo[2];
 		    }
@@ -94,15 +100,25 @@ class FormBuilder extends \yii\base\Widget {
 		
 	}
 	
-	public function renameColumn($oldName, $newName ) {
-        $query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $oldName, $newName ); 
+	public function renameColumn($data) {
+		if ( !isset($data['old']) && !isset($data['new']) && $data['old'] === $data['new'] ){
+			return $this->success = 'olga';
+		}
+        $query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $data['old'],$data['new']); 
+        
         
        	try {
 	       	$query->execute();
+	       		//$this->model->body = $data['body'];
+	       		//$this->save();
+	       	
 	       	return $this->success = true;
 	    } catch (\Exception $e) {
 	       	return $this->success = $e->errorInfo[2];
 	    }
+	    
+	    
+	    
 	}
 	
 	public function dropColumn($column) {

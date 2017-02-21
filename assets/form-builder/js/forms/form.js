@@ -1,16 +1,14 @@
 /*
- * form.js v1.2.1
+ * form.js v1.3.2
  * https://pceuropa.net/yii2-extensions/yii2-forms/manual
  * Licensed MIT © Rafal Marguzewicz
  */
- 
- 
  "use strict";
 
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.2');
+console.log('form: 1.2.3');
 var Form = function (){
 
 		//this.url = null;
@@ -30,6 +28,8 @@ var Form = function (){
 		constructor: Form,
 		viewMode: 'html',
 		time_out: 1,
+		t: null,
+		tn: null,
 		div_form: $("#preview-form"),
 		options_form: $("#form"),
 		map: { index: "0", row: "0" },
@@ -44,11 +44,11 @@ var Form = function (){
 	
 	init: function (config) {
 		
-		h.inheritAll(this.c, config)
+		h.inheritAll(this.c, config)  // form inherit all prop.value from config variable
 		this.get();
 		if(this.c.autosave){
 			this.autosaveButton();
-			Form.prototype.time_out = 600;
+			Form.prototype.time_out = 800;
 		}
 		return MyFORM.controller(this, new MyFORM.field.factory() );
 		
@@ -73,6 +73,21 @@ var Form = function (){
 		},
 	
 	
+	saveOnlyOneTime: function (callback, stopPropagation) {
+		var form = this
+		if (this.t) clearTimeout(this.t)
+			this.t = window.setTimeout(function() { callback()  }, 1000)
+		
+		
+	
+	},
+	
+	saveNameOnlyOneTime: function (callback) {
+		var form = this
+		if (this.tn) clearTimeout(this.tn)
+		this.tn = window.setTimeout(function() { callback()  }, 1000)
+	},
+	
 	save: function (){
 			var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
 			
@@ -80,7 +95,9 @@ var Form = function (){
 			
 			data = {form_data: JSON.stringify(form), title: form.title, url: form.url,  _csrf : csrfToken };
 
-			$.post( this.c.controller_url, data, function (r){
+
+			
+				$.post( form.c.controller_url, data, function (r){
 				
 				if (r.success === true) { 
 					console.log('save in base correct');
@@ -90,7 +107,8 @@ var Form = function (){
 					form.errorSave(r.success);
 				} 
 				
-			});
+				})
+			
 				
 	},
 	
@@ -100,20 +118,28 @@ var Form = function (){
  * @param {String} old_name
  * @param {String} new_name
  */
-	editName: function(old_name, new_name){
+	editTableName: function(options){
+		var old_name = options.old_name,
+			new_name = options.new_name
+	
+		if( !h.is(new_name) && !h.is(old_name) && old_name === new_name) return false
+			
 		var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
 			
-			if(this.c.autosave){
-				data = {change: {old: old_name, new: h.replaceSpaces(new_name), body: JSON.stringify(form)}, _csrf : csrfToken };
-
-				$.post( this.c.controller_url, data, function (r){
+				if(form.c.autosave){
+				data = {change: {old: old_name, new: new_name}, _csrf : csrfToken };
+				
+					$.post(form.c.controller_url, data, function (r){
 					if (r.success === true) { 
-						console.log('new name change correct');
+						options.success()
+					} else {
+						options.error(r.success)
 					}
 				});
 			}
-			
 	},
+	
+	
 	
 	
 	setValueInputOptions: function() {
@@ -184,14 +210,10 @@ var Form = function (){
 		        }
 		        
 		        if(prop === 'items'){
-		        
-				    for (var i = 0; i < o[prop].length; i++) {
-				    
-						if( !h.is( o[prop][i].value ) ){
-		    	        		o[prop][i].value = (i + 1);
-		    	        	}
-			    	}
-			    	
+		        	o[prop].forEach(function(item, i){
+							if( !h.is(o[prop][i].value) ) o[prop][i].value = (i + 1);
+		        	    })
+		        	    
 	        	}
 	        	
 	        	notReference[prop] = o[prop];
@@ -202,6 +224,7 @@ var Form = function (){
     },
     
     uniqueName: function (name){
+    
 		var q = this.fields_with_data,
 	  		name = h.replaceSpaces(name);
 	  	
@@ -283,6 +306,8 @@ var Form = function (){
  * Render form
  */
 	render: function(){
+		var form = this;
+	
 			switch(Form.prototype.viewMode){
 				case 'html': this.div_form.html(this.html()); this.sort(this); break;
 			    case 'text': this.div_form.html('<pre><code class="language-html"> </code></pre>').find('code').text(this.html()); break;
@@ -290,10 +315,13 @@ var Form = function (){
 				case 'yii2': this.div_form.html('<pre><code> </code></pre>').find('code').text('Yii2'); break;
 			    default: 	throw "View mode error, check form.viewMode";
 			}
-			if(this.c.autosave && arguments[0] !== 'off' ){
-				this.save();
-			}
 			
+			
+			if(this.c.autosave && arguments[0] !== 'off' ){
+				this.saveOnlyOneTime(function () {
+					form.save()
+				})
+			}
 			this.preventNotValidaData();
 			
 	},
@@ -333,10 +361,12 @@ var Form = function (){
 		    return '\n<div id="row'+ id +'" class="row">\n'+ this.fields(id) +' \n</div>\n';
 		}, 
 	fields: function(id){
-		    var fields = '';
-		    for (var i = 0, max = this.body[id].length; i < max; i++){
-		        fields += this.field(id, i);
-		    }
+		    var fields = '', form = this;
+		    this.body[id].forEach(function (item, i, array) {
+		    	fields += form.field(id, i);
+		    })
+		    
+		    
     	return fields;
 		},
 

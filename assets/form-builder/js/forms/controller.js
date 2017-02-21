@@ -4,7 +4,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.2',
+	var version = '1.2.3',
         key_item_change = 0,
         update_mode = false,				// selectItemToChange()
 		preview_form = form.div_form,
@@ -81,6 +81,7 @@ sidebar_div_options
 function render() {
 	if(update_mode){
 		form.render()
+		h.renderSelectUpdateItem(field)
 	} else {
 		field.render()
 	}
@@ -141,10 +142,12 @@ function activeAction(target) {
 
 
 // FORM TAB
-options_form.find('span').find('input, select').donetyping(function(){
-	    form[this.id] = this.value;
-	    form.render();
-    }, form.time_out);
+options_form.find('span').find('input, select').on('keyup', function(){
+		this.value = h.replaceChars(this.value, '-')
+	    form[this.id] = this.value
+	    console.log('form', this.value)
+	    form.render()
+    });
     
     
 // Field TAB
@@ -164,63 +167,74 @@ select_field.change(function () {
 		field.render();
 
 	});
-	
-	
+
 		
 //field_selector.find('.add-item').prop('disabled', $(this).val() === '' ? true : false );
 
-$('.input-field').find('input, select, #textdescription').donetyping(function(){
-			  		
-  		 
-        if(update_mode && this.id === 'name'){
-        	if(field.body.name != this.value){ form.editName( field.body.name, this.value) }
-        }
-            		
-				    
-    	field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
-		if(!update_mode){
-			$("#" + field.body.field).find('#add-to-form').prop( 'disabled', $("#" + field.body.field).find('#name').val() === '' ? true : false );
-		}
-	  	
-		
-		render();
-				    
-}, form.time_out).on('change', function (){
-
- 		field.body[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
- 		
- 		render();
- 		
+$('.input-field').find('input, select, #textdescription').on( "keyup paste change", function(e) {
+   var el = this;
+	
+	if(this.id === 'name'){
 			
+			if(!h.is(this.value) || field.body.name === this.value) {
+				clearTimeout(form.t) 
+				return;
+			} // poszukac sposobu prevent name jak inne 
+	
+        	this.value = h.replaceChars(this.value);
+        	
+        	if(update_mode) {
+    			
+    			form.saveOnlyOneTime(function () {
+    			
+    				form.editTableName({
+    					old_name: field.body.name,
+						new_name: el.value,
+						success: function () {
+							console.log('name changed correct');
+							field.body['name'] = el.value;
+							form.save()
+						},
+						error: function (message) {
+							
+							$(el).next().text(message)
+							$(el).addClass('empty');
+							
+							window.setTimeout(function(){ $(el).removeClass('empty') }, 1000)
+							window.setTimeout(function(){ $(el).next().empty() }, 5111)
+						}
+    				})
+    			})
+    			
+    			
+    			
+    			
+    			
+        	} else {
+        		field.body['name'] = this.value;
+        		render()
+        	}
+        	
+        	
+        } else {
+        	field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
+    		render();
+        }
+    
+    
 });
+	
+			
 	
    function addItem(){
 			
         var o = field.setDataItemFrom('item-of-field'); // class
         field.addItem(field, o);
-        renderSelectUpdateItem();
         render();
         
 	}
 
-   function renderSelectUpdateItem() {
-		var f = field.body;
-	if(f.items.length != 0){
-        
-        $("#"+ f.field).find('.select-item-to-change').html(
-            (function () {
-                var i = 0, temp = '', options = '';
-
-                for (i; i < f.items.length; i++) {
-		            temp = f.items[i].text ? f.items[i].text : '';
-		            options += '<option value="' + i + '">'+(i + 1) +'. ' + temp +'</option>';
-	            }
-
-	            return '<select class="change-item form-control input-sm"><option selected>Change item</option>'+ options + '</select>';  
-		        })()
-		    );
-		}
-    }
+   
     
    function selectItemToChange(e){ // select item to change
         var item = field.body.items[e.currentTarget.value],
@@ -258,13 +272,11 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
         field.body.items.push(o)
         
         toggleButtonsUpdateItem();
-        renderSelectUpdateItem();
     }
 
     function deleteItem(e){
         field.body.items.splice(key_item_change, 1);
         toggleButtonsUpdateItem();
-        renderSelectUpdateItem();
     }
 
     function back(e) {
@@ -292,10 +304,6 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
 		activeAction(field_selector);
 			
             
-		if(field.body.hasOwnProperty('items')){
-			renderSelectUpdateItem();
-		}
-			
 			if(field.body.field != 'description'){
 				for (var prop in field.body) {
             
@@ -314,9 +322,7 @@ $('.input-field').find('input, select, #textdescription').donetyping(function(){
 				editor.content = field.body.textdescription
 			}
 			
-			
-			
-			
+		h.renderSelectUpdateItem(field)	
 			// $('#update span').find('input, textarea, select').on('keyup change', function (){});
             
 	}

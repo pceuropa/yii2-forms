@@ -63,19 +63,34 @@ class Form extends \yii\base\Widget {
     
     public static function field($form, $model, $value){
 	 		switch ($value['field']) {
-		       case 'input': return self::text($form, $model, $value); break;
+		       case 'input': return self::textInput($form, $model, $value); break;
 		       case 'radio': return self::{$value['field']}($form, $model, $value); break;
 		       case 'checkbox': return self::{$value['field']}($form, $model, $value); break;
 		       case 'select': return self::{$value['field']}($form, $model, $value); break;
 		       case 'description': return self::{$value['field']}($value); break;
 		       case 'submit': return self::{$value['field']}($value); break;
-		       default: return self::text($form, $model, $value); break;
+		       default: return self::textInput($form, $model, $value); break;
 		   	}	
       
 	}
    
 	public static function div($width, $field){
 		return '<div class="'.$width.'">'. $field .'</div>';
+	}
+   
+   	public static function textInput($form, $model, $value){
+		if (!isset($value['name'])){
+			return null;
+		}
+       
+       
+       $field = $form->field($model, $value['name'])->textInput(['type' => $value['type']]);
+       
+       if (isset($value['label'])){ 
+       		$field->label($value['label']);
+       }
+       
+       return self::div($value['width'], $field);
 	}
    
 	public static function text($form, $model, $value){

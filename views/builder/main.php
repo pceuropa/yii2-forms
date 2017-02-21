@@ -6,35 +6,27 @@ use yii\helpers\Json;
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-		<div id="widget-form-header" class="pull-right"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+		<div id="widget-form-header" class="pull-right">
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+			<button class="btn"  data-clipboard-target="#json-code"> Cut to clipboard </button>
+		</div>
 		
-		
-		<button class="btn"  data-clipboard-target="#json-code">
-    Cut to clipboard
-</button>
-
-
-</div>
 		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
 	
-		<div id="preview-form">
-		<div class="manual" >
-			<?= $this->render('_manual'); ?>
-		</div>
+			<div id="preview-form">
+				<div class="manual" ><?= $this->render('_manual'); ?></div>
+			</div>
 		
-		<span id='previewfield'><?= Yii::t('builder', 'Preview field')  ?>:</span> <div id="preview-field">
+			<span id='previewfield'><?= Yii::t('builder', 'Preview field')  ?>:</span>
+			<div id="preview-field"></div>
 		
-		
-		</div>
-		
-		<div id="errors">
-			<div id="name-field-empty" class="alert alert-info" role="alert"></div>
-		</div>
+			<div id="errors">
+				<div id="name-field-empty" class="alert alert-info" role="alert"></div>
+			</div>
 	</section>
 	
 	<asside class="col-md-4">
 		<div id="sidebar">
-			
 			<select id="select-field" class="pull-right form-control input-sm">
 				<option value="input"><?= Yii::t('builder', 'Input') ?></option>
 				<option value="textarea"><?= Yii::t('builder', 'TextArea') ?></option>
@@ -97,9 +89,9 @@ $this->registerCss("
 	
 	#sidebar.update #add-to-form{display:none}
 	
-	#select-field {color: #3F56AA; font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;}
+	#select-field {font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;}
 	#select-field .show {display:inline-block}
-	
+	.change-item {width: 145px}
 	@media screen and (min-width: 1024px){
 	  #sidebar { position: fixed;}
 	  #preview-field {margin-bottom:200px}

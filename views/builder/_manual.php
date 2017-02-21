@@ -1,39 +1,39 @@
-<h3>Manual</h3>
+<h3><?= Yii::t('builder', 'Manual')  ?></h3>
 	<ol>
-	  <li><b>Opcje formularza (kolumna prawa)</b>
+	  <li><b><?= Yii::t('builder', 'Form options (right column)')  ?></b>
 	  		<ul>
-	  		  <li><b>Widok</b> zmienia rodzaj wyświetlanego kodu.</li>
-	  		  <li><b>Tytuł</b>  nie pojawia się w kodzie formularza, służy do rozróżnienia w liście formularzy. Jeżeli potrzebujesz tytułu skorzystaj z Pole -> Opis</li>
-	  		  <li><b>Adres URL</b> adres URL formularza</li>
-	  		  <li class="expert"><b>Metoda wysyłki</b> sposób przekazywania danych pomiędzy formularzem a adresem odbioru </li>
-	  		  <li class="expert"><b>Adres odbioru</b> zostaw puste jeżeli adres URL odbioru jest taki sam jak adres formularza</li>
-	  		  <li class="expert"><b>ID</b> pozwala ustawić atrybut id dla formularza, przydatne do CSS</li>
-	  		  <li class="expert"><b>Class</b> pozwala ustawić atrybut class dla formularza, przydatne do CSS</li>
-	  		  <li><b>Zapisz formularz</b> opcja zapisania formularza aktywna po wypełnieniu pól tytuł i adres URL.</li>
+	  		  <li><?= Yii::t('builder', '<b>View</b> changes the color of a displayed code')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Title</b> does not appear in a form code, is used for differentiation in a list of forms. If you need a title, use Field -> Description')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>URL address</b> the URL address of a form')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Method (HTTP)</b> a way of data transmission between a form and a collection address')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Action</b> leave blank if the URL collection address is the same as the address of a form')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>ID</b> allows setting an id attribute for a form, practicable for CSS')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Class</b> allows setting a class attribute for a form, practicable for CSS')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Save the form</b> an option for saving a form which is active upon filling the title and URL address fields')  ?></li>
 	  		</ul>
 	  	
 	  </li>
-	  <li><b>Opcje pola</b>
+	  <li><?= Yii::t('builder', '<b>Field options</b>')  ?></b>
 	  		<ul>
-	  		  <li><b>Menu wyboru</b> pozwala wybrać dany element</li>
-	  		  <li><b>Nazwa</b> atrybut nie widoczny w formularzu, potrzebny do rozróżnienia otrzymywanych danych z wypełnionych danych</li>
-	  		  <li><b>Etykieta</b> napis pojawiający się nad polem</li>
-	  		  <li class="expert"><b>Tekst zastępczy</b> opis pola formularza, ulokowany w polu, który znika po rozpoczęciu wypełniania danego pola formularza</li>
-	  		  <li><b>Tekst domyślny</b> domyślnie wypełnione pole</li>
-	  		  <li class="expert"><b>Opis</b> tekst opisowy ulokowany pod polem</li>
-	  		  <li><b>Szerokość</b> pole może mieć szerokość np 50% w tedy na ekranie komputera mogą być 2 pola w jednej linii. Na ekranie smartfona pole zawsze ma szerokość 100%</li>
-	  		  <li><b>Wymagane</b> pole formularza musi być uzupełnione</li>
-	  		  <li class="expert"><b>ID</b> pozwala ustawić atrybut id dla formularza, przydatne do CSS</li>
-	  		  <li class="expert"><b>Class</b> pozwala ustawić atrybut class dla formularza, przydatne do CSS</li>
-	  		  <li><b>Elementy pola</b> w przypadku pól wielokrotnego wyboru</li>
+	  		  <li><?= Yii::t('builder', '<b>Selection menu</b> allows to choose a particular element')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Name</b> an attribute not visible in the form, required for differentiation of received data from filled forms') ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Label</b> a writing appearing above a field')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Placeholder</b> tekst a description of a form field, localized in the field that disappears after you have started to fill in a given field')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Default</b> text a field filled in automatically')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Description</b> a descriptive text localized above a field')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Width</b> a field may be of e.g. 50% width and then 2 fields may appear on a computer screen in a line. The field on a smart phone screen is always of 100% width')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Required</b> a form field must be filled in')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>ID</b> allows setting an id attribute for a form, practicable for CSS')  ?></li>
+	  		  <li class="expert"><?= Yii::t('builder', '<b>Class</b> allows setting a class attribute for a form, practicable for CSS')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>Field elements</b> in case of multiple choice fields')  ?></li>
 		  		  <ol>
-		  		    <li><b>Text</b> tekst jednego elementu z listy pola</li>
-		  		    <li><b>Wartość</b> pozwoli rozróżnić odpowiedzi, zostaw puste jeżeli niemasz pewności, system ponumeruje automatycznie</li>
-		  		    <li><b>Zaznaczone</b> element listy pola domyślnie wybrany</li>
+		  		    <li><?= Yii::t('builder', '<b>Text</b> text of one element from a field list')  ?></li>
+		  		    <li><?= Yii::t('builder', '<b>Value</b> will allow the differentiation of answers, leave blank if you are not sure, the system will paginate automatically')  ?></li>
+		  		    <li><?= Yii::t('builder', '<b>Checked</b> an element of a field list selected automatically')  ?></li>
 		  		  </ol>
 	  		  </li>
 	  		</ul>
 		</li>
 	</ol>
-</div>
+
 		

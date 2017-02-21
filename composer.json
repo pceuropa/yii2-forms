@@ -11,7 +11,7 @@
 		"without model",
 		"dynamic model"
 	],
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"homepage": "https://pceuropa.net/yii2-extensions/yii2-forms",
 	"type": "yii2-extension",
 	"minimum-stability": "dev",

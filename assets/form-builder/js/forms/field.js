@@ -1,9 +1,15 @@
-"use strict";
-//#Copyright (c) 2017 Rafal Marguzewicz pceuropa.net
+/*
+ * field.js v1.2.1
+ * https://pceuropa.net/yii2-extensions/yii2-forms/manual
+ * Licensed MIT © Rafal Marguzewicz
+ */
+ 
+ "use strict";
+
 
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-	console.log('field: 1.1.1');
+	console.log('field: 1.2.0');
 
 var factory = function(o) {
 	this.body = o  || {};
@@ -73,7 +79,7 @@ factory.prototype = {
 			if(this.view){
 				preview.html('(<a>html</a>) <br/>' + field.html());
 			} else {
-				preview.html('(<a>text</a>)</p><pre><code> </code></pre>').find('code').text(field.html());	
+				preview.html('(<a>text</a>) <br/></p><pre><code> </code></pre>').find('code').text(field.html());	
 			}
 
 		preview.find('a').click(function () {
@@ -81,29 +87,17 @@ factory.prototype = {
 			field.render();
 		});
 		
-		//this.renderUpdateItemField();
+		this.disableButtonAddToForm();
+		h.renderSelectUpdateItem(this)
 		
 	},
 	
-    renderUpdateItemField: function(){
-        var field = this;
-        
-        if(this.body.hasOwnProperty('items')){
-        if(this.body.items.length){
-                $("#" + field.body.field + " .select-item-to-change").html(
-                    (function () {
-                        var i = 0, text = '', itemOption = '';
-
-                        for (i; i < field.body.items.length; i++) {
-					        text = field.body.items[i].text ? field.body.items[i].text : '';
-					        itemOption += '<option value="' + i + '">'+(i + 1) +'. ' + text +'</option>';
-				        }
-				        return '<select class="change-item form-control input-sm"> <option selected>Change item</option>'+ itemOption + '</select>';  
-                    })()
-                );
-        }}	
+	disableButtonAddToForm:	function () {
+	   var boolean = true;
+   		boolean = ( this.body.field == 'description' || this.body.field == 'submit') ? false : !h.is(this.body.name)
+   		
+		$("#" + this.body.field).find('#add-to-form').prop( 'disabled', boolean);
 	},
-
 
 	is: function (value) {
 		return value ? value : '';
@@ -352,6 +346,7 @@ var description = {
 		},
 		
 		html: function() { 
+		
 			return this.div() + this.is(this.body.textdescription) + this.divEnd();;
 		}
 	}

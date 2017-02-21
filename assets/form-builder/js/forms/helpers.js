@@ -1,7 +1,121 @@
 "use strict";
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
+
+/*
+list of tools:
+	capitalizeFirstLetter - capitalize first letter of string 
+	clearObject - delete empty variable of object	
+	clone - copy without reference
+	
+	each
+	fibonacci	
+	firstProp
+	firstValue
+	getName
+	getAllProperty
+	
+	isString
+	is
+	isBoolean
+	isArray
+	isObject
+	
+	subString	
+	setData	
+	uniqueName	
+*/
+
+
+
+
+
 var h = {
-		version: '1.2.1',
+		version: '2.0.0',
+/**
+ * Capitalize First letter of string 
+ *
+ * @param {String} s
+ * @return {String}
+ */	
+		capitalizeFirstLetter: function (s) {
+    		return s.charAt(0).toUpperCase() + s.slice(1);
+		},
+		
+		
+		clearObject: function(o){
+		    for (var i in o) {
+		        if (o[i] === null || o[i] === undefined) {
+		            delete o[i];
+		        }
+		    }
+		    return o;
+		},
+		
+		clone: function (o) {
+			var clone = {};
+
+			for (var prop in o) {
+
+					if( this.isArray(o[prop]) ){
+						for (var i = 0; i < o[prop].length; i++){
+							clone[prop][i] = o[prop][i];
+						}
+					} else {
+						clone[prop] = o[prop];
+					}
+		    }
+			return clone;
+		},
+		
+		
+		
+		each: function (arr, callback) {
+			if(this.isArray(arr)){
+				var i = 0;
+				for (i; i < arr.length; i++) {
+					callback(i, arr[i]);
+				}
+			}
+			
+		},
+		fibonacci: function (n) {
+			   return n < 1 ?   0 : n <= 2 ? 1 : fibonacci(n - 1) + fibonacci(n - 2);
+			},
+		firstProp: function (o) {
+			return Object.keys(o)[0];
+		},
+		
+		firstValue: function (o) {
+			return o[Object.keys(o)[0]];
+		},
+		
+		getName: function() { 
+   			var 
+   			funcNameRegex = /function (.{1,})\(/,
+   			results = (funcNameRegex).exec((this).constructor.toString());
+   		
+   			return (results && results.length > 1) ? results[1] : "";
+		},	
+
+	
+		getAllProperty: function (prop, o) {
+			var help = this, result = [];
+			if(o.length == 0 ) return result;
+			
+			help.each(o, function (i, value) {
+				if( value.length !== 0 || help.isArray(value)  ){
+					help.each(value, function (j, v) {
+						
+						if ( v.hasOwnProperty(prop) ) {
+							result.push(v[prop])
+						} 
+					});
+				}
+				
+			});
+			
+			return result;
+		},
 		
 		isString: function(s) {
 				return typeof s === "string" || s instanceof String
@@ -27,51 +141,6 @@ var h = {
 			return typeof o === "object";
 		},
 		
-		clearObj: function(o){
-		    for (var i in o) {
-		        if (o[i] === null || o[i] === undefined) {
-		            delete o[i];
-		        }
-		    }
-		    return o;
-		},
-		fibonacci: function (n) {
-			   return n < 1 ?   0 : n <= 2 ? 1 : fibonacci(n - 1) + fibonacci(n - 2);
-			},
-			
-			
-		getAllProperty: function (prop, o) {
-			var help = this, result = [];
-			if(o.length == 0 ) return result;
-			
-			help.each(o, function (i, value) {
-				if( value.length !== 0 || help.isArray(value)  ){
-					help.each(value, function (j, v) {
-						
-						if ( v.hasOwnProperty(prop) ) {
-							result.push(v[prop])
-						} 
-					});
-				}
-				
-			});
-			
-			return result;
-		},
-		firstProp: function (o) {
-			return Object.keys(o)[0];
-		},
-		
-		firstValue: function (o) {
-			return o[Object.keys(o)[0]];
-		},
-		
-		
-		replaceSpaces: function (o) {
-			return o.replace( new RegExp(/\W/, 'g'), '_')
-		},
-		
-		
 		inheritAll: function (o, inherit) {
 			for (var prop in inherit) {
 				if (inherit.hasOwnProperty(prop)){
@@ -79,15 +148,40 @@ var h = {
 				}
 			}
 		},
-		each: function (arr, callback) {
-			if(this.isArray(arr)){
-				var i = 0;
-				for (i; i < arr.length; i++) {
-					callback(i, arr[i]);
+		
+		replaceChars: function (o, char) {
+			char = char || '_'
+			return o.replace( new RegExp(/[^A-Za-z0-9w]/, 'g'), char)
+		},
+		
+		renderSelectUpdateItem: function(field){
+        	var helpers = this
+		    if(field.body.hasOwnProperty('items')){
+				if(field.body.items.length){
+				
+				        $("#" + field.body.field + " .select-item-to-change").html(
+				            (function () {
+				                var i = 0, text = '', itemOption = '';
+
+				                for (i; i < field.body.items.length; i++) {
+									text = field.body.items[i].text ? field.body.items[i].text : '';
+									itemOption += '<option value="' + i + '">'+(i + 1) +'. ' + helpers.subString(text, 60) +'</option>';
+								}
+								return '<select class="change-item form-control input-sm">'+ itemOption + '</select>';  
+				            })()
+				        );
+				} else {
+					$("#" + field.body.field + " .select-item-to-change").empty()
 				}
-			}
-			
-			},
+				
+		    }	
+		},
+		
+		subString: function(str, len) {
+			len = len || 10
+			if(str.length > len) str = str.substring(0,len) + '...';
+			return str
+		},
 		
 		setData: function (value) {  // set only not empty data
 			return 
@@ -98,22 +192,7 @@ var h = {
 			}
 		},
 		
-		clone: function (o) {
-			var clone = {};
-
-			for (var prop in o) {
-				if (clone[prop]){
-					if(Array.isArray(o[prop])){
-						for (var i=0; i < o[prop].length; i++){
-							clone[prop][i] = o[prop][i];
-						}
-					} else {
-						clone[prop] = o[prop];
-					}
-				}
-		    }
-			return clone;
-		},
+		
 		
 		uniqueName: function (name, list) {
 			if( $.inArray(name, list) ){
@@ -121,17 +200,9 @@ var h = {
 		  	}
 		  	return name;
 		},
+	
 		
-		getName: function() { 
-   			var 
-   			funcNameRegex = /function (.{1,})\(/,
-   			results = (funcNameRegex).exec((this).constructor.toString());
-   		
-   			return (results && results.length > 1) ? results[1] : "";
-		},
-		capitalizeFirstLetter: function (s) {
-    		return s.charAt(0).toUpperCase() + s.slice(1);
-		},
+		
 };
 
 (function($){
