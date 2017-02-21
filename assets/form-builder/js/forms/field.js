@@ -9,7 +9,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-	console.log('field: 1.2.0');
+	console.log('field: 1.2.1');
 
 var factory = function(o) {
 	this.body = o  || {};
