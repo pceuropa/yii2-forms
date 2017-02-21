@@ -226,7 +226,7 @@ var Form = function (){
     uniqueName: function (name){
     
 		var q = this.fields_with_data,
-	  		name = h.replaceSpaces(name);
+	  		name = h.replaceChars(name);
 	  	
 	  	if( $.inArray(name, q) !== -1 ){
 	  		name = name + '_2'

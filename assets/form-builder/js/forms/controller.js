@@ -145,7 +145,6 @@ function activeAction(target) {
 options_form.find('span').find('input, select').on('keyup', function(){
 		this.value = h.replaceChars(this.value, '-')
 	    form[this.id] = this.value
-	    console.log('form', this.value)
 	    form.render()
     });
     
