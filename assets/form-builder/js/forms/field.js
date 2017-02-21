@@ -77,9 +77,9 @@ factory.prototype = {
 		var preview  = $("#preview-field"), field = this;
 			
 			if(this.view){
-				preview.html('(<a>html</a>) <br/>' + field.html());
+				preview.html('(<a>html</a>) <br/><br/>' + field.html());
 			} else {
-				preview.html('(<a>text</a>) <br/></p><pre><code> </code></pre>').find('code').text(field.html());	
+				preview.html('(<a>text</a>) <br/><br/> <pre><code> </code></pre>').find('code').text(field.html());	
 			}
 
 		preview.find('a').click(function () {

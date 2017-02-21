@@ -17,7 +17,7 @@ use yii\helpers\Json;
 				<div class="manual" ><?= $this->render('_manual'); ?></div>
 			</div>
 		
-			<span id='previewfield'><?= Yii::t('builder', 'Preview field')  ?>:</span>
+			<span id='text-bofore-preview-field'><?= Yii::t('builder', 'Preview field')  ?>:</span>
 			<div id="preview-field"></div>
 		
 			<div id="errors">
@@ -76,6 +76,7 @@ $this->registerCss("
 	
 	
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
+	span#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
 	#preview-field .show {display:block}
 	
 	div.options { border:solid 1px #ccc; padding:10px;}
@@ -96,7 +97,7 @@ $this->registerCss("
 	  #sidebar { position: fixed;}
 	  #preview-field {margin-bottom:200px}
 	}
-	span#previewfield {margin: 0 10px 10px 0; float:left}
+	
 	.name-error {color: red}
 	.empty {border: solid 1px #D42323 }
 	.green {border: solid 1px #399D6E }
