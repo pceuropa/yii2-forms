@@ -64,6 +64,7 @@ class Form extends \yii\base\Widget {
     public static function field($form, $model, $value){
 	 		switch ($value['field']) {
 		       case 'input': return self::textInput($form, $model, $value); break;
+		       case 'textarea': return self::text($form, $model, $value); break;
 		       case 'radio': return self::{$value['field']}($form, $model, $value); break;
 		       case 'checkbox': return self::{$value['field']}($form, $model, $value); break;
 		       case 'select': return self::{$value['field']}($form, $model, $value); break;
@@ -82,7 +83,6 @@ class Form extends \yii\base\Widget {
 		if (!isset($value['name'])){
 			return null;
 		}
-       
        
        $field = $form->field($model, $value['name'])->textInput(['type' => $value['type']]);
        
@@ -138,7 +138,7 @@ class Form extends \yii\base\Widget {
    }
    
    public static function description($v){
-   		return self::div($v['width'], $v['description']);
+   		return self::div($v['width'], $v['textdescription']);
    }
    
    public static function select($form, $model, $v){
