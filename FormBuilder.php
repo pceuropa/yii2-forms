@@ -102,7 +102,7 @@ class FormBuilder extends \yii\base\Widget {
 	
 	public function renameColumn($data) {
 		if ( !isset($data['old']) && !isset($data['new']) && $data['old'] === $data['new'] ){
-			return $this->success = 'olga';
+			return $this->success = false;
 		}
         $query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $data['old'],$data['new']); 
         

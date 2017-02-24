@@ -36,17 +36,22 @@ class Form extends \yii\base\Widget {
     	
     	$merge_array = FormBase::filterInvalidFields($array);
     	$data_fields = FormBase::onlyDataFields($merge_array);
-    	
     	$this->model = new \yii\base\DynamicModel($data_fields);
     	
-    	foreach ($merge_array as $key => $value) {
+    	foreach ($data_fields as $key => $value) {
     	
     		if (isset($value["require"]) && $value["require"]){
     		
     			$this->model->addRule($value["name"], 'required');
     		}
     		
-    		$this->model->addRule($value["name"], FormBase::getValidator($value) );
+    		if (isset($value["name"]) && $value["name"]){
+    		
+    			$this->model->addRule($value["name"], FormBase::getValidator($value) );
+    		}
+    		
+    		
+    		
     	    
     	}
 	    
@@ -124,8 +129,13 @@ class Form extends \yii\base\Widget {
    
    public static function checkbox($form, $model, $value){
    		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$field = '';
 		
-		$field = '<label>'.$value['label'].'</label>'.Html::activeCheckboxList($model, $value['name'], $items,
+		if (isset($value['label'])	){
+			$field = '<label>'.$value['label'].'</label>';
+		}
+		
+		$field.Html::activeCheckboxList($model, $value['name'], $items,
 	
 	[
     'item' => function ($index, $label, $name, $checked, $value) {
