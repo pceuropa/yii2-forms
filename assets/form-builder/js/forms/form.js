@@ -1,5 +1,5 @@
 /*
- * form.js v1.3.2
+ * form.js v1.2.4
  * https://pceuropa.net/yii2-extensions/yii2-forms/manual
  * Licensed MIT © Rafal Marguzewicz
  */
@@ -233,12 +233,16 @@ var fields_with_data = [], // array for false autosave
 			var 
 				first = this.body[row][index], 
 				o = jQuery.extend(true, {}, first);
-			
+				
 			if (o.hasOwnProperty('label')){
 				o.label = first.label + '_2'
 			} 
 			
-			o.name = first.name + '_2'
+			if(h.is(first.name)){
+				o.name = first.name + '_2'
+			}
+			
+			
 			
 			this.body[row].splice(index + 1, 0, o); // wstawiamy obiekt na odpowiednie miejsce bez usuwania
 			
