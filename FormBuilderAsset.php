@@ -5,7 +5,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
     public $sourcePath = '@vendor/pceuropa/yii2-forms/assets/form-builder';
     public $baseUrl = '@web';
     public $css = [
-    	'https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css',
+    	'https://cdn.quilljs.com/1.2.0/quill.snow.css',
     ];
     public $js = [
         'js/forms/Sortable.min.js',
@@ -16,8 +16,9 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/controller.js',
 		'js/forms/examples.js',
 		'js/forms/test.js',
-		'https://cdn.bootcss.com/vue/1.0.26/vue.min.js',
-		'js/editor/vue-html5-editor.js',
+		'js/forms/clipboard.min.js',
+		'https://cdn.quilljs.com/1.2.0/quill.js',
+		'js/forms/clipboard.min.js',
 		
     ];
     public $depends = [
@@ -25,5 +26,4 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
         'yii\bootstrap\BootstrapAsset',
     ];
 }
-
 

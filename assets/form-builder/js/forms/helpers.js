@@ -30,7 +30,7 @@ list of tools:
 
 
 var h = {
-		version: '2.0.0',
+		version: '2.0.1',
 /**
  * Capitalize First letter of string 
  *
@@ -82,11 +82,19 @@ var h = {
 			   return n < 1 ?   0 : n <= 2 ? 1 : fibonacci(n - 1) + fibonacci(n - 2);
 			},
 		firstProp: function (o) {
-			return Object.keys(o)[0];
+			if(this.isObject(o)){
+				return Object.keys(o)[0];
+			} else {
+				return false
+			}
 		},
 		
 		firstValue: function (o) {
-			return o[Object.keys(o)[0]];
+			if( this.isObject(o) ){
+				return o[Object.keys(o)[0]];
+			} else {
+				return false
+			}
 		},
 		
 		getName: function() { 
@@ -138,7 +146,7 @@ var h = {
 		},
 		
 		isObject: function (o) {
-			return typeof o === "object";
+			return typeof o === "object" && this.is(o);
 		},
 		
 		inheritAll: function (o, inherit) {
@@ -167,7 +175,7 @@ var h = {
 									text = field.body.items[i].text ? field.body.items[i].text : '';
 									itemOption += '<option value="' + i + '">'+(i + 1) +'. ' + helpers.subString(text, 60) +'</option>';
 								}
-								return '<select class="change-item form-control input-sm">'+ itemOption + '</select>';  
+								return '<select class="change-item form-control input-sm"><option>Update</option>'+ itemOption + '</select>';  
 				            })()
 				        );
 				} else {

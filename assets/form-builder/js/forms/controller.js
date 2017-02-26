@@ -4,7 +4,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.3',
+	var version = '1.2.4',
         key_item_change = 0,
         update_mode = false,				// selectItemToChange()
 		preview_form = form.div_form,
@@ -22,26 +22,28 @@ MyFORM.controller = function(form, field){
 		delete_tab =	$('#delete-tab'),
 		
 		update_div = $('#update'),
-		delete_div = $('#delete');
+		delete_div = $('#delete'),
+		clipboard = new Clipboard('#copy-json');
 		//quill = new Quill('.editor', { theme: 'snow'}),
 		
 		console.log('controller:', version);
 
 
+var quill = new Quill('#textdescription', {
+    theme: 'snow',
+       modules: {
+        'toolbar': [
+          [{ 'header': [1, 2, false] }],
+          [ 'bold', 'italic',],
+          [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+          [{ 'align': [] }],
+          [ 'link'],
+          [ 'clean' ]
+        ],
+      },
+  });
 
-Vue.use(VueHtml5Editor, {
-        hiddenModules: [
-            "image",
-            "full-screen",
-        ]
-    })
-    
-  var editor = new Vue({
-        el: "#textdescription",
-        data: {
-            content: "",
-        }
-    })
+
 
 //Actions:
 // 1. -------- FORM -----------------
@@ -170,7 +172,7 @@ select_field.change(function () {
 		
 //field_selector.find('.add-item').prop('disabled', $(this).val() === '' ? true : false );
 
-$('.input-field').find('input, select, #textdescription').on( "keyup paste change", function(e) {
+$('.input-field').find('input, select').on( "keyup paste change", function(e) {
    var el = this;
 	
 	if(this.id === 'name'){
@@ -205,10 +207,6 @@ $('.input-field').find('input, select, #textdescription').on( "keyup paste chang
     				})
     			})
     			
-    			
-    			
-    			
-    			
         	} else {
         		field.body['name'] = this.value;
         		render()
@@ -216,30 +214,32 @@ $('.input-field').find('input, select, #textdescription').on( "keyup paste chang
         	
         	
         } else {
-        	field.body[this.id] = (this.type === 'checkbox') ? this.checked : (this.id === 'textdescription') ? $(".content").html() : this.value;
+        	field.body[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
     		render();
         }
     
     
 });
 	
+	
+	quill.on('text-change', function(delta, oldDelta, source) {
+		field.body['textdescription'] = $("#" + field.body.field).find("#textdescription .ql-editor").html();
+		render();
+	});
 			
 	
    function addItem(){
-			
         var o = field.setDataItemFrom('item-of-field'); // class
         field.addItem(field, o);
         render();
-        
 	}
-
    
-    
    function selectItemToChange(e){ // select item to change
         var item = field.body.items[e.currentTarget.value],
         	el = $(e.delegateTarget).find('.input-item');
         
         	key_item_change = e.currentTarget.value;
+        	console.log(key_item_change);
         	
         	toggleButtonsUpdateItem();
         
@@ -259,17 +259,15 @@ $('.input-field').find('input, select, #textdescription').on( "keyup paste chang
     }
     
 	function toggleButtonsUpdateItem(){  
-        
         $('#' + field.body.field).find('.input-item').toggleClass( "update" );
         render();
     }
     
-   function cloneItem(e){
+	function cloneItem(e){
         
         var o = form.clear(field.body.items[key_item_change]);
         o.value = field.body.items.length + 1
         field.body.items.push(o)
-        
         toggleButtonsUpdateItem();
     }
 
@@ -318,7 +316,9 @@ $('.input-field').find('input, select, #textdescription').on( "keyup paste chang
 					} 
 				}
 			} else {
-				editor.content = field.body.textdescription
+				document.getElementById('textdescription').firstChild.innerHTML = field.body.textdescription
+				//field_selector.find("#textdescription").first().html(field.body.textdescription)
+				//editor.content = 
 			}
 			
 		h.renderSelectUpdateItem(field)	
@@ -349,5 +349,16 @@ $('.input-field').find('input, select, #textdescription').on( "keyup paste chang
 
 	}
 	
+	
+
+    clipboard.on('success', function(e) {
+       $('#copy-json').text('Copied!').fadeOut().fadeIn(100, function () {
+       	$('#copy-json').text('Copy')
+       });
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
 
 };

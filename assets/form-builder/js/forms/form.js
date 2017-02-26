@@ -8,8 +8,9 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.3');
-var Form = function (){
+console.log('form: 1.2.4');
+var fields_with_data = [], // array for false autosave
+	Form = function (){
 
 		//this.url = null;
 		this.title =  "FormBuilder";
@@ -24,7 +25,6 @@ var Form = function (){
 	Form.prototype = {
 		// filter after save
 		hello: 'hello Vege',
-		fields_with_data: [],  // array for false autosave
 		constructor: Form,
 		viewMode: 'html',
 		time_out: 1,
@@ -77,16 +77,8 @@ var Form = function (){
 		var form = this
 		if (this.t) clearTimeout(this.t)
 			this.t = window.setTimeout(function() { callback()  }, 1000)
-		
-		
-	
 	},
 	
-	saveNameOnlyOneTime: function (callback) {
-		var form = this
-		if (this.tn) clearTimeout(this.tn)
-		this.tn = window.setTimeout(function() { callback()  }, 1000)
-	},
 	
 	save: function (){
 			var form = this, csrfToken = $('meta[name="csrf-token"]').attr("content"), data = {};
@@ -95,21 +87,16 @@ var Form = function (){
 			
 			data = {form_data: JSON.stringify(form), title: form.title, url: form.url,  _csrf : csrfToken };
 
-
-			
 				$.post( form.c.controller_url, data, function (r){
 				
-				if (r.success === true) { 
-					console.log('save in base correct');
-					form.successSave();
-					if (r.url){ window.location.href = r.url;}
-				} else {
-					form.errorSave(r.success);
-				} 
-				
+					if (r.success === true) { 
+						console.log('save in base correct');
+						form.successSave();
+						if (r.url){ window.location.href = r.url;}
+					} else {
+						form.errorSave(r.success);
+					} 
 				})
-			
-				
 	},
 	
 /**
@@ -140,16 +127,14 @@ var Form = function (){
 	},
 	
 	
-	
-	
 	setValueInputOptions: function() {
 		this.options_form.find('#title').val(this.title);
 		this.options_form.find('#url').val(this.url);
 	},
 	errorSave: function(o) {   // info 
-		console.log(h.firstProp(o));
-		
 		var save_form = $( "#save-form" ), clone = save_form.clone();
+		
+		
 		
 		save_form
 			.addClass("btn-danger" )
@@ -207,6 +192,8 @@ var Form = function (){
             	
 		        if(prop === 'name'){
 		        	o[prop] = this.uniqueName( o[prop] );
+		        	console.log('o[prop]', o[prop]);
+		        	
 		        }
 		        
 		        if(prop === 'items'){
@@ -224,17 +211,19 @@ var Form = function (){
     },
     
     uniqueName: function (name){
-    
-		var q = this.fields_with_data,
-	  		name = h.replaceChars(name);
+    	name = h.replaceChars(name)
+    	function changeName(n) {
+    		if($.inArray(n, fields_with_data) !== -1){ 	//sprawdza n w liscie
+    			n = n + '_2'; //jezeli jest dodaje _2 i ponownie wykonuje siebie
+    			return changeName(n);
+    		} else {
+    			return n
+    		}
+    	}
 	  	
-	  	if( $.inArray(name, q) !== -1 ){
-	  		name = name + '_2'
-	  		console.log('text');
-	  		
-	  	}
+	  	name = changeName(name)
 	  	
-		this.fields_with_data.push(name);
+		fields_with_data.push(name);
 		return name;
 	},
 	
@@ -298,7 +287,9 @@ var Form = function (){
 		    if(this.body.length !== 0) this.render('off')
 		    
 		    this.setValueInputOptions();
-			this.fields_with_data = h.getAllProperty('name', this.body);
+			fields_with_data = h.getAllProperty('name', this.body);
+			console.log(fields_with_data);
+			
 		},
 
 
@@ -311,7 +302,7 @@ var Form = function (){
 			switch(Form.prototype.viewMode){
 				case 'html': this.div_form.html(this.html()); this.sort(this); break;
 			    case 'text': this.div_form.html('<pre><code class="language-html"> </code></pre>').find('code').text(this.html()); break;
-				case 'json': this.div_form.html('<pre><code id="json-code"> </code></pre>').find('code').text(JSON.stringify(this, null, 4)); break;
+				case 'json': this.div_form.html('<pre><button class="pull-right" id="copy-json" data-clipboard-target="#json-code">Copy</button><code id="json-code"> </code></pre>').find('code').text(JSON.stringify(this, null, 4)); break;
 				case 'yii2': this.div_form.html('<pre><code> </code></pre>').find('code').text('Yii2'); break;
 			    default: 	throw "View mode error, check form.viewMode";
 			}

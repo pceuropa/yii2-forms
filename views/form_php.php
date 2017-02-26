@@ -14,4 +14,13 @@ $form = ActiveForm::begin();
 	}
 
 ActiveForm::end();
+
+$this->registerCss("
+.ql-align-center { text-align:center }, 
+.ql-align-right { text-align:right }, 
+
+
+");
 ?>
+
+

@@ -49,11 +49,19 @@ class FormBuilder extends \yii\base\Widget {
 	
 	}
 	
+	public function findModel($id) {
+		$this->model =  $this->model->findModel($id);
+	}
+	
+	
     public function save() {
     
    		if (!($this->success = $this->model->save())){
-   			$this->success = $this->model->getFirstErrors();
+   			 return $this->success = $this->model->getFirstErrors();
+   		} else {
+   			return true;
    		}
+   		
 	}
 	
     protected function tableShema(){
@@ -101,24 +109,18 @@ class FormBuilder extends \yii\base\Widget {
 	}
 	
 	public function renameColumn($data) {
+		
 		if ( !isset($data['old']) && !isset($data['new']) && $data['old'] === $data['new'] ){
 			return $this->success = false;
 		}
-        $query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $data['old'],$data['new']); 
-        
+        	$query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $data['old'],$data['new']); 
         
        	try {
 	       	$query->execute();
-	       		//$this->model->body = $data['body'];
-	       		//$this->save();
-	       	
 	       	return $this->success = true;
 	    } catch (\Exception $e) {
 	       	return $this->success = $e->errorInfo[2];
 	    }
-	    
-	    
-	    
 	}
 	
 	public function dropColumn($column) {

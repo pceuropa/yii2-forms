@@ -6,9 +6,9 @@ use yii\helpers\Json;
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
+	
 		<div id="widget-form-header" class="pull-right">
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-			<button class="btn"  data-clipboard-target="#json-code"> Cut to clipboard </button>
 		</div>
 		
 		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
@@ -73,7 +73,7 @@ $this->registerCss("
 	
 	#preview-form.edit-mode div.row > div{opacity: 0.3;}
 	#preview-form.edit-mode div.row > div.edit-now {opacity: 1;}
-	
+	.ql-align-center {text-align: center}
 	
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
 	span#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
@@ -136,8 +136,5 @@ if ($easy_mode){
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4);
 }
-	
 	$this->registerJs(" MyFORM.template(form);", 4);	
-	
 ?>		
-
