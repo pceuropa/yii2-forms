@@ -81,7 +81,7 @@ $this->registerCss("
 	
 	div.options { border:solid 1px #ccc; padding:10px;}
 	div.options.active-option {display: block}
-	
+	asside {height: 100%}
 	#sidebar > ul { margin:0 0 0 5px;  }
 	#sidebar > ul li { color:#3894B0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 4px 10px; margin-bottom: -3px;}
 	#sidebar > ul li:hover { background-color:#eee}
@@ -108,6 +108,11 @@ $this->registerCss("
 	.ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
 	.edit-field span { color:#A6E0FB; margin-left: 7px;}
 	#editor { max-width: 100%; }
+	
+	.ql-snow .ql-tooltip {
+		z-index: 1000;
+	}
+	
 	.border {border:solid 1px #ccc}
 	.add-item {
 		color: #fff;

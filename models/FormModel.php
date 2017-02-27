@@ -1,6 +1,9 @@
 <?php namespace pceuropa\forms\models;
 #Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
+
 use Yii;
+use yii\web\NotFoundHttpException;
+
 class FormModel extends \yii\db\ActiveRecord {
 
     public static function tableName() {
@@ -9,12 +12,11 @@ class FormModel extends \yii\db\ActiveRecord {
 
     public function rules(){
         return [
-            [['body'], 'required'],
-            [['body'], 'string'],
+            [['body', 'title', 'url'], 'required'],
+            [['body', 'response'], 'string'],
             [['date_start', 'date_end'], 'safe'],
             [['maximum'], 'integer'],
-            [['author', 'meta_title', 'url'], 'string', 'max' => 255],
-            [['title'], 'string', 'max' => 400],
+            [['title', 'author', 'meta_title', 'url'], 'string', 'max' => 255],
             [['url'], 'unique'],
         ];
     }
@@ -34,13 +36,23 @@ class FormModel extends \yii\db\ActiveRecord {
     }
 
 	public function findModel($id){
-	    if (($model = FormModel::find()->where(['form_id' => $id])->one()) !== null) {
+		
+		$validator = new \yii\validators\NumberValidator();
+		
+	    if ($validator->validate($id) && ($model = FormModel::find()->where(['form_id' => $id])->one()) !== null ) {
 	        return $model;
 	    } else {
-            throw new \yii\web\NotFoundHttpException('The requested form does not exist.');
+            throw new NotFoundHttpException('The requested form does not exist.');
         }
 	}
 	
+	public function findModelByUrl($url){
+        if (($model = FormModel::find()->where(['url' => $url])->one()) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 
-	
+   
 }

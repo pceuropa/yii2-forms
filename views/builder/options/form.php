@@ -22,6 +22,13 @@
 		<label><?= Yii::t('builder', 'Address URL') ?></label>
 	  	<input id="url" type="text" class="form-control input-sm" >
 	</div>
+	<br />
+	<div>
+		<label><?= Yii::t('builder', 'Text respond') ?></label>
+		<textarea id="response" class="form-control" rows="5"></textarea>
+		
+	</div>
+	
 	
 	<div class="form-group expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>

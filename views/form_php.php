@@ -1,5 +1,5 @@
 <?php
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use pceuropa\forms\Form;
 
 $form = ActiveForm::begin();

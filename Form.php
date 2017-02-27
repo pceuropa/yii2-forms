@@ -3,10 +3,7 @@
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\widgets\ActiveForm;
 use yii\helpers\Json;
-
-
 use pceuropa\forms\FormBase;
 
 class Form extends \yii\base\Widget {
@@ -31,26 +28,22 @@ class Form extends \yii\base\Widget {
     }
     
     public function formPhpRender() {
-    
+    	
     	$array = Json::decode($this->body)['body'];
+    	$data_fields = FormBase::onlyCorrectDataFields($array);
+    	$this->model = new \yii\base\DynamicModel(ArrayHelper::getColumn($data_fields, 'name'));  // only 'name' column to dynamic model
     	
-    	$merge_array = FormBase::filterInvalidFields($array);
-    	$data_fields = FormBase::onlyDataFields($merge_array);
-    	$this->model = new \yii\base\DynamicModel($data_fields);
     	
-    	foreach ($data_fields as $key => $value) {
-    	
-    		if (isset($value["require"]) && $value["require"]){
+    	foreach ($data_fields as $v) {
     		
-    			$this->model->addRule($value["name"], 'required');
+    		if (isset($v["name"]) && $v["name"]){
+    		
+    			if (isset($v["require"]) && $v["require"]){
+					$this->model->addRule($v["name"], 'required');
+				}
+				
+    			$this->model->addRule($v["name"], FormBase::getValidator($v) );
     		}
-    		
-    		if (isset($value["name"]) && $value["name"]){
-    		
-    			$this->model->addRule($value["name"], FormBase::getValidator($value) );
-    		}
-    		
-    		
     		
     	    
     	}
@@ -67,6 +60,7 @@ class Form extends \yii\base\Widget {
     }
     
     public static function field($form, $model, $value){
+    
 	 		switch ($value['field']) {
 		       case 'input': return self::textInput($form, $model, $value); break;
 		       case 'textarea': return self::text($form, $model, $value); break;
@@ -112,44 +106,55 @@ class Form extends \yii\base\Widget {
        return self::div($value['width'], $field);
 	}
    
-	public static function radio($form, $model, $value){
+	public static function radio_ver_depraced($form, $model, $value){
    		
 		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		
-		$field = '<label>'.$value['label'].'</label>'.Html::activeRadioList($model, $value['name'], $items,
+		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
+		$field = $label . Html::activeRadioList($model, $value['name'], $items,
 	
-	[
-    'item' => function ($index, $label, $name, $checked, $value) {
-			return Html::radio($name, $checked, ['value'  => $value]) . $label . '<br/>';
-        }
-    ]);
+		[
+			'item' => function ($index, $label, $name, $checked, $value) {
+				return Html::radio($name, $checked, ['value'  => $value]) . $label . '<br/>';
+		    }
+		]);
     
-	return self::div($value['width'], $field);
+		return self::div($value['width'], $field);
+   }
+   
+   
+   public static function radio($form, $model, $value){
+   		
+		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$field = $form->field($model, $value['name'])->radioList($items)->label($value['label']);
+    	
+		return self::div($value['width'], $field);
    }
    
    public static function checkbox($form, $model, $value){
-   		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		$field = '';
-		
-		if (isset($value['label'])	){
-			$field = '<label>'.$value['label'].'</label>';
-		}
-		
-		$field.Html::activeCheckboxList($model, $value['name'], $items,
+   		
+		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$field = $form->field($model, $value['name'])->checkboxList($items);
 	
-	[
-    'item' => function ($index, $label, $name, $checked, $value) {
-			return Html::checkbox($name, $checked, ['value'  => $value]) . $label . '<br/>';
-        }
-    ]);
     
-    
-	return self::div($value['width'], $field);
+		return self::div($value['width'], $field);
    }
    
-   public static function description($v){
-   		return self::div($v['width'], $v['textdescription']);
+   public static function checkbox_ver_depraced($form, $model, $value){
+   
+   		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
+		$field = $label . Html::activeCheckboxList($model, $value['name'], $items,
+	
+		[
+		'item' => function ($index, $label, $name, $checked, $value) {
+				return Html::checkbox($name, $checked, ['value'  => $value]) . $label . '<br/>';
+		    }
+		]);
+    
+    
+		return self::div($value['width'], $field);
    }
+   
    
    public static function select($form, $model, $v){
    		if (ArrayHelper::keyExists('name', $v) ){
@@ -157,6 +162,11 @@ class Form extends \yii\base\Widget {
 				$field = $form->field($model, $v['name'])->dropDownList($items);
    			return self::div($v['width'], $field); 
 		}
+   }
+   
+   
+   public static function description($v){
+   		return self::div($v['width'], $v['textdescription']);
    }
    
    public static function submit($value){

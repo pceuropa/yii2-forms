@@ -1,5 +1,5 @@
 /*
- * form.js v1.2.4
+ * form.js v1.2.5
  * https://pceuropa.net/yii2-extensions/yii2-forms/manual
  * Licensed MIT © Rafal Marguzewicz
  */
@@ -8,7 +8,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.4');
+console.log('form: 1.2.5');
 var fields_with_data = [], // array for false autosave
 	Form = function (){
 

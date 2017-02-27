@@ -4,7 +4,7 @@ use yii\helpers\ArrayHelper;
 
 class FormBase {
     
-    public function filterInvalidFields($array){
+    public function onlyCorrectDataFields($array){
     	$fields = [];
     	foreach ($array as $row => $r) {
     	
@@ -21,10 +21,6 @@ class FormBase {
 		return $fields;
     }
     
-    public function onlyDataFields($array){
-    	$array = ArrayHelper::getColumn($array, 'name');;
-		return $array;
-    }
     
     public function tableShema($array){
     	$fields['id'] = 'pk';
@@ -77,7 +73,7 @@ class FormBase {
     
     public function getValidator($field){
     	
-    		$array =	['input' =>  [
+    		$a = ['input' =>  [
 								'text' => 'string',
 								'email' => 'email',
 								'password' => 'string',
@@ -96,13 +92,11 @@ class FormBase {
 						'select' => 'string',
     			];
     			
-    			
     	if ($field['field'] === 'input'){
-    		return $array[$field['field']][$field['type']];
-    	} else {
-    		return $array[$field['field']];
-    	}
+    		return $a[$field['field']][$field['type']];
+    	} 
     	
+		return $a[$field['field']];
     	
     }
     

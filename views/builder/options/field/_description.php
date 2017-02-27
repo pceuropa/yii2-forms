@@ -1,4 +1,4 @@
-    <div class="col-sm-12">
+    <div class="form-inline">
     <div id="textdescription">
 	
 	

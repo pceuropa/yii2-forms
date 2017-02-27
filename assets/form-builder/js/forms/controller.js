@@ -4,7 +4,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.4',
+	var version = '1.2.5',
         key_item_change = 0,
         update_mode = false,				// selectItemToChange()
 		preview_form = form.div_form,
@@ -144,9 +144,9 @@ function activeAction(target) {
 
 
 // FORM TAB
-options_form.find('span').find('input, select').on('keyup', function(){
-		this.value = h.replaceChars(this.value, '-')
-	    form[this.id] = this.value
+options_form.find('span').find('input, textarea').on('keyup paste change', function(){
+
+	    form[this.id] = this.value = (this.id === 'url') ? h.replaceChars(this.value, '-') : this.value;
 	    form.render()
     });
     
