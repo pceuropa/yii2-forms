@@ -14,7 +14,7 @@
 	"version": "1.2.6",
 	"homepage": "https://pceuropa.net/yii2-extensions/yii2-forms",
 	"type": "yii2-extension",
-	"minimum-stability": "stable",
+	"minimum-stability": "dev",
 	"license": "MIT",
 	"authors": [
 		{
@@ -25,7 +25,7 @@
 	],
 	"require": {
 		"yiisoft/yii2": "~2.0.0",
-		"pceuropa/yii2-email": "dev-master"
+		"pceuropa/yii2-email": "1.0.1"
 	},
 	"autoload": {
 		"psr-4": {
