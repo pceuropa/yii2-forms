@@ -1,9 +1,8 @@
 <?php
-
+#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 use yii\db\Schema;
 
-class m160301_000000_create_form_table extends \yii\db\Migration {
-
+class m170101_000000_create_menu_table extends \yii\db\Migration {
 	protected $table = 'forms';
 	
     public function up(){
@@ -22,23 +21,13 @@ class m160301_000000_create_form_table extends \yii\db\Migration {
             'date_start' => $this->datetime(),
             'date_end' => $this->datetime(),
             'maximum' => $this->integer(),
-            'seo_title' => $this->string(),
-            'seo_url' => $this->string(),
+            'meta_title' => $this->string(),
+            'url' => $this->string(),
+            'response' => $this->text(),
         ], $options);
     }
 
  	public function down(){
         $this->dropTable($this->table);
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
-} 
+}

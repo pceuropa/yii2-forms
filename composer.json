@@ -24,7 +24,9 @@
 		}
 	],
 	"require": {
-		"yiisoft/yii2": "~2.0.0"
+		"yiisoft/yii2": "~2.0.0",
+		"yiisoft/yii2-swiftmailer": "~2.0.0",
+		"pceuropa/yii2-email": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
