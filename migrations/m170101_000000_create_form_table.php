@@ -2,7 +2,7 @@
 #Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 use yii\db\Schema;
 
-class m170101_000000_create_menu_table extends \yii\db\Migration {
+class m170101_000000_create_form_table extends \yii\db\Migration {
 	protected $table = 'forms';
 	
     public function up(){
