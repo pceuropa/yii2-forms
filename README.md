@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/pceuropa/yii2-forms/v/stable)](https://packagist.org/packages/pceuropa/yii2-forms) [![Total Downloads](https://poser.pugx.org/pceuropa/yii2-forms/downloads)](https://packagist.org/packages/pceuropa/yii2-forms) [![Latest Unstable Version](https://poser.pugx.org/pceuropa/yii2-forms/v/unstable)](https://packagist.org/packages/pceuropa/yii2-forms) [![License](https://poser.pugx.org/pceuropa/yii2-forms/license)](https://packagist.org/packages/pceuropa/yii2-forms)
 
 Form Builder for Yii2 (beta)
-==========================
+===================
 
 
 [DEMO](https://pceuropa.net/yii2-extensions/yii2-forms)
