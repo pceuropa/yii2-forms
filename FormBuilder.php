@@ -18,7 +18,7 @@ class FormBuilder extends \yii\base\Widget {
 	public $config = [];		// from widget
 	private $options = [];		// to js file
 	
-	public $table_prefix;
+	public $table;
 	public $model;				// model active record 
 	public $success = false;  	// for response
 		
@@ -72,7 +72,7 @@ class FormBuilder extends \yii\base\Widget {
     
 	public function createTable() {
 		if ($this->success === true){
-			$table_name = $this->table_prefix . $this->model->getPrimaryKey();
+			$table_name = $this->table . $this->model->getPrimaryKey();
 			$query = Yii::$app->db->createCommand()->createTable($table_name, $this->tableShema(), 'CHARACTER SET utf8 COLLATE utf8_general_ci'); 
 
 			try {
@@ -93,7 +93,7 @@ class FormBuilder extends \yii\base\Widget {
 			//$this->model->body = $field['body'];
 			$type = FormBase::getColumnType($field);
 		
-        	$query = Yii::$app->db->createCommand()->addColumn($this->table_prefix, $column, $type ); 
+        	$query = Yii::$app->db->createCommand()->addColumn($this->table, $column, $type ); 
         
 		    try {
 		       if ($query->execute()){
@@ -113,7 +113,7 @@ class FormBuilder extends \yii\base\Widget {
 		if ( !isset($data['old']) && !isset($data['new']) && $data['old'] === $data['new'] ){
 			return $this->success = false;
 		}
-        	$query = Yii::$app->db->createCommand()->renameColumn( $this->table_prefix, $data['old'],$data['new']); 
+        	$query = Yii::$app->db->createCommand()->renameColumn( $this->table, $data['old'],$data['new']); 
         
        	try {
 	       	$query->execute();
@@ -125,7 +125,7 @@ class FormBuilder extends \yii\base\Widget {
 	
 	public function dropColumn($column) {
 		
-       $query = Yii::$app->db->createCommand()->dropColumn($this->table_prefix, $column); 
+       $query = Yii::$app->db->createCommand()->dropColumn($this->table, $column); 
         
        try {
 	       	$query->execute();
