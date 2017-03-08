@@ -14,7 +14,7 @@
 	"version": "1.2.8",
 	"homepage": "https://pceuropa.net/yii2-extensions/yii2-forms",
 	"type": "yii2-extension",
-	"minimum-stability": "dev",
+	"minimum-stability": "beta",
 	"license": "MIT",
 	"authors": [
 		{
