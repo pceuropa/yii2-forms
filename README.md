@@ -74,8 +74,11 @@ echo \pceuropa\forms\FormBuilder::widget([
  
  ### 3. FormBuilder as module
  ```php
- 'formbuilder' => [
+'modules' => [
+		'formbuilder' => [
 		        'class' => '\pceuropa\forms\Module',
 		],
+		
+    ],
  
 ```
