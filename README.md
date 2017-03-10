@@ -72,8 +72,10 @@ echo \pceuropa\forms\FormBuilder::widget([
 - [/forms/list](https://pceuropa.net/yii2-extensions/yii2-forms/list/1)
 
  
+ ### 3. FormBuilder as module
+ ```php
+ 'formbuilder' => [
+		        'class' => '\pceuropa\forms\Module',
+		],
  
- 
- 
- 
-
+```
