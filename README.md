@@ -9,7 +9,7 @@ Form Builder for Yii2 (beta)
 ## Features
 
 
-1. Creating forms (class FormBuilder)
+1. Creating forms polls questionnaires e.g backend (class FormBuilder)
 * Form generator
  * Drag and drop - Sorting, editing, and deleting items of form
  * CRUD operations by jQuery Ajax
@@ -57,7 +57,7 @@ echo \pceuropa\forms\FormBuilder::widget([
 ### 3. Add the following code to controller view file Yii2
 
 ```php
-// beta 
+// beta code you can see on my page
 
 ```
 
@@ -65,7 +65,7 @@ echo \pceuropa\forms\FormBuilder::widget([
 
 ### 3. Getting started
 - [/forms/index](https://pceuropa.net/yii2-extensions/yii2-forms/create)
-- [/forms/view](https://pceuropa.net/yii2-extensions/yii2-forms/form/questions)
+- [/forms/view](https://pceuropa.net/yii2-extensions/yii2-forms/questions)
 - [/forms/create](https://pceuropa.net/yii2-extensions/yii2-forms/create)
 - [/forms/update](https://pceuropa.net/yii2-extensions/yii2-forms/update/1)
 - /forms/delete

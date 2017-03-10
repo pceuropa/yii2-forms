@@ -122,21 +122,25 @@ class Form extends \yii\base\Widget {
    }
    
    
-   public static function radio($form, $model, $value){
+   public static function radio($form, $model, $v){
    		
-		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		$field = $form->field($model, $value['name'])->radioList($items)->label($value['label']);
-    	
-		return self::div($value['width'], $field);
+		$items = ArrayHelper::map($v['items'], 'value', 'text');
+		$field = $form->field($model, $v['name'])->radioList($items);
+		
+    	$label = (isset($v['label'])) ? $v['label'] : '';
+		$field->label($label, ['class' => 'bold']);
+		
+		return self::div($v['width'], $field);
    }
    
-   public static function checkbox($form, $model, $value){
+   public static function checkbox($form, $model, $v){
    		
-		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		$field = $form->field($model, $value['name'])->checkboxList($items);
-	
+		$items = ArrayHelper::map($v['items'], 'value', 'text');
+		$field = $form->field($model, $v['name'])->checkboxList($items);
+		$label = (isset($v['label'])) ? $v['label'] : '';
+		$field->label($label);
     
-		return self::div($value['width'], $field);
+		return self::div($v['width'], $field);
    }
    
    public static function checkbox_ver_depraced($form, $model, $value){
@@ -160,6 +164,8 @@ class Form extends \yii\base\Widget {
    		if (ArrayHelper::keyExists('name', $v) ){
 				$items = ArrayHelper::map($v['items'], 'value', 'text');
 				$field = $form->field($model, $v['name'])->dropDownList($items);
+				$label = (isset($v['label'])) ? $v['label'] : '';
+				$field->label($label);
    			return self::div($v['width'], $field); 
 		}
    }
