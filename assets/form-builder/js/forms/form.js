@@ -8,7 +8,7 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.5');
+console.log('form: 1.2.6');
 var fields_with_data = [], // array for false autosave
 	Form = function (){
 
@@ -130,7 +130,10 @@ var fields_with_data = [], // array for false autosave
 	setValueInputOptions: function() {
 		this.options_form.find('#title').val(this.title);
 		this.options_form.find('#url').val(this.url);
+		this.options_form.find('#response').val(this.response);
 	},
+	
+	
 	errorSave: function(o) {   // info 
 		var save_form = $( "#save-form" ), clone = save_form.clone();
 		

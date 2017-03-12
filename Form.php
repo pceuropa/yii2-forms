@@ -106,63 +106,65 @@ class Form extends \yii\base\Widget {
        return self::div($value['width'], $field);
 	}
    
-	public static function radio_ver_depraced($form, $model, $value){
-   		
-		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
-		$field = $label . Html::activeRadioList($model, $value['name'], $items,
-	
-		[
-			'item' => function ($index, $label, $name, $checked, $value) {
-				return Html::radio($name, $checked, ['value'  => $value]) . $label . '<br/>';
-		    }
-		]);
-    
-		return self::div($value['width'], $field);
-   }
-   
-   
    public static function radio($form, $model, $v){
    		
-		$items = ArrayHelper::map($v['items'], 'value', 'text');
+   		$items = [];
+   		$checked = [];
+   		
+   		foreach ($v['items'] as $key => $value) {
+   		    $items[$value['value']] =  $value['text'];
+   		    if (isset($value['checked'])){
+   		    	$checked[]  = $key+1;
+   		    }
+   		}
+   		
+   		$model->{$v['name']} = $checked;
 		$field = $form->field($model, $v['name'])->radioList($items);
 		
     	$label = (isset($v['label'])) ? $v['label'] : '';
+    	
 		$field->label($label, ['class' => 'bold']);
 		
 		return self::div($v['width'], $field);
    }
    
    public static function checkbox($form, $model, $v){
+   		$items = [];
+   		$checked = [];
    		
+   		foreach ($v['items'] as $key => $value) {
+   		    $items[$value['value']] =  $value['text'];
+   		    if (isset($value['checked'])){
+   		    	$checked[]  = $key+1;
+   		    }
+   		    
+   		}
 		$items = ArrayHelper::map($v['items'], 'value', 'text');
+		$model->{$v['name']} = $checked;
 		$field = $form->field($model, $v['name'])->checkboxList($items);
+		
 		$label = (isset($v['label'])) ? $v['label'] : '';
 		$field->label($label);
     
 		return self::div($v['width'], $field);
    }
    
-   public static function checkbox_ver_depraced($form, $model, $value){
    
-   		$items = ArrayHelper::map($value['items'], 'value', 'text');
-		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
-		$field = $label . Html::activeCheckboxList($model, $value['name'], $items,
-	
-		[
-		'item' => function ($index, $label, $name, $checked, $value) {
-				return Html::checkbox($name, $checked, ['value'  => $value]) . $label . '<br/>';
-		    }
-		]);
-    
-    
-		return self::div($value['width'], $field);
-   }
    
    
    public static function select($form, $model, $v){
    		if (ArrayHelper::keyExists('name', $v) ){
-				$items = ArrayHelper::map($v['items'], 'value', 'text');
+   				$items = [];
+   				$checked = [];
+				foreach ($v['items'] as $key => $value) {
+		   		    $items[$value['value']] =  $value['text'];
+		   		    
+		   		    if (isset($value['checked'])){
+		   		    	$checked[]  = $key+1;
+		   		    }
+		   		}
+		   		
+				$model->{$v['name']} = $checked;
 				$field = $form->field($model, $v['name'])->dropDownList($items);
 				$label = (isset($v['label'])) ? $v['label'] : '';
 				$field->label($label);
@@ -179,6 +181,35 @@ class Form extends \yii\base\Widget {
    		return Html::submitButton($value['label'], ['class' => 'btn btn-success']);
    }
    
+   
+   
+   
+   	public static function radio_ver_depraced($form, $model, $value){
+   		
+		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
+		$field = $label . Html::activeRadioList($model, $value['name'], $items,
+		[
+			'item' => function ($index, $label, $name, $checked, $value) {
+				return Html::radio($name, $checked, ['value'  => $value]) . $label . '<br/>';
+		    }
+		]);
+    
+		return self::div($value['width'], $field);
+   }
+   public static function checkbox_maybe_future($form, $model, $value){
+   		
+   		$items = ArrayHelper::map($value['items'], 'value', 'text');
+		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
+		$field = $label . Html::activeCheckboxList($model, $value['name'], $items,
+		[
+		'item' => function ($index, $label, $name, $checked, $value) {
+				
+				return Html::checkbox($name, $checked, ['value'  => $value]) . $label . '<br/>';
+		    },
+		]);
+		return self::div($value['width'], $field);
+   }
 }
 
 ?>
