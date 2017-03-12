@@ -2,10 +2,11 @@ var MyFORM =  MyFORM || {};
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
 MyFORM.template = function (form){
-var version = '1.2.2',
+
+var version = '1.2.3',
 	id_selector = "#examples-form",
- 	
- 	temp = [
+	
+temp = [
 	{
     "title": "questionnaire",
     "method": "post",
@@ -431,11 +432,10 @@ var div1 = document.createElement("div"),
 				'<div class="col-sm-8">' +
 					'<select id="examples-form" class="form-control input-sm"><option>-</option> </select><div id="section-confirm"></div>' + 
 				'</div> ';
-						
-	(function(){
-			var can = true;
-			
 	
+	
+				
+	(function(){
 			div1.setAttribute('class', 'form-group');
 			div1.innerHTML = innerHTML;
 		
@@ -452,7 +452,10 @@ var div1 = document.createElement("div"),
 				return options.innerHTML;
 			})
 			
-			$(document).ready(function(){  
+			window.setTimeout(function() {
+			if(form.body.length) return;
+				
+			
 				$("#form #widget-form-options").append( div1.outerHTML ).on( "change", id_selector, function() {
 							var value = this.value;
 							$("#section-confirm").empty().html( '<button id="confirm-example" type="button" class="btn btn-warning">Confirm</button>' );
@@ -461,16 +464,9 @@ var div1 = document.createElement("div"),
 								form.render()
 								$("#section-confirm").empty()
 							})
-							
-						
-						
-						
 				});
-		
-		
+			}, 500)
 				
-			});
-		
 	})()
 	
 	console.log('template: ' + version);
