@@ -3,7 +3,7 @@ var MyFORM =  MyFORM || {};
 
 MyFORM.template = function (form){
 
-var version = '1.2.3',
+var version = '1.2.4',
 	id_selector = "#examples-form",
 	
 temp = [
@@ -58,8 +58,8 @@ temp = [
                         "value": "yes"
                     }
                 ],
-                "name": "trump_2",
-                "label": "What do you think about CETA?"
+                "name": "eat",
+                "label": "You eat meat?"
             }
         ],
         [
