@@ -83,5 +83,3 @@ echo \pceuropa\forms\FormBuilder::widget([
  
 ```
 
-
-![preview](https://stats.pceuropa.net/piwik.php?idsite=21&rec=1)
