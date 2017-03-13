@@ -1,14 +1,13 @@
 /*
- * form.js v1.2.5
  * https://pceuropa.net/yii2-extensions/yii2-forms/manual
- * Licensed MIT © Rafal Marguzewicz
+ * Licensed MIT © 2016-2017 Rafal Marguzewicz
  */
  "use strict";
 
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.2.6');
+console.log('form: 1.3.0');
 var fields_with_data = [], // array for false autosave
 	Form = function (){
 
@@ -167,27 +166,7 @@ var fields_with_data = [], // array for false autosave
  *
  * @param {Object} o
  */
- 		
-	add: function(o){
-			try {
-				if (o.hasOwnProperty('field') ){
-			
-					this.body.push([this.clear(o)]);
-					
-					if (this.c.autosave && o.hasOwnProperty('name')){
-						$.post( this.c.controller_url, {add: o});
-					} 
-				
-					this.render();
-				} 	
-			}
-			catch (err) {
-				console.log(err);
-				alert('Error add field to form: bad data')
-			}
-		},
-		
-	clear: function (o) {
+ 	clear: function (o) {
         var notReference = {} 
         
         for (var prop in o) {
@@ -213,8 +192,9 @@ var fields_with_data = [], // array for false autosave
         return notReference;
     },
     
-    uniqueName: function (name){
+ 	 uniqueName: function (name){
     	name = h.replaceChars(name)
+    	
     	function changeName(n) {
     		if($.inArray(n, fields_with_data) !== -1){ 	//sprawdza n w liscie
     			n = n + '_2'; //jezeli jest dodaje _2 i ponownie wykonuje siebie
@@ -229,32 +209,51 @@ var fields_with_data = [], // array for false autosave
 		fields_with_data.push(name);
 		return name;
 	},
-	
+	post: function (o) {
+		if (this.c.autosave && o.hasOwnProperty('name')){
+			$.post( this.c.controller_url, {add: o}, function (r) {
+				if(r.success.success === true){
+					console.log('correct add');
+				} else {
+					console.log(r.success.success);
+					
+					alert('Somting wrong: '+ r.success);
+				}
+				
+			});
+		} 
+	},
+		
+	add: function(o){
+			try {
+				if (o.hasOwnProperty('field') ){
+			
+					this.body.push([this.clear(o)]);
+					this.post(o);
+					this.render();
+				} 	
+			}
+			catch (err) {
+				console.log(err);
+				alert('Error add field to form: bad data')
+			}
+		},
 		
 	cloneField: function(row, index){
 	
 			var 
 				first = this.body[row][index], 
-				o = jQuery.extend(true, {}, first);
+				o = jQuery.extend(true, {}, first);   // clone with break reference/pointer data
 				
 			if (o.hasOwnProperty('label')){
 				o.label = first.label + '_2'
 			} 
 			
 			if(h.is(first.name)){
-				o.name = first.name + '_2'
+				o.name = this.uniqueName(o.name);
 			}
-			
-			
-			
 			this.body[row].splice(index + 1, 0, o); // wstawiamy obiekt na odpowiednie miejsce bez usuwania
-			
-			if(this.c.autosave){
-				if (o.hasOwnProperty('name')){
-					$.post( this.c.controller_url, {add_field: o} );
-				}
-			}
-			
+			this.post(o);
 			this.render();
 			
 	},
