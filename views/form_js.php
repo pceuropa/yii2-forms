@@ -2,11 +2,9 @@
 	
 <?php
 pceuropa\forms\FormAsset::register($this);
+use yii\helpers\Json;
 
-	//$this->registerJsFile('/js/forms/creator.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	//$this->registerJsFile('/js/forms/fields.js', ['position' => 3, 'depends' => 'yii\web\YiiAsset']);
-	$this->registerJs("
-		var form = new MyFORM.Form(), fields = ".$form_body.";
-			form.generate(fields);
-		", 3);
+	$this->registerJs("var form = new MyFORM.Form(); ", 4);
+	$this->registerJs("form.init(".Json::encode($form).");", 4);
+
 ?>

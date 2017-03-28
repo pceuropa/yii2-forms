@@ -1,162 +1,268 @@
 <?php namespace pceuropa\forms;
-#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use pceuropa\forms\FormBase;
+use yii\base\Widget;
+use yii\base\DynamicModel;
 
-class Form extends \yii\base\Widget {
+/**
+ * FormRender: Render form
+ *
+ * Two method render form : php or js (beta)
+ *
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.3
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ * FormBuilder requires Yii 2
+ * http://www.yiiframework.com
+ * https://github.com/yiisoft/yii2
+ *
+ *
+ */
+
+
+class Form extends Widget {
     
-	public $body = '{}';
-	public $model;
-	public $typeRender;
-	public $fields;
-	public $fields_require;
+    /**
+     * @var object JSON object representing the form body
+     */
+    public $form = '{}';
+	
+	/**
+	 * @var string Type render js|php
+	 * @since 1.0
+	 */
+	public $typeRender = 'php';
 
-
+    /**
+     * Initializes the object.
+     *
+     * @return void
+     * @see Widget
+    */
     public function init() {
         parent::init();
+        $this->form = Json::decode($this->form);
     }
 
+    /**
+        * Executes the widget.
+        * @since 1.0
+        * @return function
+    */
     public function run() {
     	if ($this->typeRender === 'js'){
-    		return $this->formJsRender();
-    	} else {
-    		return $this->formPhpRender();
-    	}
+    		return $this->jsRender($this->form);
+    	} 
+    	return $this->phpRender($this->form);
     }
     
-    public function formPhpRender() {
+
+    /**
+     * Create form
+     *
+     * Render form by PHP language. 
+     * @param array $form
+     * @return View Form
+    */
+    public function phpRender($form) {
     	
-    	$array = Json::decode($this->body)['body'];
-    	$data_fields = FormBase::onlyCorrectDataFields($array);
-    	$this->model = new \yii\base\DynamicModel(ArrayHelper::getColumn($data_fields, 'name'));  // only 'name' column to dynamic model
-    	
+
+    	$data_fields = FormBase::onlyCorrectDataFields($form['body']);
+    	$DynamicModel = new DynamicModel( ArrayHelper::getColumn($data_fields, 'name') ); 
     	
     	foreach ($data_fields as $v) {
     		
     		if (isset($v["name"]) && $v["name"]){
     		
     			if (isset($v["require"]) && $v["require"]){
-					$this->model->addRule($v["name"], 'required');
-				}
+					$DynamicModel->addRule($v["name"], 'required');
+				} 
 				
-    			$this->model->addRule($v["name"], FormBase::getValidator($v) );
+    			$DynamicModel->addRule($v["name"], FormBase::getValidator($v) );
     		}
-    		
-    	    
     	}
 	    
 		return $this->render('form_php', [
-			'array' => $array, 
-			'model' => $this->model
+			'array' => $form['body'], 
+			'model' => $DynamicModel
 		]);
     }
     
-    
-    public function formJsRender(){
-        return $this->render('form_js', ['form_body' => $this->body]);
+    /**
+     * Create form 
+     *
+     * Render form by JavaScript language. 
+     * @param array $form
+     * @return View
+    */
+    public function jsRender($form){
+        return $this->render('form_js', ['form' => $form]);
     }
     
-    public static function field($form, $model, $value){
+
+    /**
+     * Select and return function render field 
+     *
+     * Render field in view
+     * @param yii\bootstrap\ActiveForm $form
+     * @param DynamicModel $model
+     * @param array $field
+     * @return string Return field in div HTML 
+    */
+    public static function field($form, $model, $field = null){
     
-	 		switch ($value['field']) {
-		       case 'input': return self::textInput($form, $model, $value); break;
-		       case 'textarea': return self::text($form, $model, $value); break;
-		       case 'radio': return self::{$value['field']}($form, $model, $value); break;
-		       case 'checkbox': return self::{$value['field']}($form, $model, $value); break;
-		       case 'select': return self::{$value['field']}($form, $model, $value); break;
-		       case 'description': return self::{$value['field']}($value); break;
-		       case 'submit': return self::{$value['field']}($value); break;
-		       default: return self::textInput($form, $model, $value); break;
-		   	}	
+            $width = $field['width'];
+
+	 		switch ($field['field']) {
+		       case 'input': $field = self::input($form, $model, $field); break;
+		       case 'textarea': $field = self::textArea($form, $model, $field); break;
+		       case 'radio': $field = self::radio($form, $model, $field); break;
+		       case 'checkbox': $field = self::checkbox($form, $model, $field); break;
+		       case 'select': $field = self::select($form, $model, $field); break;
+		       case 'description': $field = self::description($field); break;
+		       case 'submit': $field = self::submit($field); break;
+		    default: $field = ''; break;
+		   	}
+
+        return self::div($width, $field);	
       
 	}
    
+    /**
+     * Return HTML div with field 
+     *
+     * @param string $width Class bootstrap
+     * @param string $field
+     * @return string 
+    */
 	public static function div($width, $field){
 		return '<div class="'.$width.'">'. $field .'</div>';
 	}
+
+/**
+ * Renders an input tag
+ * @param yii\bootstrap\ActiveForm $form
+ * @param DynamicModel $model
+ * @param array $field
+ * @return this The field object itself.
+ */   
+    public static function input($form, $model, $field){
+
+    if (!isset($field['name'])){
+        return null;
+    }
+
+    $input = $form->field($model, $field['name'])->input($field['type']);
+
+    if (isset($field['label'])){ 
+        $input->label($field['label']);
+    }
+
+        return $input;
+    }
+
+   /**
+     * Renders a text area.
+     * @param yii\bootstrap\ActiveForm $form
+     * @param DynamicModel $model
+     * @param array $field
+     * @return $this The field object itself.
+     */ 
+    public static function textArea($form, $model, $field){
+        
+        if (!isset($field['name'])){
+	        return null;
+        }
+
+        $text_area = $form->field($model, $field['name'])->textArea();
+
+        if (isset($field['label'])){ 
+	        $text_area->label($field['label']);
+        }
+
+        return $text_area;
+    }
    
-   	public static function textInput($form, $model, $value){
-		if (!isset($value['name'])){
-			return null;
-		}
-       
-       $field = $form->field($model, $value['name'])->textInput(['type' => $value['type']]);
-       
-       if (isset($value['label'])){ 
-       		$field->label($value['label']);
-       }
-       
-       return self::div($value['width'], $field);
-	}
-   
-	public static function text($form, $model, $value){
-		if (!isset($value['name'])){
-			return null;
-		}
-	
-       $fieldType = ['input' => 'textInput', 'textarea' => 'textarea', 'radio' => 'radioList']; // maping method ActiveField Yii2
-       $field = $form->field($model, $value['name'])->{$fieldType[$value['field']]}();
-       
-       if (isset($value['label'])){ 
-       		$field->label($value['label']);
-       }
-       return self::div($value['width'], $field);
-	}
-   
-   public static function radio($form, $model, $v){
+/**
+* Renders a list of radio buttons.
+* @param yii\bootstrap\ActiveForm $form
+* @param DynamicModel $model
+* @param array $field
+* @return $this The field object itself.
+*/ 
+   public static function radio($form, $model, $field){
    		
    		$items = [];
    		$checked = [];
    		
-   		foreach ($v['items'] as $key => $value) {
+   		foreach ($field['items'] as $key => $value) {
    		    $items[$value['value']] =  $value['text'];
-   		    if (isset($value['checked'])){
-   		    	$checked[]  = $key+1;
-   		    }
+   		    if (isset( $value['checked'] )){ $checked[]  = $key+1; }
    		}
    		
-   		$model->{$v['name']} = $checked;
-		$field = $form->field($model, $v['name'])->radioList($items);
+   		$model->{$field['name']} = $checked;
+		$radio_list = $form->field($model, $field['name'])->radioList($items);
 		
-    	$label = (isset($v['label'])) ? $v['label'] : '';
+    	$label = (isset($field['label'])) ? $field['label'] : '';
     	
-		$field->label($label, ['class' => 'bold']);
+		$radio_list->label($label, ['class' => 'bold']);
 		
-		return self::div($v['width'], $field);
+		return $radio_list;
    }
    
-   public static function checkbox($form, $model, $v){
+    /**
+    * Renders a list of checkboxes.
+    * @param yii\bootstrap\ActiveForm $form
+    * @param DynamicModel $model
+    * @param array $field
+    * @return $this The field object itself.
+    */ 
+   public static function checkbox($form, $model, $field){
    		$items = [];
    		$checked = [];
    		
-   		foreach ($v['items'] as $key => $value) {
+   		foreach ($field['items'] as $key => $value) {
    		    $items[$value['value']] =  $value['text'];
    		    if (isset($value['checked'])){
    		    	$checked[]  = $key+1;
    		    }
    		    
    		}
-		$items = ArrayHelper::map($v['items'], 'value', 'text');
-		$model->{$v['name']} = $checked;
-		$field = $form->field($model, $v['name'])->checkboxList($items);
+		$items = ArrayHelper::map($field['items'], 'value', 'text');
+		$model->{$field['name']} = $checked;
+		$checkbox_list = $form->field($model, $field['name'])->checkboxList($items);
 		
-		$label = (isset($v['label'])) ? $v['label'] : '';
-		$field->label($label);
+		$label = (isset($field['label'])) ? $v['label'] : '';
+		$checkbox_list->label($label);
     
-		return self::div($v['width'], $field);
-   }
+		return $checkbox_list;
    
    
+    
+}
    
-   
-   public static function select($form, $model, $v){
-   		if (ArrayHelper::keyExists('name', $v) ){
+    /**
+    * Renders a drop-down list.
+    * @param yii\bootstrap\ActiveForm $form
+    * @param DynamicModel $model
+    * @param array $field
+    * @return $this The field object itself.
+    */ 
+
+   public static function select($form, $model, $field){
+   		if (ArrayHelper::keyExists('name', $field) ){
    				$items = [];
    				$checked = [];
-				foreach ($v['items'] as $key => $value) {
+
+				foreach ($field['items'] as $key => $value) {
 		   		    $items[$value['value']] =  $value['text'];
 		   		    
 		   		    if (isset($value['checked'])){
@@ -164,27 +270,43 @@ class Form extends \yii\base\Widget {
 		   		    }
 		   		}
 		   		
-				$model->{$v['name']} = $checked;
-				$field = $form->field($model, $v['name'])->dropDownList($items);
-				$label = (isset($v['label'])) ? $v['label'] : '';
+				$model->{$field['name']} = $checked;
+				$field = $form->field($model, $field['name'])->dropDownList($items);
+				$label = (isset($field['label'])) ? $field['label'] : '';
 				$field->label($label);
-   			return self::div($v['width'], $field); 
+   			return $field; 
 		}
    }
    
-   
+      /**
+     * Renders a description html.
+     * @param array $v
+     * @return string
+     */ 
    public static function description($v){
-   		return self::div($v['width'], $v['textdescription']);
+   		return $v['textdescription'];
    }
    
-   public static function submit($value){
-   		return Html::submitButton($value['label'], ['class' => 'btn btn-success']);
+   /**
+     * Renders a submit buton tag.
+     * @param array $data
+     * @return string The generated submit button tag
+     */ 
+   public static function submit($data){
+   		return Html::submitButton($data['label'], ['class' => 'btn '.$data['backgroundcolor'] ]);
    }
    
    
    
    
-   	public static function radio_ver_depraced($form, $model, $value){
+    /**
+    * Depraced
+    * @depraced .
+    * @param yii\bootstrap\ActiveForm $form
+    * @param DynamicModel $model
+    * @param array $value
+    */   	
+    public static function radio2($form, $model, $value){
    		
 		$items = ArrayHelper::map($value['items'], 'value', 'text');
 		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
@@ -197,7 +319,15 @@ class Form extends \yii\base\Widget {
     
 		return self::div($value['width'], $field);
    }
-   public static function checkbox_maybe_future($form, $model, $value){
+
+    /**
+    * Depraced
+    * @depraced .
+    * @param yii\bootstrap\ActiveForm $form
+    * @param DynamicModel $model
+    * @param array $value
+    */ 
+   public static function checkbox2($form, $model, $value){
    		
    		$items = ArrayHelper::map($value['items'], 'value', 'text');
 		$label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';

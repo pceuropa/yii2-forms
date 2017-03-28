@@ -3,7 +3,6 @@ use yii\bootstrap\ActiveForm;
 use pceuropa\forms\Form;
 
 $form = ActiveForm::begin();
-	//echo('<pre>'); print_r($array);die();
 	foreach ($array as $key => $row) {
 		echo ('<div class="row">');
 
@@ -16,10 +15,8 @@ $form = ActiveForm::begin();
 ActiveForm::end();
 
 $this->registerCss("
-.ql-align-center { text-align:center }, 
-.ql-align-right { text-align:right }, 
-
-
+    .ql-align-center { text-align:center }, 
+    .ql-align-right { text-align:right }, 
 ");
 ?>
 

@@ -1,9 +1,19 @@
 <?php namespace pceuropa\forms;
-#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 use yii\helpers\ArrayHelper;
-
+/**
+ * Yii 2 Forum Module
+ *
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.3
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ */
 class FormBase {
-    
+
     public function onlyCorrectDataFields($array){
     	$fields = [];
     	foreach ($array as $row => $r) {
@@ -21,7 +31,14 @@ class FormBase {
 		return $fields;
     }
     
-    
+    /**
+     * Summary.
+     *
+     * Description.
+     * @since 1.0
+     * @param array $array Description.
+     * @return array
+    */
     public function tableShema($array){
     	$fields['id'] = 'pk';
     	
