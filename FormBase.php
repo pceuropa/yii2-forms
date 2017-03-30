@@ -55,35 +55,45 @@ class FormBase {
 		}
 		return $fields;
     }
-    
+    /**
+     * Return column type.
+     *
+     * Description.
+     * @link URL
+     * @since 1.0
+     *
+     * @param array $field Get array with field data.
+     * @return null|array 
+    */
     public function getColumnType($field){
+
     	if (!ArrayHelper::keyExists('field', $field)){
     		return null;
     	}
-    		$array = ['input' =>  [
-								'text' => 'string',
-								'email' => 'string',
-								'password' => 'string',
-								'date' => 'date',
-								'number' => 'integer',
-								'url' => 'string',
-								'tel' => 'string',
-								'url' => 'string',
-								'color' => 'string',
-								'range' => 'string',
-								'url' => 'string',
-							],
-						'textarea' => 'text',
-						'checkbox' => 'string',
-						'radio' => 'string',
-						'select' => 'string',
-    			];
+    		$type = ['input' =>  [
+						'text' => 'string',
+						'email' => 'string',
+						'password' => 'string',
+						'date' => 'date',
+						'number' => 'integer',
+						'url' => 'string',
+						'tel' => 'string',
+						'url' => 'string',
+						'color' => 'string',
+						'range' => 'string',
+						'url' => 'string',
+					],
+				'textarea' => 'text',
+				'checkbox' => 'string',
+				'radio' => 'string',
+				'select' => 'string',
+		    ];
     			
     			
     	if ($field['field'] === 'input'){
-    		return $array[ $field['field'] ][ $field['type'] ];
+    		return $type[ $field['field'] ][ $field['type'] ];
     	} else {
-    		return $array[ $field['field'] ];
+    		return $type[ $field['field'] ];
     	}
     }		
     

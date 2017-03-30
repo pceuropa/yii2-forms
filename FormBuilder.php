@@ -16,7 +16,7 @@ use pceuropa\forms\models\FormModel;
  * Generate forms and create tables from json object
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.0
+ * @version 1.4
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forms

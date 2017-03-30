@@ -13,7 +13,7 @@ use yii\base\DynamicModel;
  * Two method render form : php or js (beta)
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.3
+ * @version 1.4
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forum
@@ -226,6 +226,8 @@ class Form extends Widget {
     * @return $this The field object itself.
     */ 
    public static function checkbox($form, $model, $field){
+
+
    		$items = [];
    		$checked = [];
    		
@@ -240,7 +242,7 @@ class Form extends Widget {
 		$model->{$field['name']} = $checked;
 		$checkbox_list = $form->field($model, $field['name'])->checkboxList($items);
 		
-		$label = (isset($field['label'])) ? $v['label'] : '';
+		$label = (isset($field['label'])) ? $field['label'] : '';
 		$checkbox_list->label($label);
     
 		return $checkbox_list;
@@ -271,10 +273,10 @@ class Form extends Widget {
 		   		}
 		   		
 				$model->{$field['name']} = $checked;
-				$field = $form->field($model, $field['name'])->dropDownList($items);
+				$select = $form->field($model, $field['name'])->dropDownList($items);
 				$label = (isset($field['label'])) ? $field['label'] : '';
-				$field->label($label);
-   			return $field; 
+				$select->label($label);
+   			return $select; 
 		}
    }
    
