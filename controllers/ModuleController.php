@@ -57,15 +57,20 @@ class ModuleController extends \yii\web\Controller {
         ]);
     }
 	
-	public function actionManual(){
-
-        return $this->render('manual');
-    }
     
-   public function actionView($url) {
+    public function actionView($url) {
     
     	$form = FormModel::findModelByUrl($url);
-    	
+    	$r = Yii::$app->request;
+
+    
+        if ($r->isAjax && $r->isGet) {
+			echo $form->body;
+            return;
+
+		}
+
+
     	if (($data = Yii::$app->request->post('DynamicModel')) !== null) {
     		
     		foreach ($data as $i => $v) {
@@ -78,23 +83,21 @@ class ModuleController extends \yii\web\Controller {
 				
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Registration successfully completed'));
 				
-				if (isset($data['email'])){
+				if (isset($data['email']) && isset(Json::decode($form->body)['response'])){
 					Send::widget([
-						'from' => 'info@email.net',
+						'from' => 'info@pceuropa.net',
 						'to' => $data['email'],
 						'subject' => Yii::t('app', 'Registration successfully completed'),
 						'textBody' => Json::decode($form->body)['response'],
 					]);
 				}
-				 
-				
 			} else {
 				Yii::$app->session->setFlash('error', Yii::t('app', 'An confirmation email was not sent'));
 			}
 			
             return $this->redirect(['index']);
         } else {
-            return $this->render('view', [ 'form_body' => $form->body] );
+            return $this->render('view', [ 'form' => $form->body] );
         }
 	}
 	
