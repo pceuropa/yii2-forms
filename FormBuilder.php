@@ -16,7 +16,7 @@ use pceuropa\forms\models\FormModel;
  * Generate forms and create tables from json object
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4
+ * @version 1.4.1
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forms
@@ -192,13 +192,13 @@ class FormBuilder extends Widget {
 		
 		if (isset($field['name'])){
 		
-			$column = $field['name'];
-			$type = FormBase::getColumnType($field);
-        	$query = Yii::$app->db->createCommand()->addColumn($this->table, $column, $type ); 
+			$column_name = $field['name'];
+			$column_type = FormBase::getColumnType($field);
+
+        	$query = Yii::$app->db->createCommand()->addColumn($this->table, $column_name, $column_type ); 
         
 		    return $this->execute($query);
 		}
-		
 	}
 
 /**

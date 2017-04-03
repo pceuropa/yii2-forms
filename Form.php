@@ -49,7 +49,7 @@ class Form extends Widget {
     */
     public function init() {
         parent::init();
-        $this->form = Json::decode($this->form);
+        $this->form = Json::decode($this->form)['body'];
     }
 
     /**
@@ -74,8 +74,8 @@ class Form extends Widget {
     */
     public function phpRender($form) {
     	
-
-    	$data_fields = FormBase::onlyCorrectDataFields($form['body']);
+    
+    	$data_fields = FormBase::onlyCorrectDataFields($form);
     	$DynamicModel = new DynamicModel( ArrayHelper::getColumn($data_fields, 'name') ); 
     	
     	foreach ($data_fields as $v) {
@@ -86,12 +86,12 @@ class Form extends Widget {
 					$DynamicModel->addRule($v["name"], 'required');
 				} 
 				
-    			$DynamicModel->addRule($v["name"], FormBase::getValidator($v) );
+    			$DynamicModel->addRule($v["name"], FormBase::ruleType($v) );
     		}
     	}
 	    
 		return $this->render('form_php', [
-			'array' => $form['body'], 
+			'form_body' => $form, 
 			'model' => $DynamicModel
 		]);
     }
@@ -269,7 +269,7 @@ class Form extends Widget {
 		   		    
 		   		    if (isset($value['checked'])){
 		   		    	$checked[]  = $key+1;
-		   		    }
+		   		    }   
 		   		}
 		   		
 				$model->{$field['name']} = $checked;

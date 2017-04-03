@@ -1,10 +1,10 @@
 <?php namespace pceuropa\forms;
 use yii\helpers\ArrayHelper;
 /**
- * Yii 2 Forum Module
+ * Base method for Yii2-forms extension
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.3
+ * @version 1.4.1
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forum
@@ -14,93 +14,102 @@ use yii\helpers\ArrayHelper;
  */
 class FormBase {
 
-    public function onlyCorrectDataFields($array){
-    	$fields = [];
-    	foreach ($array as $row => $r) {
-    	
-			foreach ($r as $key => $v) {
+/**
+ * Filter fields array and retun only fields with attribute name (data fields)
+ *
+ * @param array $array Array represent elements of form
+ * @return array Only fields with attribute name
+*/
+    public function onlyCorrectDataFields($array = []){
+    	$data_fields = [];
+    	foreach ($array as $key_row => $row) {
+
+			foreach ($row as $key => $v) {
 			
-				$field = $array[$row][$key];
+				$field = $array[$key_row][$key];
 				
 				if (ArrayHelper::keyExists('name', $field) ){
-    				array_push($fields, $field);
+    				array_push($data_fields, $field);
     			}
 			}
-			
 		}
-		return $fields;
+		return $data_fields;
     }
     
     /**
-     * Summary.
+     * Generate table shema need to create table 
      *
-     * Description.
-     * @since 1.0
-     * @param array $array Description.
+     * Get array with data fields and 
+     * @param array $array Data fields
      * @return array
     */
-    public function tableShema($array){
-    	$fields['id'] = 'pk';
+    public function tableShema($array = []){
+    	$schema['id'] = 'pk';
     	
-    	foreach ($array as $r) {
-			foreach ($r as $v) {
+    	foreach ($array as $row) {
+			foreach ($row as $v) {
 			
 				if ( isset($v['name']) ){
-					$fields[ $v['name'] ] = ($v['field'] === 'textarea') ? 'text' : 'string';
+					$schema[ $v['name'] ] = ($v['field'] === 'textarea') ? 'text' : 'string';
 				}
-				
-				
-				
 			}
 		}
-		return $fields;
+		return $schema;
     }
+
     /**
      * Return column type.
      *
-     * Description.
-     * @link URL
-     * @since 1.0
+     * Need to add column in table SQL
      *
-     * @param array $field Get array with field data.
-     * @return null|array 
-    */
+     * @param array $field Data one field.
+     * @return null|string 
+    */ 
     public function getColumnType($field){
 
     	if (!ArrayHelper::keyExists('field', $field)){
     		return null;
     	}
-    		$type = ['input' =>  [
-						'text' => 'string',
-						'email' => 'string',
-						'password' => 'string',
-						'date' => 'date',
-						'number' => 'integer',
-						'url' => 'string',
-						'tel' => 'string',
-						'url' => 'string',
-						'color' => 'string',
-						'range' => 'string',
-						'url' => 'string',
-					],
-				'textarea' => 'text',
-				'checkbox' => 'string',
-				'radio' => 'string',
-				'select' => 'string',
+    		$type = [
+                'input' =>  [
+		            'text' =>   'string',
+		            'email' =>  'string',
+		            'password' => 'string',
+		            'date' =>   'date',
+		            'number' => 'integer',
+		            'url' =>    'string',
+		            'tel' =>    'string',
+		            'url' =>    'string',
+		            'color' =>  'string',
+		            'range' =>  'string',
+		            'url' =>    'string',
+				],
+				'textarea' =>   'text',
+				'checkbox' =>   'string',
+				'radio' =>      'string',
+				'select' =>     'string',
 		    ];
     			
     			
     	if ($field['field'] === 'input'){
     		return $type[ $field['field'] ][ $field['type'] ];
-    	} else {
-    		return $type[ $field['field'] ];
-    	}
+    	} 
+
+    	return $type[ $field['field'] ];
+    	
     }		
     
-    
-    public function getValidator($field){
+    /**
+     * Return validation rule type.
+     *
+     * Need to dynamic model validation
+     *
+     * @param array $f Data field.
+     * @return null|array 
+    */
+    public function ruleType($f){
     	
-    		$a = ['input' =>  [
+    		$types = ['input' =>  [
 								'text' => 'string',
 								'email' => 'email',
 								'password' => 'string',
@@ -108,10 +117,8 @@ class FormBase {
 								'number' => 'integer',
 								'url' => 'url',
 								'tel' => 'string',
-								'url' => 'string',
 								'color' => 'string',
 								'range' => 'string',
-								'url' => 'string',
 							],
 						'textarea' => 'string',
 						'checkbox' => 'string',
@@ -119,16 +126,12 @@ class FormBase {
 						'select' => 'string',
     			];
     			
-    	if ($field['field'] === 'input'){
-    		return $a[$field['field']][$field['type']];
+    	if ($f['field'] === 'input'){
+    		return $types[$f['field']][$f['type']];
     	} 
     	
-		return $a[$field['field']];
-    	
+		return $types[$f['field']];
     }
-    
-    
-    
 }
     
 ?>

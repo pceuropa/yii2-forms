@@ -1,6 +1,6 @@
 <?php
 
-class ExampleTest extends \PHPUnit_Framework_TestCase
+class FormmTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {

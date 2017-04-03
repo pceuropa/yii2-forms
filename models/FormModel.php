@@ -1,9 +1,20 @@
 <?php namespace pceuropa\forms\models;
-#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
 use Yii;
 use yii\web\NotFoundHttpException;
 
+/**
+ * AR model for Yii2-forms extensions
+ *
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.4.1
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ */
 class FormModel extends \yii\db\ActiveRecord {
 
     public static function tableName() {

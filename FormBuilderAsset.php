@@ -1,5 +1,17 @@
 <?php 
 namespace pceuropa\forms;
+/**
+ * Asset bundle for formbuilder
+ *
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.4.1
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ */
 
 class FormBuilderAsset extends \yii\web\AssetBundle {
     public $sourcePath = '@vendor/pceuropa/yii2-forms/assets/form-builder';

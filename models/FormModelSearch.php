@@ -5,6 +5,18 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use pceuropa\forms\models\FormModel;
 
+/**
+ * AR search model for Yii2-forms extensions
+ *
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.4.1
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ */
 class FormModelSearch extends FormModel {
 
     public function rules(){
@@ -14,6 +26,12 @@ class FormModelSearch extends FormModel {
         ];
     }
 
+/**
+ * Search and filter result of gridview
+ *
+ * @param array $param List of params
+ * @return ActiveDataProvider 
+*/
     public function search($params) {
         $query = FormModel::find();
 

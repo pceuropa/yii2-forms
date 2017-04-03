@@ -15,10 +15,31 @@ use pceuropa\forms\models\FormModel;
 use pceuropa\forms\models\FormModelSearch;
 
 
+/**
+ * Example controller help to use all functions of formBuilder
+ *
+ * FormBuilder controller of module.
+ * @author Rafal Marguzewicz <info@pceuropa.net>
+ * @version 1.4.1
+ * @license MIT
+ *
+ * https://github.com/pceuropa/yii2-forum
+ * Please report all issues at GitHub
+ * https://github.com/pceuropa/yii2-forum/issues
+ *
+ */
 class ModuleController extends \yii\web\Controller {
 
+/**
+ * @var array List all actions to rule of access
+ */
 	protected $list_action = ['index', 'create', 'update', 'delete', 'list'];
-	protected $table = 'poll_';
+	
+
+/**
+ * @var string Prefix table (if you need storage data in SQL)
+ */
+    protected $table = 'poll_';
 	
 	public function behaviors() {
 	    return [
@@ -33,7 +54,7 @@ class ModuleController extends \yii\web\Controller {
 		                [
 		                    'allow' => true,
 		                    'actions' => $this->list_action,
-		                    'roles' => ['admin'],
+		                    'roles' => ['@'],
 		                ],
 		                
 		            ],
@@ -47,6 +68,12 @@ class ModuleController extends \yii\web\Controller {
 		    ];
 		}
 		
+/**
+ * Index Controller.
+ *
+ * List of all forms
+ * @return Void View
+*/
     public function actionIndex(){
         $searchModel = new FormModelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -57,7 +84,12 @@ class ModuleController extends \yii\web\Controller {
         ]);
     }
 	
-    
+ /**
+ * View Controller.
+ *
+ * Preview form.
+ * @return Void View
+*/   
     public function actionView($url) {
     
     	$form = FormModel::findModelByUrl($url);
@@ -101,7 +133,12 @@ class ModuleController extends \yii\web\Controller {
         }
 	}
 	
-	
+ /**
+ * List Controller.
+ *
+ * List of data from submited forms.
+ * @return Void View
+*/   	
 	public function actionList($id) {
     
     	$query = (new \yii\db\Query)->from($this->table.$id);
@@ -119,7 +156,12 @@ class ModuleController extends \yii\web\Controller {
         ]);
 	}
 	
-	
+ /**
+ * Create Controller.
+ *
+ * Create form - FormBuilder
+ * @return Void View
+*/   	
     public function actionCreate(){
     
 		$r = Yii::$app->request;
@@ -137,7 +179,12 @@ class ModuleController extends \yii\web\Controller {
 		}
 	}
 
-
+/**
+ * Update Controller.
+ *
+ * Update form - FormBuilder
+ * @return Void View
+*/   
  public function actionUpdate($id){
    
 		$form = new FormBuilder(['table' => $this->table.$id]);
@@ -174,7 +221,12 @@ class ModuleController extends \yii\web\Controller {
 		}
 	}
 
-
+/**
+ * Delete Controller.
+ *
+ * Delete form
+ * @return Void Redirect to index controller
+*/  
     public function actionDelete($id){
     	$form = new FormBuilder();
         $form->model->findModel($id)->delete();
