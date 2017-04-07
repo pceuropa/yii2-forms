@@ -10,7 +10,7 @@
 </span>
 
 <div class="input-item well">
-	<b><?= Yii::t('builder', 'Items') ?></b>
+	<?= Yii::t('builder', 'Items') ?>
 
 	<?php
 		require('item/_text.php');

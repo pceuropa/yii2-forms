@@ -1,7 +1,7 @@
-<div class="form-group"> 
-	<label class="col-sm-4 control-label"><?= Yii::t('builder', 'View') ?></label>
-	<div class="col-sm-8">
-		<select id="view-mode" class="form-control input-sm">
+<div class="row form-group-sm">
+	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'View') ?></label>
+	<div class="col-sm-9">
+		<select id="view-mode" class="form-control">
 			<option value="html" ><?= Yii::t('builder', 'HTML') ?></option>
 			<option value="text"><?= Yii::t('builder', 'Text') ?></option>
 			<option value="json" ><?= Yii::t('builder', 'Json') ?></option>
@@ -11,48 +11,48 @@
 </div>
 
 <span>
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Title') ?></label>
+		<div class="col-sm-9">
+		  <input id="title" type="text" class="form-control" >
+		</div>
+	</div>
 
-	<div>
-		<label><?= Yii::t('builder', 'Title') ?></label>
-	  	<input id="title" type="text" class="form-control input-sm" >
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'URL') ?></label>
+		<div class="col-sm-9">
+		  <input id="url" type="text" class="form-control" >
+		</div>
 	</div>
-	<br />
-	
-	<div>
-		<label><?= Yii::t('builder', 'Address URL') ?></label>
-	  	<input id="url" type="text" class="form-control input-sm" >
-	</div>
-	<br />
-	<div>
-		<label><?= Yii::t('builder', 'Text respond') ?></label>
-		<textarea id="response" class="form-control" rows="5"></textarea>
-		
+
+
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Text respond') ?></label>
+		<div class="col-sm-9">
+		  <textarea id="response" class="form-control input-sm" rows="5"></textarea>
+		</div>
 	</div>
 	
-	
-	<div class="form-group expert">
+	<div class="row form-group-sm expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>
 		<div class="col-sm-9">
-			<select id="method" class="form-control input-sm">
+			<select id="method" class="form-control">
 				<option value="post" >POST</option>
 				<option value="get">GET</option>
 			</select>
 		</div>
 	</div>
 
-	<div class="form-group expert">
+	<div class="row form-group-sm expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Action') ?></label>
 		<div class="col-sm-9">
-		  <input id="action" type="text" class="form-control input-sm" >
+		  <input id="action" type="text" class="form-control" >
 		</div>
 	</div>
-	<br />
 		<?php
 			require('field/_id.php');
 			require('field/_class.php');
 		?>
 	<div id="widget-form-options"></div>
-<?php
-		require('button/_save-form.php');
-	?>
+	<?php require('button/_save-form.php');?>
 </span>

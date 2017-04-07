@@ -1,6 +1,6 @@
-<div class="form-group">
+<div class="row form-group-sm">
 	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Type') ?></label>
-	<div class="col-sm-6">
+	<div class="col-sm-9">
 		<select id="type" class="form-control input-sm data-source">
 			<option value="text"><?= Yii::t('builder', 'text') ?></option>
 			<option value="email"><?= Yii::t('builder', 'email') ?></option>
