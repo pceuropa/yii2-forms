@@ -1,7 +1,7 @@
 <?php
 #Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
-#1.1.0
+#1.1.1
 return [
     'Form Builder' => 'Form budowniczy',  
     'Form' => 'Formularz',  
@@ -35,7 +35,7 @@ return [
     'Width' => 'Szerokość',  
     'Value' => 'Tekst domyślny',  
     'Value item' => 'Wartość',  
-    'Field require' => 'Pole wymagane',  
+    'Field require' => 'wymagane',  
     'Rows' => 'Ilość wierszy',  
     'Add to form' => 'Dodaj do formularza',  
     'Add item' => 'Dodaj do pola',  

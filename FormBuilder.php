@@ -16,7 +16,7 @@ use pceuropa\forms\models\FormModel;
  * Generate forms and create tables from json object
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
+ * @version 1.5
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forms
@@ -47,7 +47,13 @@ class FormBuilder extends Widget {
     
 	public $easy_mode = true;
 
+    /**
+     * @var bool If true - form can send email response
+     * @since 1.4
+     */
     
+	public $email_response = false;
+	
     /**
      * @var array  Configuration data from widget/user
      * @since 1.0
@@ -96,6 +102,7 @@ class FormBuilder extends Widget {
         $this->options = [
 			'easy_mode' => $this->easy_mode,
 			'test_mode' => $this->test_mode,
+			'email_response' => $this->email_response,
 			'update' => false,
 			'config' =>  $this->config
 		];

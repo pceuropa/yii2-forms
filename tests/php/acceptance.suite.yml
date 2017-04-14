@@ -8,10 +8,11 @@
 # config at tests/acceptance.yml
 modules:
     enabled:
-        - WebDriver:
-            url: http://127.0.0.1:8080/
-            browser: firefox
+        - PhpBrowser:
+            url: http://pceuropa.dev
         - Yii2:
             part: [orm, fixtures] # allow to use AR methods
             cleanup: false # don't wrap test in transaction
             entryScript: index-test.php
+            
+

@@ -4,7 +4,7 @@ namespace pceuropa\forms;
  * Asset bundle for formbuilder
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
+ * @version 1.5
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forum
@@ -26,8 +26,11 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/form.js',
 		'js/forms/field.js',
 		'js/forms/controller.js',
+		
+		'js/forms/form.module.response.js',
 		'js/forms/examples.js',
 		'js/forms/test.js',
+		
 		'js/forms/clipboard.min.js',
 		'https://cdn.quilljs.com/1.2.0/quill.js',
 		'js/forms/clipboard.min.js',

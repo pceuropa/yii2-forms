@@ -48,13 +48,17 @@ var quill = new Quill('#textdescription', {
 //Actions:
 // 1. -------- FORM -----------------
 preview_form
-    .delegate('.edit', 		'click', function(e){ edit(e)  })
-    .delegate('.clone', 	'click', function(e){ clone(e) })
-    .delegate('.delete', 	'click', function(e){ del(e)   });
+    .on('click',	'.edit', 	function(e){ edit(e)  })
+    .on('click',	'.clone', 	 function(e){ clone(e) })
+    .on('click',	'.delete', 	 function(e){ del(e)   })
+    .on('click',	'button', 	 function(e){ e.preventDefault(); 
+    
+    var button = $(this), clone = button.clone();
+    	button.text('edit mode');
+    	window.setTimeout(function() {button.replaceWith(clone);}, 1111)
+   });
 
 // 2-1-a view-mode
- $('#tabs')
- 	.on('click',    'li',    function(e){ activeTab(e.target);});  
  	
 $('#view-mode')
 	.change(function (){
@@ -62,6 +66,8 @@ $('#view-mode')
         form.render('off');
     })
 
+
+		
 sidebar_div_options
     .on('click',    '#add-to-form',         function(){ form.add( field.body) })
     .on('click',    '.add-item',            function(){ addItem() }    ) 
@@ -75,8 +81,8 @@ sidebar_div_options
     .on('mouseenter','#widget-form-options', function(e){ preventEmptyTitleUrl(e) })
 
  $('#sidebar')
-    .on('click',    '#form-tab',            function(){  activeAction('#form') })   
-    .on('click',    '#field-tab',           function(){  select_field.change() })   
+    .on('click',    '#form-tab',            function(e){ activeTab(e.target); activeAction('#form') })   
+    .on('click',    '#field-tab',           function(e){ activeTab(e.target); select_field.change() })   
     .on('click', 	'#save-form', function(){ form.save() })  
 
  

@@ -139,15 +139,15 @@ factory.prototype = {
 	rowsAttr: function () {
 		return this.body.rows ? ' rows="'+ this.body.rows + '"' : '';
 	},
-	checkedAttr: function () {
-		return this.body.checked ? ' checked' : '';
-	},
+	
 	requireAttr: function () {
 		return this.body.require ? ' required' : '';
 	},
-	checkedAttr: function () {
-		return this.body.require ? ' checked' : '';
+	
+	checkedAttr: function() {
+		return this.body.require ? ' checked' : '' ;
 	},
+	
 	helpBlockAttr: function () {
 		return this.body.helpBlock ? '\n\t<span class="help-block">' + this.body.helpBlock + '</span>' : '';
 	},

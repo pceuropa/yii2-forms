@@ -1,7 +1,7 @@
 var MyFORM =  MyFORM || {};
 //#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
-MyFORM.template = function (form){
+MyFORM.examples = function (form){
 
 var version = '1.2.4',
 	id_selector = "#examples-form",
@@ -428,15 +428,15 @@ temp = [
 
 var div1 = document.createElement("div"),
 
-	innerHTML = '<label class="col-sm-4 control-label">Examples</label>' +
-				'<div class="col-sm-8">' +
-					'<select id="examples-form" class="form-control input-sm"><option>-</option> </select><div id="section-confirm"></div>' + 
-				'</div> ';
+	innerHTML = '<label class="col-sm-3 control-label">Examples</label>' +
+				'<div class="col-sm-6">' +
+				'<select id="examples-form" class="form-control"><option>-</option> </select>'+
+				'</div><div id="section-confirm"></div>';
 	
 	
 				
 	(function(){
-			div1.setAttribute('class', 'form-group');
+			div1.setAttribute('class', 'row form-group-sm');
 			div1.innerHTML = innerHTML;
 		
 			$(div1).find(id_selector).append( function() {
@@ -458,7 +458,7 @@ var div1 = document.createElement("div"),
 			
 				$("#form #widget-form-options").append( div1.outerHTML ).on( "change", id_selector, function() {
 							var value = this.value;
-							$("#section-confirm").empty().html( '<button id="confirm-example" type="button" class="btn btn-warning">Confirm</button>' );
+							$("#section-confirm").empty().html( '<button id="confirm-example" type="button" class="btn btn-sm btn-warning">Confirm</button>' );
 							$("#confirm-example").click(function () {
 								form.body = temp[value].body
 								form.render()

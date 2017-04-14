@@ -226,13 +226,12 @@ class Form extends Widget {
     * @return $this The field object itself.
     */ 
    public static function checkbox($form, $model, $field){
-
-
    		$items = [];
    		$checked = [];
    		
    		foreach ($field['items'] as $key => $value) {
-   		    $items[$value['value']] =  $value['text'];
+   		
+   				$items[$value['value']] =  $value['text'];
    		    if (isset($value['checked'])){
    		    	$checked[]  = $key+1;
    		    }

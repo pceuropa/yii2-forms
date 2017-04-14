@@ -26,13 +26,6 @@
 	</div>
 
 
-	<div class="row form-group-sm">
-		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Text respond') ?></label>
-		<div class="col-sm-9">
-		  <textarea id="response" class="form-control input-sm" rows="5"></textarea>
-		</div>
-	</div>
-	
 	<div class="row form-group-sm expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>
 		<div class="col-sm-9">
@@ -53,6 +46,7 @@
 			require('field/_id.php');
 			require('field/_class.php');
 		?>
+		
 	<div id="widget-form-options"></div>
 	<?php require('button/_save-form.php');?>
 </span>

@@ -7,18 +7,16 @@
 
 var MyFORM =  MyFORM || {};
 MyFORM = (function(){
-console.log('form: 1.3.0');
+console.log('form: 1.5.0');
 var fields_with_data = [], // array for false autosave
+	
 	Form = function (){
-
 		//this.url = null;
 		this.title =  "FormBuilder";
 		//this.action = "";
 		this.method = "post";
 		this.language = "English"; 
 		this.body = [];
-		
-		
 	};
 	
 	Form.prototype = {
@@ -49,6 +47,7 @@ var fields_with_data = [], // array for false autosave
 			this.autosaveButton();
 			Form.prototype.time_out = 800;
 		}
+		
 		return MyFORM.controller(this, new MyFORM.field.factory() );
 		
 	},
@@ -147,6 +146,7 @@ var fields_with_data = [], // array for false autosave
 	
 	},
 	
+	
 	successSave: function() {
 		
 		var save_form = $( "#save-form" ), clone = save_form.clone();
@@ -209,6 +209,7 @@ var fields_with_data = [], // array for false autosave
 		fields_with_data.push(name);
 		return name;
 	},
+	
 	post: function (o) {
 		if (this.c.autosave && o.hasOwnProperty('name')){
 			$.post( this.c.controller_url, {add: o}, function (r) {
@@ -289,19 +290,35 @@ var fields_with_data = [], // array for false autosave
  */
  
 	generate: function(o){
+	var result = false;	
  			h.inheritAll(this, o);
+ 			this.setValueInputOptions();
+ 			fields_with_data = h.getAllProperty('name', this.body);
 		    if(this.body.length !== 0) this.render('off')
 		    
-		    this.setValueInputOptions();
-			fields_with_data = h.getAllProperty('name', this.body);
-			console.log(fields_with_data);
 			
 		},
+		
+	modules: {
+		init: function () {
+		},
+	
+	},
+	
+	executeModules: function () {
+		for (var prop in this.modules) {
+ 			if (this.modules.hasOwnProperty(prop)){
+	        	this.modules[prop]();
+	        	console.log('execute module ' + prop);
+	        	
+ 			}
+ 		}
+	},
 
-
-/**
- * Render form
- */
+ 	servicesAfter: function () {
+ 		
+ 	},
+ 
 	render: function(){
 		var form = this;
 	
@@ -320,7 +337,8 @@ var fields_with_data = [], // array for false autosave
 				})
 			}
 			this.preventNotValidaData();
-			
+			this.executeModules();
+			this.servicesAfter();
 	},
 	// default save button if title or url are empty
 	preventNotValidaData: function () { 

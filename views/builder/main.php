@@ -11,12 +11,15 @@ use yii\helpers\Json;
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 		</div>
 		
-		<h1><?= Yii::t('builder', 'Form Builder') ?></h1>
+		<h1 class="header"><?= Yii::t('builder', 'Form Builder') ?></h1>
 	
 			<div id="preview-form">
 				<div class="manual" ><?= $this->render('_manual'); ?></div>
 			</div>
-		
+			<p id="end-form" class="text-uppercase text-center">-- <?= Yii::t('builder', 'Form end') ?> --</p>
+			
+			
+			
 			<span id='text-bofore-preview-field'><?= Yii::t('builder', 'Preview field')  ?>:</span>
 			<div id="preview-field"></div>
 		
@@ -55,8 +58,9 @@ use yii\helpers\Json;
 			<div id="update" class="options form-horizontal">update</div>
 			
 			<div id="delete" class="options form-horizontal">
+                <?= $this->render('options/button/_back'); ?> - 
                 <?= $this->render('options/button/_delete'); ?>
-                <?= $this->render('options/button/_back'); ?>
+                
 			</div>
 			
 		</div> <!-- end id.sidebar -->
@@ -66,33 +70,43 @@ use yii\helpers\Json;
 <?php
 
 $this->registerCss("
-	div.options, .update-buttons, #update-tab, #delete-tab, #select-field, #preview-field, #name-field-empty {display:none}
+	#MyForm h1.header {color: #C8EBFB}
+	.options, .update-buttons, #update-tab, #delete-tab, #select-field, #preview-field, #name-field-empty {display:none}
 
-	#preview-form {min-height: 50px;border:dashed 1px #C8EBFB;margin-bottom:50px}
+	#preview-form {min-height: 50px; border:dashed 1px #C8EBFB; border-top: solid 3px #C8EBFB;}
 	#preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
 	
-	#preview-form.edit-mode div.row > div{opacity: 0.3;}
-	#preview-form.edit-mode div.row > div.edit-now {opacity: 1;}
-	.ql-align-center {text-align: center}
-	
-	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio , #preview-form checkbox{cursor: grab;}
-	span#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
+	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
+	#end-form {height: 25px;background-color: #C8EBFB; color:#6CBDE3; margin:0 0 50px 0; }
+	#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
 	#preview-field .show {display:block}
 	
-	div.options { border:solid 1px #ccc; padding:10px;}
-	div.options.active-option {display: block}
-	asside {height: 100%}
+	asside {height: 100%;}
+	.options { border:solid 1px #ccc; padding:5px;}
+	.options.active-option {display: block}
+	
 	#sidebar > ul { margin:0 0 0 5px;  }
 	#sidebar > ul li { color:#3894B0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 4px 10px; margin-bottom: -3px;}
 	#sidebar > ul li:hover { background-color:#eee}
 	#sidebar > ul li#field-tab.active-tab  {display:none}
-	#sidebar > ul li.active-tab { background-color: #fff; color:#244BAC;  padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;}
+	#sidebar > ul li.active-tab { 
+		background-color: #fff; color:#244BAC; padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;
+	}
 	
 	#sidebar.update #add-to-form{display:none}
-	
-	#select-field {font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;}
+	#sidebar .well {
+		padding: 5px;
+		margin-bottom: 10px;
+		background-color: #ECF9FF;
+		border: 1px solid #e3e3e3;
+		margin-top: 5px;
+	}
+	#select-field {
+		font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;
+	}
 	#select-field .show {display:inline-block}
 	.change-item {width: 145px}
+	
 	@media screen and (min-width: 1024px){
 	  #sidebar { position: fixed;}
 	  #preview-field {margin-bottom:200px}
@@ -105,25 +119,20 @@ $this->registerCss("
 	.input-item.update div.create-buttons {display:none}
 	.input-item.update div.update-buttons {display:block}
 	
-	.ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
-	.edit-field span { color:#A6E0FB; margin-left: 7px;}
-	#editor { max-width: 100%; }
+	#MyForm .ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
+	#MyForm .edit-field span { color:#A6E0FB; margin-left: 7px;}
 	
-	.ql-snow .ql-tooltip {
-		z-index: 1000;
-	}
-	
-	.border {border:solid 1px #ccc}
-	.add-item {
-		color: #fff;
-		background-color: #337ab7;
-		border-color: #2e6da4;
-	}
+	#MyForm .ql-snow .ql-tooltip {z-index: 1000;}
+	#MyForm .ql-align-center {text-align: center}
+	#MyForm .border {border:solid 1px #ccc}
 	
 	.glyphicon-pencil { cursor: e-resize;}
 	.glyphicon-duplicate { cursor: pointer;}
 	.glyphicon-trash { cursor: no-drop;}
-	.manual {
+	
+	#MyForm .btn-danger {margin-left:20px}
+	#MyForm #save-form {margin-top:5px}
+	#MyForm .manual {
 		background-color: #FAFAFA;
 		color: #ADADAD;
 		padding: 10px;
@@ -131,15 +140,19 @@ $this->registerCss("
 	}
 ");
 
-
 if ($easy_mode){
 	$this->registerCss(".expert {display:none}");
 }
-	$this->registerJs(" var form = new MyFORM.Form(); ", 4);
+	$this->registerJs("var form = new MyFORM.Form(); ", 4);
+
+if ($email_response){
+	$this->registerJs("form.modules.response  = MyFORM.response(form) ", 4);
+}
+	
 	$this->registerJs("form.init(".Json::encode($config).");", 4);
 
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4);
 }
-	$this->registerJs(" MyFORM.template(form);", 4);	
+	$this->registerJs(" MyFORM.examples(form);", 4);	
 ?>		
