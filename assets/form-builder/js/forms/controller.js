@@ -4,7 +4,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form, field){
 	
-	var version = '1.2.5',
+var version = '1.3.0',
         key_item_change = 0,
         update_mode = false,				// selectItemToChange()
 		preview_form = form.div_form,
@@ -69,7 +69,12 @@ $('#view-mode')
 
 		
 sidebar_div_options
-    .on('click',    '#add-to-form',         function(){ form.add( field.body) })
+    .on('click',    '#add-to-form',         function(e){ form.add( field.body);
+    
+$(e.delegateTarget).find("#name").val('');
+
+    })
+
     .on('click',    '.add-item',            function(){ addItem() }    ) 
        
     .on('change',   '.change-item',   		function(e){ selectItemToChange(e)} )   

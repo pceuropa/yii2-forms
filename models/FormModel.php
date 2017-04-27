@@ -46,7 +46,7 @@ class FormModel extends \yii\db\ActiveRecord {
         ];
     }
 
-	public function findModel($id){
+	public static function findModel($id){
 		
 		$validator = new \yii\validators\NumberValidator();
 		

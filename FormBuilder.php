@@ -159,12 +159,12 @@ class FormBuilder extends Widget {
     /**
      * Populates the model with input data.
      * @since 1.0
-     * @see FormBase::tableShema
+     * @see FormBase::tableSchema
      * @return array Return array table shema for self::createTable()
     */	
-    protected function tableShema(){
-		$form_body = Json::decode($this->model->body)['body'];
-    	return FormBase::tableShema($form_body);
+    public function tableSchema($body){
+		$form_body = Json::decode($body)['body'];
+    	return FormBase::tableSchema($form_body);
     }
     
     
@@ -180,7 +180,7 @@ class FormBuilder extends Widget {
 		
         if ($this->success === true){
 			$table_name = $this->table . $this->model->getPrimaryKey();
-			$query = Yii::$app->db->createCommand()->createTable($table_name, $this->tableShema(), 'CHARACTER SET utf8 COLLATE utf8_general_ci'); 
+			$query = Yii::$app->db->createCommand()->createTable($table_name, $this->tableSchema($this->model->body), 'CHARACTER SET utf8 COLLATE utf8_general_ci'); 
 
             return $this->execute($query);
 		}

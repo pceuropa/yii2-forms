@@ -43,7 +43,7 @@ class FormBase {
      * @param array $array Data fields
      * @return array
     */
-    public function tableShema($array = []){
+    public function tableSchema($array = []){
     	$schema['id'] = 'pk';
     	
     	foreach ($array as $row) {
@@ -75,7 +75,7 @@ class FormBase {
 		            'text' =>   'string',
 		            'email' =>  'string',
 		            'password' => 'string',
-		            'date' =>   'date',
+		            'date' =>   'string',
 		            'number' => 'integer',
 		            'url' =>    'string',
 		            'tel' =>    'string',
