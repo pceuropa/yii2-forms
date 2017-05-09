@@ -43,7 +43,7 @@ class FormBase {
      * @param array $array Data fields
      * @return array
     */
-    public function tableSchema($array = []){
+    public static function tableSchema($array = []){
     	$schema['id'] = 'pk';
     	
     	foreach ($array as $row) {

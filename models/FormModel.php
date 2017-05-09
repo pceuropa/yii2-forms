@@ -26,8 +26,8 @@ class FormModel extends \yii\db\ActiveRecord {
             [['body', 'title', 'url'], 'required'],
             [['body', 'response'], 'string'],
             [['date_start', 'date_end'], 'safe'],
-            [['maximum'], 'integer'],
-            [['title', 'author', 'meta_title', 'url'], 'string', 'max' => 255],
+            [['maximum', 'author'], 'integer'],
+            [['title',  'meta_title', 'url'], 'string', 'max' => 255],
             [['url'], 'unique'],
         ];
     }
