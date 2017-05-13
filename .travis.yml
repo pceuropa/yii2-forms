@@ -8,11 +8,6 @@ php:
 # faster builds on new travis setup not using sudo
 sudo: false
 
-# cache vendor dirs
-cache:
-  directories:
-    - $HOME/.composer/cache
-    - vendor
 
 install:
   - travis_retry composer self-update
@@ -31,7 +26,11 @@ before_script:
     # Doing this last gives the webdriver and server time to start up.
     - composer install --prefer-source
     - pwd
+    - ~/.composer/vendor/bin/codecept build
 
 script:
-    - ~/.composer/vendor/bin/codecept run
+    - ~/.composer/vendor/bin/codecept run unit
     # vendor/bin/codecept -c vendor/pceuropa/yii2-forms run unit
+after_failure:
+    - cat codeception/_app/runtime/logs/*
+    - cat codeception/_output/*
