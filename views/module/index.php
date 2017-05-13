@@ -1,15 +1,14 @@
-<?php
-use yii\helpers\Html;
+<?php use yii\helpers\Html;
 
 $this->title = 'FormBuilder: Free Software Open Source';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] =  Yii::t('app', 'Forms');
 ?>
 
-<h1><?= Yii::t('app', 'FormBuilder <small>Free Software Open Source</small>') ?></h1>
+<h1><?= Yii::t('app', 'Forms') ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
 
-
-	<?= Html::a(Yii::t('app', 'Create form'), ['create'], ['class' => 'btn btn-success']) ?>
-	
+<div class="row">
+	<div class="col-md-12">
+		
    <?= \yii\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -20,30 +19,24 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'url',
 				'format' => 'html',
 				'value' => function ($m, $key) {
-							return  Html::a ( $m->url, ['forms/view', 'url' => $m->url], ['target' => 'new']);
+							return  Html::a ( $m->url, ['view', 'url' => $m->url], ['target' => 'new']);
 						},
 			],
-
             ['class' => 'yii\grid\ActionColumn',
             
             'buttons' => [
-		        'view' => function ($url, $model, $key) {
-					return Html::a ( '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> ', ['module/view', 'url' => $model->url] );
-				},
 		        'list' => function ($url, $model, $key) {
-					return Html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> ', ['module/list', 'id' => $model->form_id] );
+					return Html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> ', ['list', 'id' => $model->form_id] );
+				},
+		        'number' => function ($url, $model, $key) {
+					return $model->answer;
 				},
             ],
-			'template' => '{update} {view} {delete} {list}'
+			'template' => '{list} {number}'
             
             
             ],
         ],
     ]); ?>
-    
-  
-
-
-
-
-    
+    </div>
+</div>

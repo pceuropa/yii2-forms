@@ -176,11 +176,11 @@ class FormBuilder extends Widget {
  * @since 1.0
  * @return object Return json message callback
 */
-	public function createTable() {
+	public function createTable($table, $db = 'db') {
 		
         if ($this->success === true){
-			$table_name = $this->table . $this->model->getPrimaryKey();
-			$query = Yii::$app->db->createCommand()->createTable($table_name, $this->tableSchema($this->model->body), 'CHARACTER SET utf8 COLLATE utf8_general_ci'); 
+			$table_name = $table . $this->model->getPrimaryKey();
+			$query = Yii::$app->{$db}->createCommand()->createTable($table_name, $this->tableSchema($this->model->body), 'CHARACTER SET utf8 COLLATE utf8_general_ci'); 
 
             return $this->execute($query);
 		}

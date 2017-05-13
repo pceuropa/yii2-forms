@@ -24,6 +24,7 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
             'meta_title' => $this->string(),
             'url' => $this->string(),
             'response' => $this->text(),
+            'answer' => $this->integer(),
         ], $options);
     }
 

@@ -196,7 +196,7 @@ public function testOnlyCorrectDataFields(){
        
 
 public function testTableShema(){
-        $data_fields = FormBase::tableShema($this->form);
+        $data_fields = FormBase::tableSchema($this->form);
         $this->assertTrue(is_array($data_fields));
     }
 
