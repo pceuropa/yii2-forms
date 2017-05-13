@@ -5,8 +5,14 @@ language: php
 php:
     - 5.6
     - 7.0
+install:
+  - composer self-update
+  - composer global require "fxp/composer-asset-plugin:1.0.0"
+  - composer install
 
 before_script:
+    - travis_retry composer self-update
+    - travis_retry composer install --no-interaction --prefer-source --dev
     # Start up a web server.
     - php -S 127.0.0.1:8888 -t /path/to/web/root >/dev/null 2>&1 &
     # Start up the webdriver.
