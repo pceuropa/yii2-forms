@@ -33,4 +33,3 @@ script:
     # vendor/bin/codecept -c vendor/pceuropa/yii2-forms run unit
 after_failure:
     - cat codeception/_app/runtime/logs/*
-    - cat codeception/_output/*
