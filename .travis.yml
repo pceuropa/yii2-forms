@@ -19,7 +19,7 @@ install:
 
 before_script:
     - pwd && ls
-    - ls ~/.composer/vendor/bin
+    - ls ~ -s -a
 script:
     - codecept run unit
     # vendor/bin/codecept -c vendor/pceuropa/yii2-forms run unit
