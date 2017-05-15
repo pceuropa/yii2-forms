@@ -1,12 +1,15 @@
 <?php namespace pceuropa\forms\controllers;
 #Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net LTD
 use Yii;
-use yii\helpers\Url;
+use yii\db\Query;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+
 use pceuropa\email\Send;
 use pceuropa\forms\FormBase;
 use pceuropa\forms\Form;
@@ -32,7 +35,6 @@ use pceuropa\forms\models\FormModelSearch;
 class ModuleController extends \yii\web\Controller {
 
     protected $list_action = ['create', 'update', 'delete', 'user'];
-    protected $table = 'form_';
 
     /**
      * @var string form table name
@@ -42,15 +44,25 @@ class ModuleController extends \yii\web\Controller {
     /**
      * @var string data forms table name
      */
-    protected $dataFormsTables = 'form_';
+    protected $formDataTable = 'form_';
 
+    /**
+     * Action before all actions
+     *
+     * @param string
+     * @return void
+     */
+    public function beforeActions() {
+        $this->formsTable = $this->module->formsTable;
+        $this->formDataTable = $this->module->dataFormsTables;
+
+    }
     /**
      * This method is invoked before any actions
      *
      * @param string $arg
      * @return void
      */
-
     public function behaviors() {
         return [
                    'access' => [
@@ -58,12 +70,17 @@ class ModuleController extends \yii\web\Controller {
                        'only' => $this->list_action,
                        'rules' => [
                            [
-                               'actions' => $this->list_action,
+                               'actions' => [ 'update', 'delete'],
                                'allow' => true,
-                               'roles' => ['@'],
+                               'roles' => ['updateOwnForm'],
                            ],
-
+                           [
+                               'actions' => ['user', 'create'],
+                               'allow' => true,
+                               'roles' => ['user'],
+                           ]
                        ],
+
                    ],
                    'verbs' => [
                        'class' => VerbFilter::className(),
@@ -77,7 +94,6 @@ class ModuleController extends \yii\web\Controller {
     public function actionIndex() {
         $searchModel = new FormModelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
                                  'searchModel' => $searchModel,
                                  'dataProvider' => $dataProvider,
@@ -85,7 +101,7 @@ class ModuleController extends \yii\web\Controller {
     }
     public function actionUser() {
         $searchModel = new FormModelSearch();
-        $searchModel->author = Yii::$app->user->identity->id;
+        $searchModel->author    = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('user', [
                                  'searchModel' => $searchModel,
@@ -104,7 +120,7 @@ class ModuleController extends \yii\web\Controller {
                 if (is_array($data[$i])) $data[$i] = join(',', $data[$i]);
             }
 
-            $query = Yii::$app[Module::getInstance()->db]->createCommand()->insert($this->table.$form->form_id, $data);
+            $query = (new Query)->createCommand()->insert($this->formDataTable.$form->form_id, $data);
 
             if ($query->execute()) {
                 $form->updateCounters(['answer' => 1 ]);
@@ -135,18 +151,16 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionList($id) {
 
-        $query = (new \yii\db\Query)->from($this->table.$id);
         $form = FormModel::findModel($id);
-        $array = Json::decode($form->body);
-
-        $merge_array = FormBase::onlyCorrectDataFields($array['body']);
-
+        $form = Json::decode($form->body);
+        $form = FormBase::onlyCorrectDataFields($form['body']);
+        $query = (new Query)->from( $this->formDataTable.$id );
         $dataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
 
         return $this->render('list', [
                                  //   'searchModel' => $searchModel,
                                  'dataProvider' => $dataProvider,
-                                 'only_data_fields' => ArrayHelper::getColumn($merge_array, 'name')
+                                 'only_data_fields' => ArrayHelper::getColumn($form, 'name')
                              ]);
     }
 
@@ -159,9 +173,10 @@ class ModuleController extends \yii\web\Controller {
 
             $form = new FormBuilder(['table' => $this->formsTable]);
             $form->load($r->post());
-            $form->model->author = Yii::$app->user->identity->id;
+            $form->model->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
+
             $form->save();
-            $form->createTable($this->formsTable, $this->module->db);
+            $form->createTable($this->formDataTable, $this->module->db);
             if ($form->success) {
                 return $this->redirect(['user']);
             }
@@ -173,9 +188,8 @@ class ModuleController extends \yii\web\Controller {
 
 
     public function actionUpdate($id) {
-        $form = new FormBuilder(['table' => $this->formsTable.$id]);
+        $form = new FormBuilder(['table' => $this->formDataTable.$id]);
         $form->findModel($id);
-        $this->rbacUser($form->model);
         $r = Yii::$app->request;
 
 
@@ -215,7 +229,6 @@ class ModuleController extends \yii\web\Controller {
     public function actionClone($id) {
 
         $form = FormModel::find()->select(['body', 'title', 'author', 'date_start', 'date_start', 'maximum', 'meta_title', 'url', 'response'])->where(['form_id' => $id])->one();
-        $this->rbacUser($form);
         do {
             $form->url = $form->url.'_2';
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
@@ -225,7 +238,7 @@ class ModuleController extends \yii\web\Controller {
 
         $last_id = Yii::$app->db->getLastInsertID();
         $schema = FormBuilder::tableSchema($form->body);
-        Yii::$app->db->createCommand()->createTable($this->table.$last_id, $schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci')->execute();
+        (new Query)->createCommand()->createTable($this->formDataTable.$last_id, $schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci')->execute();
 
         $this->redirect(['user']);
     }
@@ -233,7 +246,6 @@ class ModuleController extends \yii\web\Controller {
     public function actionDelete($id) {
         $form = new FormBuilder();
         $form = $form->model->findModel($id);
-        $this->rbacUser($form);
         $form->delete();
         return $this->redirect(['index']);
     }
@@ -244,4 +256,5 @@ class ModuleController extends \yii\web\Controller {
         }
     }
 }
+
 

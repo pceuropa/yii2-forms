@@ -42,7 +42,7 @@ class Module extends \yii\base\Module implements BootstrapInterface {
     /**
      * @var string The database table storing the data from forms
      */
-    public $dataFormsTables = '{{%form_}';
+    public $formDataTable = '{{%form_}';
 
     /**
      * @var array the list of rights that are allowed to access this module.
@@ -57,9 +57,16 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      */
     public function bootstrap($app)
     {
+      if ($app instanceof \yii\console\Application) {
+            $this->controllerNamespace = 'pceuropa\forms\commands';
+        }
       //  $this->addUrlManagerRules($app);
     }
 
+    public function init()
+    {
+        parent::init();
+    }
     /**
     * Adds UrlManager rules.
     * @param Application $app the application currently running
@@ -74,11 +81,6 @@ class Module extends \yii\base\Module implements BootstrapInterface {
     }
 
 
-
-    public function init() {
-        parent::init();	  // custom initialization code goes here
-//        echo '<pre>'; print_r( Yii::$app->UrlManager ); die();
-    }
 
 }
 

@@ -1,18 +1,20 @@
-<?php use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-use lajax\translatemanager\helpers\Language as Lx;
-use pceuropa\languageSelection\LanguageSelection;
-$this->title = Yii::t('app', 'Questionnaire') . ' Online';
-$this->params['breadcrumbs'][] = $this->title;
-?>
 <?php
+
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\grid\GridView;
+
+$this->title = Yii::t('app', 'Forms');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'All forms') , 'url' => ['index']];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Your forms') ;
 ?>
 
 <h1><?= $this->title ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
+
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-12">
 		
-   <?= \yii\grid\GridView::widget([
+   <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -27,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 
             ['class' => 'yii\grid\ActionColumn',
-            
             'buttons' => [
 		        'view' => function ($url, $model, $key) {
 					return Html::a ( '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> ', ['view', 'url' => $model->url] );
@@ -40,17 +41,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
             ],
 			'template' => '{update} {view} {delete} {list} | {clone}'
-            
-            
             ],
         ],
     ]); ?>
     
    </div>
-	<div class="col-md-4">
+	<div class="col-md-4 pull-right">
     	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> - <?= Yii::t('app', 'Edit form')  ?><br />
     	<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> - <?= Yii::t('app', 'View form')  ?><br />
     	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> - <?= Yii::t('app', 'Delete form')  ?><br />
-    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('app', 'Data received from completed forms')  ?><br />
+    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('app', 'Data received from completed forms')  ?>
 	</div>
 </div>
