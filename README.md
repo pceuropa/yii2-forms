@@ -115,3 +115,13 @@ Create rules and roles for form module
 php yii formsrbac/generate
 ```
 
+## Tests
+For tests run 
+```
+composer exec -v -- codecept -c vendor/pceuropa/forms run
+```
+or
+```
+cd path/to/app/vendor/pceuropa/yii2-forms
+codecept run
+```
