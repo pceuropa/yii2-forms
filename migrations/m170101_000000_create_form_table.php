@@ -11,34 +11,28 @@ use yii\db\Schema;
  */
 
 class m170101_000000_create_form_table extends \yii\db\Migration {
-    protected $table = 'forms';
 
-    public function up() {
-
-        $options = null;
+    public function safeUp()
+    {
+        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
-            $options = 'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-
-        $this->createTable($this->table, [
-                               'form_id' => $this->primaryKey(),
-                               'body' => $this->text(),
-                               'title' => $this->string(),
-                               'author' => $this->string(),
-                               'date_start' => $this->datetime(),
-                               'date_end' => $this->datetime(),
-                               'maximum' => $this->integer(),
-                               'meta_title' => $this->string(),
-                               'url' => $this->string(),
-                               'response' => $this->text(),
-                               'answer' => $this->integer(),
-                           ], $options);
-    }
-
-
-    public function down() {
-        $this->dropTable($this->table);
+        $this->createTable('{{%forms}}', [
+            'form_id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
+            'body' => $this->text()->notNull(),
+            'title' => $this->string(255)->notNull(),
+            'author' => $this->integer(11),
+            'date_start' => $this->date(),
+            'date_end' => $this->dateTime(),
+            'maximum' => $this->integer(11),
+            'meta_title' => $this->string(255),
+            'url' => $this->string(255)->notNull(),
+            'response' => $this->text(),
+            'answer' => $this->integer(11)->notNull()->defaultValue('0'),
+            'method' => $this->string(4)->defaultValue('post'),
+            'language' => $this->string(11)->defaultValue('en'),
+        ], $tableOptions);
     }
 }
-

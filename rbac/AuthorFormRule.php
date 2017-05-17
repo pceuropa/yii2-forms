@@ -1,8 +1,10 @@
 <?php
 namespace pceuropa\forms\rbac;
+
 use Yii;
 use yii\rbac\Rule;
 use yii\db\Query;
+use pceuropa\forms\Module;
 /**
  * Checks if authorID matches user passed via params
  */
@@ -19,7 +21,7 @@ class AuthorFormRule extends Rule
     public function execute($user, $item, $params)
     {
         $id = Yii::$app->request->get('id');
-        $query = (new Query)->select('author')->where(['form_id' => $id])->from('forms')->one();
+        $query = (new Query)->select('author')->where(['form_id' => $id])->from(Module::getInstance()->formsTable)->one();
         return $query['author'] == $user;
     }
 }

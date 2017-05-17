@@ -49,7 +49,7 @@ class Form extends Widget {
     */
     public function init() {
         parent::init();
-        $this->form = Json::decode($this->form)['body'];
+        $this->form = Json::decode($this->form);
     }
 
     /**

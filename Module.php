@@ -48,8 +48,30 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      * @var array the list of rights that are allowed to access this module.
      * If you modify, you also need to enable authManager.
      * http://www.yiiframework.com/doc-2.0/guide-security-authorization.html
+     *     $rules = [
+     *                   [
+     *                       'actions' => [ 'update', 'delete', 'clone' ],
+     *                       'allow' => true,
+     *                       'roles' => ['updateOwnForm'],
+     *                   ],
+     *                   [
+     *                       'actions' => ['user', 'create'],
+     *                       'allow' => true,
+     *                       'roles' => ['user'],
+     *                   ]
+     *               ];
      */
-    public $roles = [];
+    public $rules =[
+                       [
+                           'allow' => true,
+                           'actions' => ['user', 'create', 'udpdate', 'delete'],
+                           'roles' => ['?'],
+                       ],[
+                           'allow' => true,
+                           'actions' => ['user', 'create', 'udpdate', 'delete'],
+                           'roles' => ['@'],
+                       ]
+                   ];
     /**
      * Bootstrap method to be called during application bootstrap stage.
      * Adding routing rules and log target.
@@ -57,10 +79,10 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      */
     public function bootstrap($app)
     {
-      if ($app instanceof \yii\console\Application) {
+        if ($app instanceof \yii\console\Application) {
             $this->controllerNamespace = 'pceuropa\forms\commands';
         }
-      //  $this->addUrlManagerRules($app);
+        //  $this->addUrlManagerRules($app);
     }
 
     public function init()
@@ -73,16 +95,19 @@ class Module extends \yii\base\Module implements BootstrapInterface {
     */
     protected function addUrlManagerRules($app)
     {
-      $app->getUrlManager()->addRules([
-                            $this->id.'/update/<id:\d+>' => $this->id. '/module/update',
-                            $this->id.'/delete/<id:\d+>' => $this->id.'module/delete',
-                            $this->id.'list/<id:\d+>' => $this->id.'module/list',
-            ], false);
+        $app->getUrlManager()->addRules([
+                                            $this->id.'/update/<id:\d+>' => $this->id. '/module/update',
+                                            $this->id.'/delete/<id:\d+>' => $this->id.'module/delete',
+                                            $this->id.'list/<id:\d+>' => $this->id.'module/list',
+                                        ], false);
     }
 
 
 
 }
+
+
+
 
 
 

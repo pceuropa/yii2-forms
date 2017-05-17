@@ -25,6 +25,26 @@
 		</div>
 	</div>
 
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Max Entries') ?></label>
+		<div class="col-sm-9">
+		  <input id="maximum" type="number" class="form-control" >
+		</div>
+	</div>
+
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Start') ?></label>
+		<div class="col-sm-9">
+		  <input id="date_start" type="date" class="form-control" placeholder="yyyy-mm-dd">
+		</div>
+	</div>
+
+	<div class="row form-group-sm">
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'End') ?></label>
+		<div class="col-sm-9">
+		  <input id="date_end" type="date" class="form-control" placeholder="yyyy-mm-dd">
+		</div>
+	</div>
 
 	<div class="row form-group-sm expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Method') ?></label>

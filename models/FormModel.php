@@ -38,8 +38,9 @@ class FormModel extends \yii\db\ActiveRecord {
     public function rules() {
         return [
                    [['body', 'title', 'url'], 'required'],
-                   [['body', 'response'], 'string'],
+                   [['body', 'response', 'language', 'method'], 'string'],
                    [['date_start', 'date_end'], 'safe'],
+                   [['date_start'], 'default', 'value' => date('Y-m-d')],
                    [['maximum', 'author'], 'integer'],
                    [['title',  'meta_title', 'url'], 'string', 'max' => 255],
                    [['url'], 'unique'],

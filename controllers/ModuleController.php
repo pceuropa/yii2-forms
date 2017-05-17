@@ -67,19 +67,8 @@ class ModuleController extends \yii\web\Controller {
         return [
                    'access' => [
                        'class' => \yii\filters\AccessControl::className(),
-                       'only' => $this->list_action,
-                       'rules' => [
-                           [
-                               'actions' => [ 'update', 'delete'],
-                               'allow' => true,
-                               'roles' => ['updateOwnForm'],
-                           ],
-                           [
-                               'actions' => ['user', 'create'],
-                               'allow' => true,
-                               'roles' => ['user'],
-                           ]
-                       ],
+                       'rules' => $this->module->rules
+                       
 
                    ],
                    'verbs' => [
@@ -169,18 +158,20 @@ class ModuleController extends \yii\web\Controller {
 
         $r = Yii::$app->request;
 
-        if ($r->isAjax && $r->post('form_data')) {
+        if ($r->isAjax) {
 
             $form = new FormBuilder(['table' => $this->formsTable]);
             $form->load($r->post());
             $form->model->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
-
-            $form->save();
+            if (!$form->save() ) {
+                echo '<pre>';
+                print_r($form->model->getErrors());
+                die();
+            }
             $form->createTable($this->formDataTable, $this->module->db);
             if ($form->success) {
                 return $this->redirect(['user']);
             }
-
         } else {
             return $this->render('create');
         }
@@ -198,30 +189,20 @@ class ModuleController extends \yii\web\Controller {
 
             switch (true) {
             case $r->isGet:
-                echo $form->model->body;
-                break;
-
+                return $form->model;
             case $r->post('form_data'):
-
                 $form->load($r->post());
-
                 return ['success' => $form->save()];
-
             case $r->post('add'):
                 return ['success' => $form->addColumn($r->post('add'))];
-
             case $r->post('delete'):
                 return ['success' => $form->dropColumn($r->post('delete'))];
-
             case $r->post('change'):
                 return ['success' => $form->renameColumn($r->post('change'))];
-
             default:
                 return ['success' => false];
             }
-
         } else {
-            // update post
             return $this->render('update', ['id' => $id]);
         }
     }
@@ -229,10 +210,12 @@ class ModuleController extends \yii\web\Controller {
     public function actionClone($id) {
 
         $form = FormModel::find()->select(['body', 'title', 'author', 'date_start', 'date_start', 'maximum', 'meta_title', 'url', 'response'])->where(['form_id' => $id])->one();
+
         do {
             $form->url = $form->url.'_2';
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
         } while ($count > 0);
+
         $form->answer = 0;
         Yii::$app->db->createCommand()->insert('forms', $form)->execute();
 
@@ -256,5 +239,7 @@ class ModuleController extends \yii\web\Controller {
         }
     }
 }
+
+
 
 
