@@ -7,8 +7,9 @@
 
 var MyFORM = MyFORM || {};
 MyFORM = (function() {
-    console.log('form: 1.5.0');
+    console.log('form: 1.6.0');
     var fields_with_data = [], // array for false autosave
+    t = 0,
 
         Form = function() {
             //this.url = null;
@@ -25,8 +26,6 @@ MyFORM = (function() {
         constructor: Form,
         viewMode: 'html',
         time_out: 1,
-        t: null,
-        tn: null,
         div_form: $("#preview-form"),
         options_form: $("#form"),
         map: {
@@ -77,8 +76,8 @@ MyFORM = (function() {
 
         saveOnlyOneTime: function(callback, stopPropagation) {
             var form = this
-            if (this.t) clearTimeout(this.t)
-            this.t = window.setTimeout(function() {
+            if (t) clearTimeout(t)
+            t = window.setTimeout(function() {
                 callback()
             }, 1000)
         },
@@ -100,11 +99,13 @@ MyFORM = (function() {
                   }
                 }
             }
+
             $.post(form.c.controller_url, data, function(r) {
 
                 if (r.success === true) {
                     console.log('save in base correct');
                     form.successSave();
+                    if (r.url){ window.location.href = r.url;}
                 } else {
                     form.errorSave(r.success);
                 }
@@ -156,14 +157,19 @@ MyFORM = (function() {
 
         errorSave: function(o) { // info 
             var save_form = $("#save-form"),
-                clone = save_form.clone();
+                clone = save_form.clone(),
+                message_error = '';
 
-
+            if (h.isString(o)) {
+              message_error = o; 
+            } else {
+              message_error = h.firstValue(o);
+            }
 
             save_form
                 .addClass("btn-danger")
                 .prop('disabled', true)
-                .text(h.firstValue(o));
+                .text(message_error);
 
             window.setTimeout(function() {
                 save_form.replaceWith(clone);
@@ -243,10 +249,10 @@ MyFORM = (function() {
                 $.post(this.c.controller_url, {
                     add: o
                 }, function(r) {
-                    if (r.success.success === true) {
+                    if (r.success === true) {
                         console.log('correct add');
                     } else {
-                        console.log(r.success.success);
+                        console.log(r.success);
 
                         alert('Somting wrong: ' + r.success);
                     }
@@ -412,8 +418,8 @@ MyFORM = (function() {
             var rows = '',
                 form = this;
             if (form.body.length == 0) return '';
+
             h.each(form.body, function(i) {
-                console.log(form.row(i));
                 rows += form.row(i)
             })
             return rows;
