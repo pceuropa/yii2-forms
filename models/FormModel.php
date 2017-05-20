@@ -3,6 +3,7 @@
 use Yii;
 use yii\web\NotFoundHttpException;
 use pceuropa\forms\Module;
+
 /**
  * AR model for Yii2-forms extensions
  *
@@ -20,16 +21,25 @@ class FormModel extends \yii\db\ActiveRecord {
     /**
      * @ingeritdoc
      */
-    public static function getDb()
-    {
+    public static function getDb() {
+
+      if (Module::getInstance()) {
         return Yii::$app->get(Module::getInstance()->db);
+      } else {
+        return Yii::$app->db;
+      } 
     }
 
     /**
      * @ingeritdoc
      */
     public static function tableName() {
-        return Module::getInstance()->formsTable;
+
+      if (Module::getInstance()) {
+        return Module::getInstance()->formTable;
+      } else {
+        return 'forms';
+      } 
     }
 
     /**
@@ -65,7 +75,6 @@ class FormModel extends \yii\db\ActiveRecord {
     }
     /**
      * Get form by id number (form_id) in database
-     *
      * @param int $id number of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */
@@ -81,7 +90,6 @@ class FormModel extends \yii\db\ActiveRecord {
     }
     /**
      * Get form by url
-     *
      * @param string $url Unique string represent url of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */

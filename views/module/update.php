@@ -1,13 +1,17 @@
 <?php
-
 use yii\helpers\Html;
-$this->title = Yii::t('app', 'form update') ;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forms list') , 'url' => ['index']];
-$this->params['breadcrumbs'][] =  $this->title;
+use pceuropa\forms\Module;
+use pceuropa\forms\FormBuilder;
 
-echo \pceuropa\forms\FormBuilder::widget([
-	'table' => 'poll_',     // 'form_' . $id
-	'config' => [
+$this->title = Yii::t('app', 'form update') ;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'All forms') , 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Your forms') , 'url' => ['user']];
+$this->params['breadcrumbs'][] = Yii::t('builder', 'Form create');
+
+echo FormBuilder::widget([
+	'formTable' => Module::getInstance()->formTable,
+    'db' => Module::getInstance()->db,
+	'jsConfig' => [
 			'get'=> true, 
 			'save'=> true, 
 			'autosave' => true,

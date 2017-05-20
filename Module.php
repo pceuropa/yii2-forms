@@ -17,7 +17,7 @@ use yii\web\GroupUrlRule;
  * https://github.com/pceuropa/yii2-forum/issues
  *
  */
-class Module extends \yii\base\Module implements BootstrapInterface {
+class Module extends \yii\base\Module{
 
     /**
      * @ingeritdoc
@@ -37,12 +37,12 @@ class Module extends \yii\base\Module implements BootstrapInterface {
     /**
      * @var string The database table storing the forms
      */
-    public $formsTable = '{{%forms}';
+    public $formTable = '{{%forms}';
 
     /**
      * @var string The database table storing the data from forms
      */
-    public $formDataTable = '{{%form_}';
+    public $formDataTable = 'form_';
 
     /**
      * @var array the list of rights that are allowed to access this module.
@@ -61,53 +61,26 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      *                   ]
      *               ];
      */
-    public $rules =[
+    
+    public $rules = [
                        [
                            'allow' => true,
-                           'actions' => ['user', 'create', 'udpdate', 'delete'],
+                           'actions' => [],
                            'roles' => ['?'],
                        ],[
                            'allow' => true,
-                           'actions' => ['user', 'create', 'udpdate', 'delete'],
+                           'actions' => [],
                            'roles' => ['@'],
                        ]
                    ];
+
     /**
-     * Bootstrap method to be called during application bootstrap stage.
-     * Adding routing rules and log target.
-     * @param Application $app the application currently running
+     * @var boolean If true after completing the form the message is sent
      */
-    public function bootstrap($app)
-    {
-        if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = 'pceuropa\forms\commands';
-        }
-        //  $this->addUrlManagerRules($app);
-    }
-
-    public function init()
-    {
-        parent::init();
-    }
+    public $sendEmail = false;
+    
     /**
-    * Adds UrlManager rules.
-    * @param Application $app the application currently running
-    */
-    protected function addUrlManagerRules($app)
-    {
-        $app->getUrlManager()->addRules([
-                                            $this->id.'/update/<id:\d+>' => $this->id. '/module/update',
-                                            $this->id.'/delete/<id:\d+>' => $this->id.'module/delete',
-                                            $this->id.'list/<id:\d+>' => $this->id.'module/list',
-                                        ], false);
-    }
-
-
-
+     * @var string The sender's address
+     */
+    public $emailFrom = null;
 }
-
-
-
-
-
-

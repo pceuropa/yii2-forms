@@ -1,5 +1,6 @@
 <?php
 namespace pceuropa\forms;
+
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Url;
@@ -7,6 +8,8 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\db\Query;
+use yii\db\Exception;
+use yii\web\NotFoundHttpException;
 use pceuropa\forms\Form;
 use pceuropa\forms\FormBase;
 use pceuropa\forms\models\FormModel;
@@ -36,6 +39,11 @@ use pceuropa\forms\models\FormModel;
 class FormBuilder extends Widget {
 
     /**
+     * @var array preLoaded data of form
+     */
+    public $formData = null;
+
+    /**
      * @var bool If true FormBuilder set test data on begin
      * @since 1.0
      */
@@ -54,22 +62,31 @@ class FormBuilder extends Widget {
     public $email_response = false;
 
     /**
-     * @var array  Configuration data from widget/user
+     * @var array  Configuration data for JavaScript assets
      * @since 1.0
      */
-    public $config = [];
+    public $jsConfig = [];
 
     /**
-     * @var array Configuration data for JavaScript assets
+     * @var array configuration data for php render
      * @since 1.0
      */
     private $options = [];
 
     /**
-     * @var string Table name eg. form_, poll_
-     * @since 1.0
+     * @var string DB connections
      */
-    public $table = 'form_';
+    public $db = 'db';
+
+    /**
+     * @var string The database table storing the forms
+     */
+    public $formTable = '{{%forms}';
+
+    /**
+     * @var string The database table storing the data from forms
+     */
+    public $formDataTable = 'form_';
 
     /**
      * @var FormModel Model data
@@ -95,14 +112,18 @@ class FormBuilder extends Widget {
 
         $this->registerTranslations();
         $this->model = new FormModel();
+        if ($this->formData !== null) {
+            $this->load($this->formData);
+        }
+
 
         $this->options = [
-                      'easy_mode' => $this->easy_mode,
-                      'test_mode' => $this->test_mode,
-                      'email_response' => $this->email_response,
-                      'update' => false,
-                      'config' =>  $this->config
-                        ];
+                             'easy_mode' => $this->easy_mode,
+                             'test_mode' => $this->test_mode,
+                             'email_response' => $this->email_response,
+                             'update' => false,
+                             'jsConfig' =>  $this->jsConfig
+                         ];
     }
 
     /**
@@ -121,9 +142,10 @@ class FormBuilder extends Widget {
         * @return null
     */
     public function load($form) {
-      foreach ($form as $key => $value) {
-        $this->model[$key] = $form[$key];
-      }
+        foreach ($form as $key => $value) {
+            $this->model[$key] = $form[$key];
+        }
+        $this->model->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
     }
 
     /**
@@ -142,23 +164,26 @@ class FormBuilder extends Widget {
      * @return array|bool Return message error or true if saved corretly
     */
     public function save() {
-
         if (!($this->success = $this->model->save())) {
             return $this->success = $this->model->getFirstErrors();
-        } else {
-            return true;
         }
-
+        return $this->success;
     }
     /**
      * Populates the model with input data.
      * @since 1.0
      * @see FormBase::tableSchema
-     * @return array Return array table shema for self::createTable()
+     * @param string Json form
+     * @return array Return table shema
     */
-    public function tableSchema($body) {
-        $form_body = Json::decode($body);
-        return FormBase::tableSchema($form_body);
+    public function tableSchema($form_body) {
+        if (!is_string($form_body)) {
+            return false;
+        }
+
+        $form_body = Json::decode($form_body);
+        $schema =  FormBase::tableSchema($form_body);
+        return $schema;
     }
 
 
@@ -170,14 +195,14 @@ class FormBuilder extends Widget {
      * @since 1.0
      * @return object Return json message callback
     */
-    public function createTable($table, $db = 'db') {
-
-        if ($this->success === true) {
-            $table_name = $table . $this->model->getPrimaryKey();
-            $query = Yii::$app-> {$db}->createCommand()->createTable($table_name, $this->tableSchema($this->model->body), 'CHARACTER SET utf8 COLLATE utf8_general_ci');
-
-            return $this->execute($query);
+    public function createTable() {
+        if ($this->success !== true) {
+            return;
         }
+        $table_name = $this->formDataTable . $this->model->form_id;
+        $table_schema = $this->tableSchema($this->model->body);
+        $query = Yii::$app->{$this->db}->createCommand()->createTable($table_name,  $table_schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci');
+        return $this->execute($query);
     }
 
     /**
@@ -188,15 +213,13 @@ class FormBuilder extends Widget {
      * @return object Return json message callback
     */
     public function addColumn($field = false) {
+        if (!isset($field['name']))return 'empty name';
 
-        if (isset($field['name'])) {
-
-            $column_name = $field['name'];
-            $column_type = FormBase::getColumnType($field);
-            $query = Yii::$app->db->createCommand()->addColumn($this->table, $column_name, $column_type );
-
-            return $this->execute($query);
-        }
+        $column_name = $field['name'];
+        $column_type = FormBase::getColumnType($field);
+        $id = $this->model->form_id;
+        $query = Yii::$app->{$this->db}->createCommand()->addColumn($this->formDataTable, $column_name, $column_type );
+        return $this->execute($query);
     }
 
     /**
@@ -207,11 +230,11 @@ class FormBuilder extends Widget {
      * @return object Return json message callback
     */
     public function renameColumn($name) {
-
         if ( !isset($name['old']) && !isset($name['new']) && $name['old'] === $name['new'] ) {
             return $this->success = false;
         }
-        $query = Yii::$app->db->createCommand()->renameColumn( $this->table, $name['old'],$name['new']);
+        $id = $this->model->form_id;
+        $query = Yii::$app->db->createCommand()->renameColumn( $this->formDataTable.$id, $name['old'], $name['new']);
 
         return $this->execute($query);
     }
@@ -224,9 +247,8 @@ class FormBuilder extends Widget {
      * @return object Return json message callback
     */
     public function dropColumn($column) {
-
-        $query = Yii::$app->db->createCommand()->dropColumn($this->table, $column);
-
+        $id = $this->model->form_id;
+        $query = Yii::$app->db->createCommand()->dropColumn($this->formDataTable.$id, $column);
         return $this->execute($query);
     }
 
@@ -238,15 +260,12 @@ class FormBuilder extends Widget {
      * @return object Return json message callback
     */
     public function execute($query) {
-
         try {
             $query->execute();
-            $this->success = true;
+            return $this->success = true;
         } catch (\Exception $e) {
             return $this->success = $e->errorInfo[2];
         }
-
-        return $this->response();
     }
 
     /**
@@ -256,9 +275,11 @@ class FormBuilder extends Widget {
      * @return array Return json message callback
     */
     public function response($format = 'json') {
-
         \Yii::$app->response->format = $format;
-        return ['success' => $this->success, 'url' => Url::to(['index'])];
+        if ( $this->success === true) {
+            return ['success' => $this->success, 'url' => Url::to(['user'])];
+        }
+        return ['success' => $this->success];
     }
 
     /**
@@ -267,7 +288,6 @@ class FormBuilder extends Widget {
      * @return void
     */
     public function formBuilderRender() {
-
         return $this->render('builder/main', $this->options );
     }
 
@@ -285,8 +305,5 @@ class FormBuilder extends Widget {
 
                 ];
     }
-
-
 }
-
 ?>

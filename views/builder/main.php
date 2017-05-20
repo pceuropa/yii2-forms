@@ -47,7 +47,7 @@ use yii\helpers\Json;
 				<li id="delete-tab" class="btn"><?= Yii::t('builder', 'Delete') ?></li>
 			</ul>
 		
-			<div id="form" class="options form-horizontal active-option"><?= $this->render('options/form'); ?></div>
+	 		<div id="form" class="options form-horizontal active-option"><?= $this->render('options/form'); ?></div>
 			<div id="input" class="options form-horizontal"><?= $this->render('options/input'); ?></div>
 			<div id="textarea" class="options form-horizontal"><?= $this->render('options/textarea'); ?></div>
 			<div id="radio" class="options form-horizontal"><?= $this->render('options/multi-field'); ?></div>
@@ -149,7 +149,7 @@ if ($email_response){
 	$this->registerJs("form.modules.response  = MyFORM.response(form) ", 4);
 }
 	
-	$this->registerJs("form.init(".Json::encode($config).");", 4);
+	$this->registerJs("form.init(".Json::encode($jsConfig).");", 4);
 
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4);

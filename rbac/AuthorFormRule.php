@@ -21,7 +21,7 @@ class AuthorFormRule extends Rule
     public function execute($user, $item, $params)
     {
         $id = Yii::$app->request->get('id');
-        $query = (new Query)->select('author')->where(['form_id' => $id])->from(Module::getInstance()->formsTable)->one();
+        $query = (new Query)->select('author')->where(['form_id' => $id])->from(Module::getInstance()->formTable)->one();
         return $query['author'] == $user;
     }
 }

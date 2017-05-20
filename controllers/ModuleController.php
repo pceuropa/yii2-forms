@@ -2,15 +2,16 @@
 #Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net LTD
 use Yii;
 use yii\db\Query;
+use yii\data\ActiveDataProvider;
+
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 
-use pceuropa\email\Send;
 use pceuropa\forms\FormBase;
 use pceuropa\forms\Form;
 use pceuropa\forms\FormBuilder;
@@ -37,27 +38,6 @@ class ModuleController extends \yii\web\Controller {
     protected $list_action = ['create', 'update', 'delete', 'user'];
 
     /**
-     * @var string form table name
-     */
-    protected $formsTable = 'forms';
-
-    /**
-     * @var string data forms table name
-     */
-    protected $formDataTable = 'form_';
-
-    /**
-     * Action before all actions
-     *
-     * @param string
-     * @return void
-     */
-    public function beforeActions() {
-        $this->formsTable = $this->module->formsTable;
-        $this->formDataTable = $this->module->dataFormsTables;
-
-    }
-    /**
      * This method is invoked before any actions
      *
      * @param string $arg
@@ -67,9 +47,8 @@ class ModuleController extends \yii\web\Controller {
         return [
                    'access' => [
                        'class' => \yii\filters\AccessControl::className(),
+                       'only' => ['user', 'create', 'update', 'delete', 'clone'],
                        'rules' => $this->module->rules
-                       
-
                    ],
                    'verbs' => [
                        'class' => VerbFilter::className(),
@@ -88,6 +67,7 @@ class ModuleController extends \yii\web\Controller {
                                  'dataProvider' => $dataProvider,
                              ]);
     }
+
     public function actionUser() {
         $searchModel = new FormModelSearch();
         $searchModel->author    = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
@@ -109,22 +89,13 @@ class ModuleController extends \yii\web\Controller {
                 if (is_array($data[$i])) $data[$i] = join(',', $data[$i]);
             }
 
-            $query = (new Query)->createCommand()->insert($this->formDataTable.$form->form_id, $data);
+            $query = (new Query)->createCommand()->insert($this->module->formDataTable.$form->form_id, $data);
 
             if ($query->execute()) {
                 $form->updateCounters(['answer' => 1 ]);
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Registration successfully completed'));
+                Form::sendEmail($form, $data, 'info@pceuropa.eu', 'subject');
 
-                if (isset($data['email'])) {
-                    $response = (isset(Json::decode($form->body)['response'])) ? Json::decode($form->body)['response'] : '';
-
-                    Send::widget([
-                                     'from' => 'info@pceuropa.net',
-                                     'to' => $data['email'],
-                                     'subject' => Yii::t('app', 'Registration successfully completed'),
-                                     'textBody' => $response,
-                                 ]);
-                }
 
 
             } else {
@@ -142,86 +113,102 @@ class ModuleController extends \yii\web\Controller {
 
         $form = FormModel::findModel($id);
         $form = Json::decode($form->body);
-        $form = FormBase::onlyCorrectDataFields($form['body']);
-        $query = (new Query)->from( $this->formDataTable.$id );
-        $dataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
+        $form = FormBase::onlyCorrectDataFields($form);
+
+        $dataProvider = new ActiveDataProvider([
+                'query' => (new Query)->from( $this->module->formDataTable.$id ),
+                'db' => $this->module->db
+                                               ]);
 
         return $this->render('list', [
-                                 //   'searchModel' => $searchModel,
                                  'dataProvider' => $dataProvider,
                                  'only_data_fields' => ArrayHelper::getColumn($form, 'name')
                              ]);
     }
 
-
+/**
+ * Create Form action
+ * @throws yii\base\InvalidParamException
+ * @return string
+ */
     public function actionCreate() {
-
         $r = Yii::$app->request;
 
         if ($r->isAjax) {
-
-            $form = new FormBuilder(['table' => $this->formsTable]);
-            $form->load($r->post());
-            $form->model->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
-            if (!$form->save() ) {
-                echo '<pre>';
-                print_r($form->model->getErrors());
-                die();
-            }
-            $form->createTable($this->formDataTable, $this->module->db);
-            if ($form->success) {
-                return $this->redirect(['user']);
-            }
+            $form = new FormBuilder([
+                                        'formTable' => $this->module->formTable,
+                                        'formDataTable' => $this->module->formDataTable,
+                                        'formData' => $r->post()
+                                    ]);
+            $form->save();
+            $form->createTable();
+            return $form->response();
         } else {
             return $this->render('create');
         }
     }
 
 
+/**
+ * Create Form action
+ * @throws yii\base\InvalidParamException
+ * @return string
+ */
     public function actionUpdate($id) {
-        $form = new FormBuilder(['table' => $this->formDataTable.$id]);
+        $form = new FormBuilder([
+                                    'formTable' => $this->module->formTable,
+                                    'formDataTable' => $this->module->formDataTable,
+                                ]);
+
         $form->findModel($id);
         $r = Yii::$app->request;
-
 
         if ($r->isAjax) {
             \Yii::$app->response->format = 'json';
 
             switch (true) {
-            case $r->isGet:
-                return $form->model;
-            case $r->post('form_data'):
-                $form->load($r->post());
-                return ['success' => $form->save()];
-            case $r->post('add'):
-                return ['success' => $form->addColumn($r->post('add'))];
-            case $r->post('delete'):
-                return ['success' => $form->dropColumn($r->post('delete'))];
-            case $r->post('change'):
-                return ['success' => $form->renameColumn($r->post('change'))];
-            default:
-                return ['success' => false];
+                case $r->isGet:
+                    return $form->model;
+                case $r->post('body'):
+                    $form->load($r->post());
+                    $form->save();
+                case $r->post('add'):
+                    $form->addColumn($r->post('add'));
+                    break;
+                case $r->post('delete'):
+                    $form->dropColumn($r->post('delete'));
+                    break;
+                case $r->post('change'):
+                    $form->renameColumn($r->post('change'));
+                    break;
+                default:
+                    return ['success' => false];
             }
+
+            return ['success' => $form->success];
         } else {
             return $this->render('update', ['id' => $id]);
         }
     }
 
+/**
+ * Create Form action
+ * @throws yii\base\InvalidParamException
+ * @return void
+ */
     public function actionClone($id) {
 
         $form = FormModel::find()->select(['body', 'title', 'author', 'date_start', 'date_start', 'maximum', 'meta_title', 'url', 'response'])->where(['form_id' => $id])->one();
-
-        do {
-            $form->url = $form->url.'_2';
-            $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
-        } while ($count > 0);
-
         $form->answer = 0;
-        Yii::$app->db->createCommand()->insert('forms', $form)->execute();
+        $this->uniqueUrl($form);
 
-        $last_id = Yii::$app->db->getLastInsertID();
+        $db = Yii::$app-> {$this->module->db};
+        $db->createCommand()->insert( $this->module->formTable , $form)->execute();
+
+        $last_id = $db->getLastInsertID();
         $schema = FormBuilder::tableSchema($form->body);
-        (new Query)->createCommand()->createTable($this->formDataTable.$last_id, $schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci')->execute();
+
+        $db->createCommand()->createTable($this->module->formDataTable.$last_id, $schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci')->execute();
 
         $this->redirect(['user']);
     }
@@ -230,15 +217,33 @@ class ModuleController extends \yii\web\Controller {
         $form = new FormBuilder();
         $form = $form->model->findModel($id);
         $form->delete();
-        return $this->redirect(['index']);
+        return $this->redirect(['user']);
     }
-    public function rbacUser($form) {
-        if (!\Yii::$app->user->can('updateOwnForm', ['item' => $form])) {
-            $this->redirect(['user']);
-            exit();
-        }
+
+    /**
+     * Unique URL
+     * @param $array form
+     * @return void
+     */
+    public function uniqueUrl($form) {
+        do {
+            $form->url = $form->url.'_2';
+            $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
+        } while ($count > 0);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

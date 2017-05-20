@@ -122,6 +122,6 @@ composer exec -v -- codecept -c vendor/pceuropa/forms run
 ```
 or
 ```
-cd path/to/app/vendor/pceuropa/yii2-forms
+cd vendor/pceuropa/yii2-forms
 codecept run
 ```
