@@ -26,21 +26,24 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Your forms') ;
 				'value' => function ($m, $key) {
 							return  Html::a ( $m->url, ['view', 'url' => $m->url], ['target' => 'new']);
 						},
-			],
+			],[
+            'attribute' => 'anwer',
+            'format' => 'html',
+            'value' => function ($model) {
+                return html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer, ['list', 'id' => $model->form_id] );
+                    },
+        ],
 
             ['class' => 'yii\grid\ActionColumn',
             'buttons' => [
 		        'view' => function ($url, $model, $key) {
 					return Html::a ( '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> ', ['view', 'url' => $model->url] );
 				},
-		        'list' => function ($url, $model, $key) {
-					return Html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer, ['list', 'id' => $model->form_id] );
-				},
 		        'clone' => function ($url, $model, $key) {
 					return Html::a ( 'clone', ['clone', 'id' => $model->form_id] );
 				},
             ],
-			'template' => '{update} {view} {delete} {list} | {clone}'
+			'template' => '{update} {view} {delete}  | {clone}'
             ],
         ],
     ]); ?>
