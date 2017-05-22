@@ -81,16 +81,15 @@ URLs for the translating tool:
                 ]
             ]
       ],
+```
 
 ## Form renderer widget
-
 ```
 use pceuropa\forms\Form;
 echo Form::widget([
      'body' => '[[{"field": "input", "type": "text", "width": "col-md-5", "name": "email", "placeholder": "email"},{"field": "input", "name": "pass", "type": "text", "placeholder": "pass", "width": "col-md-5"},{"field": "submit", "width": "col-md-2", "backgroundcolor": "btn-info", "label": "Submit"}]]',
      'typeRender' => 'php'
      ]);
- 
 ```
 or
 ```
@@ -100,7 +99,6 @@ or
 ```
 
 ## Configure RBAC Component
-
 Before you can go on you need to create those tables in the database.
 
 ```
