@@ -61,7 +61,8 @@ URLs for the translating tool:
 ## Full example configuration Form Builder
 
 ```
-'forms' => [
+'modules' => [
+      'forms' => [
           'class' => 'pceuropa\forms\Module',
           'db' => 'db',
           'formsTable' => '{{%forms}}',
@@ -80,7 +81,8 @@ URLs for the translating tool:
                     'roles' => ['user'],            // role only authenticated user can
                 ]
             ]
-      ],
+      ]
+],
 ```
 
 ## Form renderer widget
