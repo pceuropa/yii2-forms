@@ -81,21 +81,13 @@ URLs for the translating tool:
                 ]
             ]
       ],
-```
-
-Widget render forms
-```
-echo \pceuropa\forms\Form::widget([
-	'form' => $form_body,
-])
-```
 
 ## Form renderer widget
 
 ```
 use pceuropa\forms\Form;
 echo Form::widget([
-     'form' => '[[{"field": "input", "type": "text", "width": "col-md-5", "name": "email", "placeholder": "email"},{"field": "input", "name": "pass", "type": "text", "placeholder": "pass", "width": "col-md-5"},{"field": "submit", "width": "col-md-2", "backgroundcolor": "btn-info", "label": "Submit"}]]',
+     'body' => '[[{"field": "input", "type": "text", "width": "col-md-5", "name": "email", "placeholder": "email"},{"field": "input", "name": "pass", "type": "text", "placeholder": "pass", "width": "col-md-5"},{"field": "submit", "width": "col-md-2", "backgroundcolor": "btn-info", "label": "Submit"}]]',
      'typeRender' => 'php'
      ]);
  

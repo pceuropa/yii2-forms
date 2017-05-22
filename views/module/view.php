@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 echo \pceuropa\forms\Form::widget([
-	'form' => $form,
+	'body' => $form,
 	'typeRender' => 'php'
 ]);
 ?>

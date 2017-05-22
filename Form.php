@@ -53,7 +53,7 @@ class Form extends Widget {
     /**
      * @var array|string JSON Object representing the form body
      */
-    public $form = '{}';
+    public $body = '{}';
 
     /**
      * @var string Type render js|php
@@ -71,10 +71,10 @@ class Form extends Widget {
         parent::init();
         if (is_int($this->formId)) {
             $form = FormModel::FindOne($this->formId);
-            $this->form = $form->body;
+            $this->body = $form->body;
         }
 
-        $this->form = Json::decode($this->form);
+        $this->body = Json::decode($this->body);
     }
 
     /**
@@ -84,9 +84,9 @@ class Form extends Widget {
     */
     public function run() {
         if ($this->typeRender === 'js') {
-            return $this->jsRender($this->form);
+            return $this->jsRender($this->body);
         }
-        return $this->phpRender($this->form);
+        return $this->phpRender($this->body);
     }
 
 
