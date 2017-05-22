@@ -9,20 +9,21 @@ use yii\rbac\Permission;
 use yii\rbac\Role;
 use yii\rbac\Rule;
 use yii\db\Query;
+
 /**
- * Rbac init
- * Create rbac rules and role
+ * RBAC for pceuropa/yii2-form
+ * Create rules, user role and assigment for all user
  * @author Rafal Marguzewicz
  * @licence MIT
  */
 class RbacController extends  Controller
 {
-  /**
-    * @var Default action
-   */
-  public $defaultAction = 'generate';
-  
-  
+    /**
+      * @var Default action
+     */
+    public $defaultAction = 'generate';
+
+
     const CREATE_FORM = 'createForm';
     const UPDATE_FORM = 'updateForm';
     const DELETE_FORM = 'deleteForm';
@@ -31,7 +32,7 @@ class RbacController extends  Controller
     const UPDATE_OWN_FORM = 'updateOwnForm';
 
     /**
-     * Generate rules rbas
+     * Create rules, role and assigment for all user
      * @return void
      */
     public function actionGenerate() {
@@ -43,8 +44,10 @@ class RbacController extends  Controller
         try {
             $createForm = $authManager->getPermission($permission);
         } catch (\yii\db\Exception $e) {
-            echo $this->ansiFormat($e->errorInfo[2], Console::FG_RED);echo "\n";
-            echo $this->ansiFormat('Rbac migration:  php yii migrate/up --migrationPath=@yii/rbac/migrations', Console::FG_YELLOW);echo "\n";
+            echo $this->ansiFormat($e->errorInfo[2], Console::FG_RED);
+            echo "\n";
+            echo $this->ansiFormat('Rbac migration:  php yii migrate/up --migrationPath=@yii/rbac/migrations', Console::FG_YELLOW);
+            echo "\n";
             return false;
 
         }
@@ -66,9 +69,11 @@ class RbacController extends  Controller
             $updateForm = $authManager->createPermission($permission);
             $updateForm->description = 'update forms';
             $authManager->add($updateForm);
-            echo $this->ansiFormat('Permision `'.$permission .'` added successfully', Console::FG_GREEN); echo "\n";
+            echo $this->ansiFormat('Permision `'.$permission .'` added successfully', Console::FG_GREEN);
+            echo "\n";
         } else {
-            echo $this->ansiFormat('Permision `'.$permission.'` exist', Console::FG_YELLOW); echo "\n";
+            echo $this->ansiFormat('Permision `'.$permission.'` exist', Console::FG_YELLOW);
+            echo "\n";
         }
 
         $permission = self::DELETE_FORM;
@@ -174,6 +179,7 @@ class RbacController extends  Controller
     }
 }
 ?>
+
 
 
 

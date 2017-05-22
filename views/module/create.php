@@ -10,6 +10,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Form create');
 
 echo \pceuropa\forms\FormBuilder::widget([
 		'test_mode' => false,
-		'easy_mode' => true
+		'easy_mode' => false
 ]);
 ?>

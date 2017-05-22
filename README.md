@@ -65,7 +65,9 @@ URLs for the translating tool:
           'class' => 'pceuropa\forms\Module',
           'db' => 'db',
           'formsTable' => '{{%forms}}',
-          'formDataTable' => '{{%form_}}',
+          'formDataTable' => 'form_', // dont use prefix please
+          'sendEmail' => true, 
+          'emailSender' => 'info@email.net',
           'rules' => [
                 [
                     'actions' => [ 'update', 'delete', 'clone'],
@@ -85,9 +87,26 @@ Widget render forms
 ```
 echo \pceuropa\forms\Form::widget([
 	'form' => $form_body,
-	'typeRender' => 'php'
 ])
 ```
+
+## Form renderer widget
+
+```
+use pceuropa\forms\Form;
+echo Form::widget([
+     'form' => '[[{"field": "input", "type": "text", "width": "col-md-5", "name": "email", "placeholder": "email"},{"field": "input", "name": "pass", "type": "text", "placeholder": "pass", "width": "col-md-5"},{"field": "submit", "width": "col-md-2", "backgroundcolor": "btn-info", "label": "Submit"}]]',
+     'typeRender' => 'php'
+     ]);
+ 
+```
+or
+```
+  echo Form::widget([
+     'formId' => 1, // equivalennt 'form' => FormModel::findOne(1)->body
+  ]);
+```
+
 ## Configure RBAC Component
 
 Before you can go on you need to create those tables in the database.

@@ -23,11 +23,11 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public static function getDb() {
 
-      if (Module::getInstance()) {
-        return Yii::$app->get(Module::getInstance()->db);
-      } else {
-        return Yii::$app->db;
-      } 
+        if (Module::getInstance()) {
+            return Yii::$app->get(Module::getInstance()->db);
+        } else {
+            return Yii::$app->db;
+        }
     }
 
     /**
@@ -35,11 +35,11 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public static function tableName() {
 
-      if (Module::getInstance()) {
-        return Module::getInstance()->formTable;
-      } else {
-        return 'forms';
-      } 
+        if (Module::getInstance()) {
+            return Module::getInstance()->formTable;
+        } else {
+            return 'forms';
+        }
     }
 
     /**
@@ -51,7 +51,7 @@ class FormModel extends \yii\db\ActiveRecord {
                    [['body', 'response', 'language', 'method'], 'string'],
                    [['date_start', 'date_end'], 'safe'],
                    [['date_start'], 'default', 'value' => date('Y-m-d')],
-                   [['maximum', 'author'], 'integer'],
+                   [['maximum', 'answer', 'author'], 'integer'],
                    [['title',  'meta_title', 'url'], 'string', 'max' => 255],
                    [['url'], 'unique'],
                ];
@@ -101,6 +101,30 @@ class FormModel extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * End registration form
+     * @return void
+     */
+    public function endForm() {
+        if (is_null($this->maximum) && is_null($this->date_end) ) {
+            return false;
+        }
+
+        // deadline after now
+        if (!is_null($this->date_end) && strtotime($this->date_end) < time()) {
+            return true;
+        }
+
+        // is max possible answer is less than answer then end form
+        if (!is_null($this->maximum) && $this->maximum <= $this->answer) {
+            return true;
+        }
+
+        return false;
+    }
 
 }
+
+
+
 
