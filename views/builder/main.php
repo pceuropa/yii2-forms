@@ -1,4 +1,3 @@
-<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net  1.1.0-->
 <?php
 use yii\helpers\Json;
 	pceuropa\forms\FormBuilderAsset::register($this);
@@ -6,7 +5,6 @@ use yii\helpers\Json;
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
-	
 		<div id="widget-form-header" class="pull-right">
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 		</div>
@@ -17,8 +15,6 @@ use yii\helpers\Json;
 				<div class="manual" ><?= $this->render('_manual'); ?></div>
 			</div>
 			<p id="end-form" class="text-uppercase text-center">-- <?= Yii::t('builder', 'Form end') ?> --</p>
-			
-			
 			
 			<span id='text-bofore-preview-field'><?= Yii::t('builder', 'Preview field')  ?>:</span>
 			<div id="preview-field"></div>
@@ -148,7 +144,6 @@ if ($easy_mode){
 if ($email_response){
 	$this->registerJs("form.modules.response  = MyFORM.response(form) ", 4);
 }
-	
 	$this->registerJs("form.init(".Json::encode($jsConfig).");", 4);
 
 if ($test_mode){

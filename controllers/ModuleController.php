@@ -80,7 +80,7 @@ class ModuleController extends \yii\web\Controller {
     }
 
 
-    public function actionView($url) {
+    public function actionView(string $url) {
       $form = FormModel::findModelByUrl($url);
       if ($form->endForm()) { return $this->render('end'); } 
       
@@ -116,7 +116,7 @@ class ModuleController extends \yii\web\Controller {
         }
     }
 
-    public function actionList($id) {
+    public function actionList(int $id) {
         $form = FormModel::findModel($id);
         $form = Json::decode($form->body);
         $form = FormBase::onlyCorrectDataFields($form);
@@ -160,7 +160,7 @@ class ModuleController extends \yii\web\Controller {
      * @throws yii\base\InvalidParamException
      * @return string
      */
-    public function actionUpdate($id) {
+    public function actionUpdate(int $id) {
         $form = new FormBuilder([
                                     'formTable' => $this->module->formTable,
                                     'formDataTable' => $this->module->formDataTable,
@@ -202,7 +202,7 @@ class ModuleController extends \yii\web\Controller {
      * @throws yii\base\InvalidParamException
      * @return void
      */
-    public function actionClone($id) {
+    public function actionClone(int $id) {
 
         $form = FormModel::find()->select(['body', 'title', 'author', 'date_start', 'date_start', 'maximum', 'meta_title', 'url', 'response'])->where(['form_id' => $id])->one();
         $form->answer = 0;
@@ -219,9 +219,8 @@ class ModuleController extends \yii\web\Controller {
         $this->redirect(['user']);
     }
 
-    public function actionDelete($id) {
-        $form = new FormBuilder();
-        $form = $form->model->findModel($id);
+    public function actionDelete(int $id) {
+        $form = FormModel::findModel($id);
         $form->delete();
         return $this->redirect(['user']);
     }
@@ -231,7 +230,7 @@ class ModuleController extends \yii\web\Controller {
      * @param $array form
      * @return void
      */
-    public function uniqueUrl($form) {
+    public function uniqueUrl(array $form) {
         do {
             $form->url = $form->url.'_2';
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();

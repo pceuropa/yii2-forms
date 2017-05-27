@@ -12,14 +12,14 @@
 
 <span>
 	<div class="row form-group-sm">
-		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Title') ?></label>
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Title') ?> *</label>
 		<div class="col-sm-9">
 		  <input id="title" type="text" class="form-control" >
 		</div>
 	</div>
 
 	<div class="row form-group-sm">
-		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'URL') ?></label>
+		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'URL') ?> *</label>
 		<div class="col-sm-9">
 		  <input id="url" type="text" class="form-control" >
 		</div>
@@ -32,7 +32,7 @@
 		</div>
 	</div>
 
-	<div class="row form-group-sm">
+	<div class="row form-group-sm expert">
 		<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Start') ?></label>
 		<div class="col-sm-9">
 		  <input id="date_start" type="date" class="form-control" placeholder="yyyy-mm-dd">

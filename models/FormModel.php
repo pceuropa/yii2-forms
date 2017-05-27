@@ -78,22 +78,21 @@ class FormModel extends \yii\db\ActiveRecord {
      * @param int $id number of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */
-    public static function findModel($id) {
+    public static function findModel(int $id) {
 
-        $validator = new \yii\validators\NumberValidator();
-
-        if ($validator->validate($id) && ($model = self::find()->where(['form_id' => $id])->one()) !== null ) {
+        if (($model = self::find()->where(['form_id' => $id])->one()) !== null ) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested form does not exist.');
         }
     }
+
     /**
      * Get form by url
      * @param string $url Unique string represent url of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */
-    public function findModelByUrl($url) {
+    public function findModelByUrl(string $url) {
         if (($model = self::find()->where(['url' => $url])->one()) !== null) {
             return $model;
         } else {

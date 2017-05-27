@@ -13,7 +13,6 @@ use pceuropa\email\Send as SendEmail;
 
 /**
  * FormRender: Render form
- *
  * Two method render form : php or js (beta)
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
