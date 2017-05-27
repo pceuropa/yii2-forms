@@ -111,7 +111,6 @@ class FormBuilder extends Widget {
             $this->load($this->formData);
         }
 
-
         $this->options = [
                              'easy_mode' => $this->easy_mode,
                              'test_mode' => $this->test_mode,
