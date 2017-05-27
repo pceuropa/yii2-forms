@@ -163,6 +163,7 @@ class ModuleController extends \yii\web\Controller {
      */
     public function actionUpdate(int $id) {
         $form = new FormBuilder([
+                                    'db' => $this->module->db,
                                     'formTable' => $this->module->formTable,
                                     'formDataTable' => $this->module->formDataTable,
                                 ]);
@@ -209,7 +210,7 @@ class ModuleController extends \yii\web\Controller {
         $form->answer = 0;
         $this->uniqueUrl($form);
 
-        $db = Yii::$app-> {$this->module->db};
+        $db = Yii::$app->{$this->module->db};
         $db->createCommand()->insert( $this->module->formTable , $form)->execute();
 
         $last_id = $db->getLastInsertID();
