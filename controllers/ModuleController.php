@@ -142,6 +142,7 @@ class ModuleController extends \yii\web\Controller {
 
         if ($r->isAjax) {
             $form = new FormBuilder([
+                                        'db' => $this->module->db,
                                         'formTable' => $this->module->formTable,
                                         'formDataTable' => $this->module->formDataTable,
                                         'formData' => $r->post()
