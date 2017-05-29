@@ -11,9 +11,7 @@ use pceuropa\forms\models\FormModel;
 
 /**
  * FormBuilder: Generate forms, Storage data in databasesand, create tables
- *
  * Generate forms and create tables from json object
- *
  * @author Rafal Marguzewicz <info@pceuropa.net>
  * @version 1.6
  * @license MIT
@@ -49,6 +47,12 @@ class FormBuilder extends Widget {
      * @since 1.0
      */
     public $easy_mode = true;
+
+    /**
+     * @var bool If true - hide options dont need for only generator html|Yii2 code
+     * @since 1.0
+     */
+    public $generator_mode = false;
 
     /**
      * @var bool If true - form can send email response
@@ -96,8 +100,12 @@ class FormBuilder extends Widget {
     public $success = false;  	// for response
 
     /**
+     * @var bolean If false - hide button save form
+     */
+    public $hide_button_form_save = false;
+    
+    /**
      * Initializes the object.
-     *
      * Variables and functions init
      * @since 1.0
      *
@@ -114,8 +122,9 @@ class FormBuilder extends Widget {
         $this->options = [
                              'easy_mode' => $this->easy_mode,
                              'test_mode' => $this->test_mode,
+                             'generator_mode' => $this->generator_mode,
                              'email_response' => $this->email_response,
-                             'update' => false,
+                             'hide_button_form_save' => $this->hide_button_form_save,
                              'jsConfig' =>  $this->jsConfig
                          ];
     }

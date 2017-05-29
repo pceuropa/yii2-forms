@@ -112,7 +112,7 @@ class ModuleController extends \yii\web\Controller {
 
             return $this->redirect(['index']);
         } else {
-            return $this->render('view', [ 'form' => $form->body] );
+            return $this->render('view', [ 'form' => $form] );
         }
     }
 
@@ -180,6 +180,7 @@ class ModuleController extends \yii\web\Controller {
             case $r->post('body'):
                 $form->load($r->post());
                 $form->save();
+                break;
             case $r->post('add'):
                 $form->addColumn($r->post('add'));
                 break;

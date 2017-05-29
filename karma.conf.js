@@ -15,15 +15,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    	'https://code.jquery.com/jquery-2.2.4.min.js',
-    	'assets/form-builder/js/forms/Sortable.min.js',
-    	'assets/form-builder/js/forms/helpers.js',
-    	'assets/form-builder/js/forms/form.js',
-    	'assets/form-builder/js/forms/field.js',
-    	'assets/form-builder/js/forms/controller.js',
-    	'assets/form-builder/js/forms/*',
-    	'tests/js/helpers.js',
-    //	'tests/js/form.js'
+        "../../web/assets/d99891ef/js/forms/*.js",
+//    	'https://code.jquery.com/jquery-2.2.4.min.js',
+//    	'assets/form-builder/js/forms/Sortable.min.js',
+//    	'assets/form-builder/js/forms/helpers.js',
+//    	'assets/form-builder/js/forms/form.js',
+//    	'assets/form-builder/js/forms/field.js',
+//    	'assets/form-builder/js/forms/controller.js',
+    	'tests/js/helpersTest.js',
+    	'tests/js/formTest.js'
     
     ],
 
