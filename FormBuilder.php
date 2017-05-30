@@ -308,13 +308,13 @@ class FormBuilder extends Widget {
      * @return null
     */
     public function registerTranslations() {
-
+      if (!is_object(Yii::$app->i18n->translations['builder'])) {
         Yii::$app->i18n->translations['builder'] = [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'sourceLanguage' => 'en-US',
                     'basePath' => '@vendor/pceuropa/yii2-forms/messages',
-
-                ];
+              ];
+      } 
     }
 }
 ?>

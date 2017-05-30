@@ -1,11 +1,11 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
-$this->title = 'FormBuilder: Free Software Open Source';
-$this->params['breadcrumbs'][] =  Yii::t('app', 'Forms');
+$this->title = Yii::t('builder', 'FormBuilder: Online form generator');
+$this->params['breadcrumbs'][] =  Yii::t('builder', 'Forms');
 ?>
 
-<h1><?= Yii::t('app', 'Forms') ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
+<h1><?= Yii::t('builder', 'Forms') ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
 <?= Gridview::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,

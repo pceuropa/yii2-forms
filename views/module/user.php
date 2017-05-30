@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 
-$this->title = Yii::t('app', 'Forms');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'All forms') , 'url' => ['index']];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Your forms') ;
+$this->title = Yii::t('builder', 'Forms');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('builder', 'All forms') , 'url' => ['index']];
+$this->params['breadcrumbs'][] = Yii::t('builder', 'Your forms') ;
 ?>
 
 <h1><?= $this->title ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
@@ -26,18 +26,17 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Your forms') ;
 				'value' => function ($m, $key) {
 							return  Html::a ( $m->url, ['view', 'url' => $m->url], ['target' => 'new']);
 						},
-			],[
-            'attribute' => 'answer',
-            'format' => 'html',
-            'value' => function ($model) {
-              $maximum = null;
-              if ($model->maximum !== null) {
-               $maximum = ' /'. $model->maximum; 
-              } 
-              
+            ],
+            [
+              'attribute' => 'answer',
+              'format' => 'html',
+              'value' => function ($model) {
+                $maximum = null;
+                if ($model->maximum !== null) { $maximum = ' /'. $model->maximum; } 
+            
                 return html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer . $maximum, ['list', 'id' => $model->form_id] );
-                    },
-        ],
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn',
             'buttons' => [
@@ -45,7 +44,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Your forms') ;
 					return Html::a ( '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> ', ['view', 'url' => $model->url] );
 				},
 		        'clone' => function ($url, $model, $key) {
-					return Html::a ( 'clone', ['clone', 'id' => $model->form_id] );
+					return Html::a ( Yii::t('builder', 'clone'), ['clone', 'id' => $model->form_id] );
 				},
             ],
 			'template' => '{update} {view} {delete}  | {clone}'

@@ -3,12 +3,14 @@ use yii\helpers\Html;
 use pceuropa\forms\Module;
 use pceuropa\forms\FormBuilder;
 
-$this->title = Yii::t('app', 'form update') ;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'All forms') , 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Your forms') , 'url' => ['user']];
-$this->params['breadcrumbs'][] = Yii::t('builder', 'Form create');
+$this->title = Yii::t('builder', 'Form update') ;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('builder', 'All forms') , 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('builder', 'Your forms') , 'url' => ['user']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <h1 class="header"><?= Yii::t('builder', 'Form Builder') ?></h1>
+
 <?= FormBuilder::widget([
 	'formTable' => Module::getInstance()->formTable,
     'db' => Module::getInstance()->db,

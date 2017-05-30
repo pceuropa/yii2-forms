@@ -62,16 +62,16 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-                   'form_id' => Yii::t('app', 'ID'),
-                   'author' => Yii::t('app', 'Author'),
-                   'title' => Yii::t('app', 'Title'),
-                   'body' => Yii::t('app', 'Body'),
-                   'date_start' => Yii::t('app', 'Date'),
-                   'answer' => Yii::t('app', 'Answers'),
-                   'date_end' => Yii::t('app', 'Date Expire'),
-                   'maximum' => Yii::t('app', 'Max'),
-                   'meta_title' => Yii::t('app', 'Meta Title'),
-                   'url' => Yii::t('app', 'Url'),
+                   'form_id' => Yii::t('builder', 'ID'),
+                   'author' => Yii::t('builder', 'Author'),
+                   'title' => Yii::t('builder', 'Title'),
+                   'body' => Yii::t('builder', 'Body'),
+                   'date_start' => Yii::t('builder', 'Date'),
+                   'answer' => Yii::t('builder', 'Answers'),
+                   'date_end' => Yii::t('builder', 'Date Expire'),
+                   'maximum' => Yii::t('builder', 'Max'),
+                   'meta_title' => Yii::t('builder', 'Meta Title'),
+                   'url' => Yii::t('builder', 'URL'),
                ];
     }
     /**

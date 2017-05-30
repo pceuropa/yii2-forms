@@ -2,10 +2,10 @@
 	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'View') ?></label>
 	<div class="col-sm-9">
 		<select id="view-mode" class="form-control">
-			<option value="html" ><?= Yii::t('builder', 'HTML') ?></option>
+			<option value="html" >HTML</option>
 			<option value="text"><?= Yii::t('builder', 'Text') ?></option>
-			<option value="json" ><?= Yii::t('builder', 'Json') ?></option>
-			<option value="yii2"><?= Yii::t('builder', 'Yii2') ?></option>
+			<option value="json" >Json</option>
+			<option value="yii2">Yii2</option>
 		</select>
 	</div>
 </div>
