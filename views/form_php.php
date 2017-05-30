@@ -19,5 +19,3 @@ $this->registerCss("
     .ql-align-right { text-align:right }, 
 ");
 ?>
-
-

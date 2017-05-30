@@ -8,11 +8,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 use pceuropa\forms\FormBase;
-use pceuropa\email\Send;
+use pceuropa\forms\models\FormModel;
+use pceuropa\email\Send as SendEmail;
 
 /**
  * FormRender: Render form
- *
  * Two method render form : php or js (beta)
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
@@ -23,20 +23,36 @@ use pceuropa\email\Send;
  * Please report all issues at GitHub
  * https://github.com/pceuropa/yii2-forum/issues
  *
+ * Usage example:
+ * ~~~
+ * echo \pceuropa\forms\form::widget([
+ *    'form' => ',{}'
+ * ]);
+ *
+ * echo \pceuropa\forms\form::widget([
+ *    'formId' => 1,
+ * ]);
+ * ~~~
+ * echo \pceuropa\forms\Form::widget([
  * FormBuilder requires Yii 2
  * http://www.yiiframework.com
  * https://github.com/yiisoft/yii2
  *
- *
  */
-
 
 class Form extends Widget {
 
     /**
-     * @var object JSON object representing the form body
+     * @var int Id of form. If set, widget take data from FormModel.
+     * @see pceuropa\models\FormModel
      */
-    public $form = '{}';
+    public $formId = null;
+
+
+    /**
+     * @var array|string JSON Object representing the form body
+     */
+    public $body = '{}';
 
     /**
      * @var string Type render js|php
@@ -52,7 +68,12 @@ class Form extends Widget {
     */
     public function init() {
         parent::init();
-        $this->form = Json::decode($this->form);
+        if (is_int($this->formId)) {
+            $form = FormModel::FindOne($this->formId);
+            $this->body = $form->body;
+        }
+
+        $this->body = Json::decode($this->body);
     }
 
     /**
@@ -62,9 +83,9 @@ class Form extends Widget {
     */
     public function run() {
         if ($this->typeRender === 'js') {
-            return $this->jsRender($this->form);
+            return $this->jsRender($this->body);
         }
-        return $this->phpRender($this->form);
+        return $this->phpRender($this->body);
     }
 
 
@@ -100,7 +121,6 @@ class Form extends Widget {
 
     /**
      * Create form
-     *
      * Render form by JavaScript language.
      * @param array $form
      * @return View
@@ -112,7 +132,6 @@ class Form extends Widget {
 
     /**
      * Select and return function render field
-     *
      * Render field in view
      * @param yii\bootstrap\ActiveForm $form
      * @param DynamicModel $model
@@ -156,7 +175,6 @@ class Form extends Widget {
 
     /**
      * Return HTML div with field
-     *
      * @param string $width Class bootstrap
      * @param string $field
      * @return string
@@ -174,11 +192,27 @@ class Form extends Widget {
      */
     public static function input($form, $model, $field) {
 
+        $options = [];
+
         if (!isset($field['name'])) {
-            return null;
+            return;
         }
 
-        $input = $form->field($model, $field['name'])->input($field['type']);
+        if (!isset($field['label']) || $field['label'] === '') {
+            $options['template'] = "{input}\n{hint}\n{error}";
+        }
+
+        foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
+            if (isset($field[$value])) {
+                $options['inputOptions'][$value] = $field[$value];
+            }
+        }
+
+        if (isset($field['description'])) {
+            $options['template'] = str_replace("{hint}", $field["description"]."{hint}", $options['template']);
+        }
+
+        $input = $form->field($model, $field['name'], $options)->input($field['type']);
 
         if (isset($field['label'])) {
             $input->label($field['label']);
@@ -196,11 +230,28 @@ class Form extends Widget {
       */
     public static function textArea($form, $model, $field) {
 
+        $options = [];
+        $template ='{input}\n{hint}\n{error}';
+
         if (!isset($field['name'])) {
-            return null;
+            return;
         }
 
-        $text_area = $form->field($model, $field['name'])->textArea();
+        if (!isset($field['label']) || $field['label'] === '') {
+            $template = "{input}\n{hint}\n{error}";
+        }
+
+        foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
+            if (isset($field[$value])) {
+                $options[$value] = $field[$value];
+            }
+        }
+
+        if (isset($field['description'])) {
+            $template = str_replace("{hint}", $field["description"]."{hint}", $options['template']);
+        }
+
+        $text_area = $form->field($model, $field['name'], ['template' => $template])->textArea($options);
 
         if (isset($field['label'])) {
             $text_area->label($field['label']);
@@ -317,75 +368,34 @@ class Form extends Widget {
         return Html::submitButton($data['label'], ['class' => 'btn '.$data['backgroundcolor'] ]);
     }
 
-
-
-
-    /**
-    * Depraced
-    * @depraced .
-    * @param yii\bootstrap\ActiveForm $form
-    * @param DynamicModel $model
-    * @param array $value
-    */
-    public static function radio2($form, $model, $value) {
-
-        $items = ArrayHelper::map($value['items'], 'value', 'text');
-        $label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
-        $field = $label . Html::activeRadioList($model, $value['name'], $items,
-                                                [
-        'item' => function ($index, $label, $name, $checked, $value) {
-            return Html::radio($name, $checked, ['value'  => $value]) . $label . '<br/>';
-        }
-                                                ]);
-
-        return self::div($value['width'], $field);
-    }
-
-    /**
-    * Depraced
-    * @depraced .
-    * @param yii\bootstrap\ActiveForm $form
-    * @param DynamicModel $model
-    * @param array $value
-    */
-    public static function checkbox2($form, $model, $value) {
-
-        $items = ArrayHelper::map($value['items'], 'value', 'text');
-        $label = (isset($value['label'])) ? '<label>'.$value['label'].'</label>' : '';
-        $field = $label . Html::activeCheckboxList($model, $value['name'], $items,
-                 [
-        'item' => function ($index, $label, $name, $checked, $value) {
-
-            return Html::checkbox($name, $checked, ['value'  => $value]) . $label . '<br/>';
-        },
-                 ]);
-        return self::div($value['width'], $field);
-    }
     /**
      * Send email
-     *
-     * @param string $data
+     * @param string $emailSender
+     * @param string $to
+     * @param string $subject
+     * @param string $response
      * @return void
      */
-    public function sendEmail($form = null, $data = null, $from = null, $subject = null) {
+    public function sendEmail($emailSender = null, $to = null, $subject = null, $response = null) {
 
-        if (isset($data['email']) &&  is_string($form->response)) {
+        if (!is_string($emailSender) &&  !is_string($to)) {
             return;
         }
 
-        $response = (isset($form->response)) ? $form-response : '';
-
-        Send::widget([
-                  'from' => 'info@pceuropa.net',
-                  'to' => $data['email'],
-                  'subject' => $subject,
-                  'textBody' => $response,
-              ]);
-
+        SendEmail::widget([
+                              'from' => $emailSender,
+                              'to' => $to,
+                              'subject' => $subject,
+                              'textBody' => $response,
+                          ]);
     }
 }
 
 ?>
+
+
+
+
 
 
 

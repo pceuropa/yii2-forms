@@ -3,22 +3,15 @@ namespace pceuropa\forms;
 
 use Yii;
 use yii\base\Widget;
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
-use yii\db\Query;
-use yii\db\Exception;
+use yii\helpers\{Url, Html, ArrayHelper, Json};
+use yii\db\{Query, Exception};
 use yii\web\NotFoundHttpException;
-use pceuropa\forms\Form;
-use pceuropa\forms\FormBase;
+use pceuropa\forms\{Form, FormBase};
 use pceuropa\forms\models\FormModel;
 
 /**
  * FormBuilder: Generate forms, Storage data in databasesand, create tables
- *
  * Generate forms and create tables from json object
- *
  * @author Rafal Marguzewicz <info@pceuropa.net>
  * @version 1.6
  * @license MIT
@@ -54,6 +47,12 @@ class FormBuilder extends Widget {
      * @since 1.0
      */
     public $easy_mode = true;
+
+    /**
+     * @var bool If true - hide options dont need for only generator html|Yii2 code
+     * @since 1.0
+     */
+    public $generator_mode = false;
 
     /**
      * @var bool If true - form can send email response
@@ -101,8 +100,12 @@ class FormBuilder extends Widget {
     public $success = false;  	// for response
 
     /**
+     * @var bolean If false - hide button save form
+     */
+    public $hide_button_form_save = false;
+    
+    /**
      * Initializes the object.
-     *
      * Variables and functions init
      * @since 1.0
      *
@@ -116,12 +119,12 @@ class FormBuilder extends Widget {
             $this->load($this->formData);
         }
 
-
         $this->options = [
                              'easy_mode' => $this->easy_mode,
                              'test_mode' => $this->test_mode,
+                             'generator_mode' => $this->generator_mode,
                              'email_response' => $this->email_response,
-                             'update' => false,
+                             'hide_button_form_save' => $this->hide_button_form_save,
                              'jsConfig' =>  $this->jsConfig
                          ];
     }
@@ -154,7 +157,7 @@ class FormBuilder extends Widget {
      * @param int $id Data from request post
      * @return null
     */
-    public function findModel($id) {
+    public function findModel(int $id) {
         $this->model = $this->model->findModel($id);
     }
 
@@ -208,17 +211,16 @@ class FormBuilder extends Widget {
     /**
      * Add column
      * Creates a SQL command for adding a new DB column and execute.
-     * @since 1.0
-     * @param array|bool $field
+     * @param array $field
      * @return object Return json message callback
     */
-    public function addColumn($field = false) {
-        if (!isset($field['name']))return 'empty name';
+    public function addColumn(array $field) {
+        if (!isset($field['name'])) {return $this->success = 'empty name';}
 
         $column_name = $field['name'];
         $column_type = FormBase::getColumnType($field);
         $id = $this->model->form_id;
-        $query = Yii::$app->{$this->db}->createCommand()->addColumn($this->formDataTable, $column_name, $column_type );
+        $query = Yii::$app->{$this->db}->createCommand()->addColumn( $this->formDataTable.$id, $column_name, $column_type );
         return $this->execute($query);
     }
 
@@ -229,10 +231,12 @@ class FormBuilder extends Widget {
      * @param array $name Array with old and new name of the column.
      * @return object Return json message callback
     */
-    public function renameColumn($name) {
+    public function renameColumn(array $name) {
+
         if ( !isset($name['old']) && !isset($name['new']) && $name['old'] === $name['new'] ) {
             return $this->success = false;
         }
+
         $id = $this->model->form_id;
         $query = Yii::$app->db->createCommand()->renameColumn( $this->formDataTable.$id, $name['old'], $name['new']);
 
@@ -246,7 +250,7 @@ class FormBuilder extends Widget {
      * @param string $column The name of the column to be dropped.
      * @return object Return json message callback
     */
-    public function dropColumn($column) {
+    public function dropColumn(string $column) {
         $id = $this->model->form_id;
         $query = Yii::$app->db->createCommand()->dropColumn($this->formDataTable.$id, $column);
         return $this->execute($query);
@@ -263,8 +267,8 @@ class FormBuilder extends Widget {
         try {
             $query->execute();
             return $this->success = true;
-        } catch (\Exception $e) {
-            return $this->success = $e->errorInfo[2];
+        } catch (Exception $e) {
+            return $this->success = $e->getMessage();
         }
     }
 
@@ -274,12 +278,19 @@ class FormBuilder extends Widget {
      * @param string $format format response
      * @return array Return json message callback
     */
-    public function response($format = 'json') {
-        \Yii::$app->response->format = $format;
-        if ( $this->success === true) {
-            return ['success' => $this->success, 'url' => Url::to(['user'])];
+    public function response(string $format = 'json') {
+      \Yii::$app->response->format = $format;
+      $response = ['success' => $this->success];
+
+      if ( $this->success === true) {
+
+        try {
+          $response['url'] =  Url::to(['user']);
+        } catch (\yii\base\InvalidParamException $e) {
+          $response['url'] =  '';
         }
-        return ['success' => $this->success];
+      }
+      return $response;
     }
 
     /**

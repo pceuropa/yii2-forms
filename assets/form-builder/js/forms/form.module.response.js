@@ -1,12 +1,15 @@
+var 
+MyFORM = MyFORM || {};
+//#Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net
 
 /**
  * Add module send respond message if in form is field 
+ *
  * @param {Form} form
  * @param {String} field Optional name of field which active responde textarea
  * @return {String}
  */	
  
-var MyFORM = MyFORM || {};
 MyFORM.response = function (form, field){
 
 	var html = '<div class="row form-group-sm"> ' +

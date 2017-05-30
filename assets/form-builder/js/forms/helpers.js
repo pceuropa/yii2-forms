@@ -300,21 +300,18 @@ var h = {
 		
 /**
  * Return unique Name
- * @param {String} name Attribute name of field tag
+ *
+ * @param {String} name String name
  * @param {Array} list of names
  * @return {String} render select tag
 */		
-        uniqueName: function(name, list) {
-            name = this.replaceChars(name)
-
-            function changeName(n) {
-                if (list.indexOf(n) !== -1) { //sprawdza n w liscie
-                    n = n + '_2'; //jezeli jest dodaje _2 i ponownie wykonuje siebie
-                    return changeName(n);
-                } else {
-                    return n
-                }
-            }
-            return changeName(name)
-        },
+		uniqueName: function (name, list) {
+	
+		},
+	
+		
+		
 };
+
+
+
