@@ -67,6 +67,7 @@ class FormModel extends \yii\db\ActiveRecord {
                    'title' => Yii::t('app', 'Title'),
                    'body' => Yii::t('app', 'Body'),
                    'date_start' => Yii::t('app', 'Date'),
+                   'answer' => Yii::t('app', 'Answers'),
                    'date_end' => Yii::t('app', 'Date Expire'),
                    'maximum' => Yii::t('app', 'Max'),
                    'meta_title' => Yii::t('app', 'Meta Title'),

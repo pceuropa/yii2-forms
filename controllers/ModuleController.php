@@ -233,7 +233,7 @@ class ModuleController extends \yii\web\Controller {
      * @param $array form
      * @return void
      */
-    public function uniqueUrl(array $form) {
+    public function uniqueUrl(FormModel $form) {
         do {
             $form->url = $form->url.'_2';
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
