@@ -118,18 +118,19 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionList(int $id) {
         $form = FormModel::findModel($id);
-        $form = Json::decode($form->body);
-        $form = FormBase::onlyCorrectDataFields($form);
+        $form_body = Json::decode($form->body);
+        $onlyDataFields = FormBase::onlyCorrectDataFields($form_body);
 
         $dataProvider = new ActiveDataProvider([
-                'query' => (new Query)->from( $this->module->formDataTable.$id ),
-                'db' => $this->module->db
-                                               ]);
+                          'query' => (new Query)->from( $this->module->formDataTable.$id ),
+                          'db' => $this->module->db
+                        ]);
 
         return $this->render('list', [
-                                 'dataProvider' => $dataProvider,
-                                 'only_data_fields' => ArrayHelper::getColumn($form, 'name')
-                             ]);
+                          'form' => $form,
+                          'dataProvider' => $dataProvider,
+                          'only_data_fields' => ArrayHelper::getColumn($onlyDataFields, 'name')
+                        ]);
     }
 
     /**
