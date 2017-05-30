@@ -32,9 +32,4 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
                            ], $tableOptions);
         $this->createIndex('url', '{{%forms}}', 'url', true);
     }
-    public function safeDown()
-    {
-        $this->dropTable('{{%forms}}');
-    }
 }
-

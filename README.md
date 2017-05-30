@@ -61,14 +61,11 @@ URLs for the translating tool:
 ## Full example configuration Form Builder
 
 ```
-'modules' => [
-      'forms' => [
+'forms' => [
           'class' => 'pceuropa\forms\Module',
           'db' => 'db',
           'formsTable' => '{{%forms}}',
-          'formDataTable' => 'form_', // dont use prefix please
-          'sendEmail' => true, 
-          'emailSender' => 'info@email.net',
+          'formDataTable' => '{{%form_}}',
           'rules' => [
                 [
                     'actions' => [ 'update', 'delete', 'clone'],
@@ -81,26 +78,18 @@ URLs for the translating tool:
                     'roles' => ['user'],            // role only authenticated user can
                 ]
             ]
-      ]
-],
+      ],
 ```
 
-## Form renderer widget
+Widget render forms
 ```
-use pceuropa\forms\Form;
-echo Form::widget([
-     'body' => '[[{"field": "input", "type": "text", "width": "col-md-5", "name": "email", "placeholder": "email"},{"field": "input", "name": "pass", "type": "text", "placeholder": "pass", "width": "col-md-5"},{"field": "submit", "width": "col-md-2", "backgroundcolor": "btn-info", "label": "Submit"}]]',
-     'typeRender' => 'php'
-     ]);
+echo \pceuropa\forms\Form::widget([
+	'form' => $form_body,
+	'typeRender' => 'php'
+])
 ```
-or
-```
-  echo Form::widget([
-     'formId' => 1, // equivalennt 'form' => FormModel::findOne(1)->body
-  ]);
-```
-
 ## Configure RBAC Component
+
 Before you can go on you need to create those tables in the database.
 
 ```

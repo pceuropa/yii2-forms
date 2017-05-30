@@ -19,19 +19,11 @@ $this->params['breadcrumbs'][] =  Yii::t('app', 'Forms');
                         return  Html::a ( $model->url, ['view', 'url' => $model->url], ['target' => 'new']);
                     },
         ],[
-            'attribute' => 'answer',
+            'attribute' => 'anwer',
             'format' => 'html',
             'value' => function ($model) {
-              $maximum = null;
-              if ($model->maximum !== null) {
-               $maximum = ' /'. $model->maximum; 
-              } 
-              
-                return html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer . $maximum, ['list', 'id' => $model->form_id] );
+                return html::a ( '<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer, ['list', 'id' => $model->form_id] );
                     },
-        ],[
-            'attribute' => 'date_end',
-            'format' => 'datetime',
         ]
     ]
 ]);?>

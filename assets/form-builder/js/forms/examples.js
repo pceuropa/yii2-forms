@@ -3,7 +3,7 @@ var MyFORM =  MyFORM || {};
 
 MyFORM.examples = function (form){
 
-var version = '1.6.0',
+var version = '1.2.4',
 	id_selector = "#examples-form",
 	
 temp = [
@@ -112,6 +112,8 @@ temp = [
                 "value": "#EAAE1B"
             }
         ],
+        [],
+        [],
         [
             {
                 "field": "checkbox",
@@ -142,6 +144,7 @@ temp = [
                 "label": "What languages you know?"
             }
         ],
+        [],
         [
             {
                 "field": "submit",
@@ -161,7 +164,7 @@ temp = [
                 "field": "input",
                 "type": "text",
                 "width": "col-md-6",
-                "name": "email",
+                "name": "name",
                 "label": "Email",
                 "require": true
             },
@@ -174,6 +177,7 @@ temp = [
                 "require": true
             }
         ],
+        [],
         [
             {
                 "field": "checkbox",

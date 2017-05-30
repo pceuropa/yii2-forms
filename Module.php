@@ -82,5 +82,5 @@ class Module extends \yii\base\Module{
     /**
      * @var string The sender's address
      */
-    public $emailSender = null;
+    public $emailFrom = null;
 }

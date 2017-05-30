@@ -23,11 +23,11 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public static function getDb() {
 
-        if (Module::getInstance()) {
-            return Yii::$app->get(Module::getInstance()->db);
-        } else {
-            return Yii::$app->db;
-        }
+      if (Module::getInstance()) {
+        return Yii::$app->get(Module::getInstance()->db);
+      } else {
+        return Yii::$app->db;
+      } 
     }
 
     /**
@@ -35,11 +35,11 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public static function tableName() {
 
-        if (Module::getInstance()) {
-            return Module::getInstance()->formTable;
-        } else {
-            return 'forms';
-        }
+      if (Module::getInstance()) {
+        return Module::getInstance()->formTable;
+      } else {
+        return 'forms';
+      } 
     }
 
     /**
@@ -51,7 +51,7 @@ class FormModel extends \yii\db\ActiveRecord {
                    [['body', 'response', 'language', 'method'], 'string'],
                    [['date_start', 'date_end'], 'safe'],
                    [['date_start'], 'default', 'value' => date('Y-m-d')],
-                   [['maximum', 'answer', 'author'], 'integer'],
+                   [['maximum', 'author'], 'integer'],
                    [['title',  'meta_title', 'url'], 'string', 'max' => 255],
                    [['url'], 'unique'],
                ];
@@ -67,7 +67,6 @@ class FormModel extends \yii\db\ActiveRecord {
                    'title' => Yii::t('app', 'Title'),
                    'body' => Yii::t('app', 'Body'),
                    'date_start' => Yii::t('app', 'Date'),
-                   'answer' => Yii::t('app', 'Answers'),
                    'date_end' => Yii::t('app', 'Date Expire'),
                    'maximum' => Yii::t('app', 'Max'),
                    'meta_title' => Yii::t('app', 'Meta Title'),
@@ -79,21 +78,22 @@ class FormModel extends \yii\db\ActiveRecord {
      * @param int $id number of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */
-    public static function findModel(int $id) {
+    public static function findModel($id) {
 
-        if (($model = self::find()->where(['form_id' => $id])->one()) !== null ) {
+        $validator = new \yii\validators\NumberValidator();
+
+        if ($validator->validate($id) && ($model = self::find()->where(['form_id' => $id])->one()) !== null ) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested form does not exist.');
         }
     }
-
     /**
      * Get form by url
      * @param string $url Unique string represent url of form
      * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
      */
-    public function findModelByUrl(string $url) {
+    public function findModelByUrl($url) {
         if (($model = self::find()->where(['url' => $url])->one()) !== null) {
             return $model;
         } else {
@@ -101,30 +101,6 @@ class FormModel extends \yii\db\ActiveRecord {
         }
     }
 
-    /**
-     * End registration form
-     * @return void
-     */
-    public function endForm() {
-        if (is_null($this->maximum) && is_null($this->date_end) ) {
-            return false;
-        }
-
-        // deadline after now
-        if (!is_null($this->date_end) && strtotime($this->date_end) < time()) {
-            return true;
-        }
-
-        // is max possible answer is less than answer then end form
-        if (!is_null($this->maximum) && $this->maximum <= $this->answer) {
-            return true;
-        }
-
-        return false;
-    }
 
 }
-
-
-
 

@@ -1,6 +1,6 @@
 # phpstorm project files
 .idea
-tags
+
 # netbeans project files
 nbproject
 
@@ -11,6 +11,7 @@ nbproject
 
 # windows thumbnail cache
 Thumbs.db
+
 
 # composer itself is not needed
 composer.phar
@@ -23,4 +24,5 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
+tests/php/_output/*
 tests/php/_output/*

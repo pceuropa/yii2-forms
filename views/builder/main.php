@@ -1,3 +1,4 @@
+<!--Copyright (c) 2016-2017 Rafal Marguzewicz pceuropa.net  1.1.0-->
 <?php
 use yii\helpers\Json;
 	pceuropa\forms\FormBuilderAsset::register($this);
@@ -5,14 +6,19 @@ use yii\helpers\Json;
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
+	
 		<div id="widget-form-header" class="pull-right">
-			<span class="glyphicon glyphicon-info-sign hidden" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 		</div>
 		
+		<h1 class="header"><?= Yii::t('builder', 'Form Builder') ?></h1>
+	
 			<div id="preview-form">
 				<div class="manual" ><?= $this->render('_manual'); ?></div>
 			</div>
 			<p id="end-form" class="text-uppercase text-center">-- <?= Yii::t('builder', 'Form end') ?> --</p>
+			
+			
 			
 			<span id='text-bofore-preview-field'><?= Yii::t('builder', 'Preview field')  ?>:</span>
 			<div id="preview-field"></div>
@@ -41,7 +47,7 @@ use yii\helpers\Json;
 				<li id="delete-tab" class="btn"><?= Yii::t('builder', 'Delete') ?></li>
 			</ul>
 		
-	 		<div id="form" class="options form-horizontal active-option"><?= $this->render('options/form', ['hide_button_form_save' => $hide_button_form_save]); ?></div>
+	 		<div id="form" class="options form-horizontal active-option"><?= $this->render('options/form'); ?></div>
 			<div id="input" class="options form-horizontal"><?= $this->render('options/input'); ?></div>
 			<div id="textarea" class="options form-horizontal"><?= $this->render('options/textarea'); ?></div>
 			<div id="radio" class="options form-horizontal"><?= $this->render('options/multi-field'); ?></div>
@@ -73,8 +79,7 @@ $this->registerCss("
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
 	#end-form {height: 25px;background-color: #C8EBFB; color:#6CBDE3; margin:0 0 50px 0; }
 	#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
-	#preview-field .show {display:block; }
-	#preview-field {display:block; }
+	#preview-field .show {display:block}
 	
 	asside {height: 100%;}
 	.options { border:solid 1px #ccc; padding:5px;}
@@ -119,7 +124,7 @@ $this->registerCss("
 	
 	#MyForm .ql-snow .ql-tooltip {z-index: 1000;}
 	#MyForm .ql-align-center {text-align: center}
-	#MyForm .border {border:solid 1cx #ccc}
+	#MyForm .border {border:solid 1px #ccc}
 	
 	.glyphicon-pencil { cursor: e-resize;}
 	.glyphicon-duplicate { cursor: pointer;}
@@ -136,26 +141,18 @@ $this->registerCss("
 ");
 
 if ($easy_mode){
-	$this->registerCss(".expert {display:none}"); // hide many options
+	$this->registerCss(".expert {display:none}");
 }
-
-if ($generator_mode){
-	$this->registerCss(".generator_mode {display:none}"); // hide many options
-}
-	$this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
+	$this->registerJs("var form = new MyFORM.Form(); ", 4);
 
 if ($email_response){
-  // add module Email send after submit form (work if in forms is field with name email)
-  // form.modules are initalize each time when form is render
-	$this->registerJs("form.modules.response = MyFORM.response(form)", 4);
+	$this->registerJs("form.modules.response  = MyFORM.response(form) ", 4);
 }
-$this->registerJs("
-form.init(".Json::encode($jsConfig).");
-form.controller();
-", 4);
+	
+	$this->registerJs("form.init(".Json::encode($jsConfig).");", 4);
 
 if ($test_mode){
-	$this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
+	$this->registerJs(" MyFORM.test(form);", 4);
 }
-	$this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
+	$this->registerJs(" MyFORM.examples(form);", 4);	
 ?>		

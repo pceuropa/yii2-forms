@@ -21,7 +21,7 @@ class FormModelSearch extends FormModel {
 
     public function rules(){
         return [
-            [['form_id', 'maximum', 'answer'], 'integer'],
+            [['form_id', 'maximum'], 'integer'],
             [['author', 'title', 'body', 'date_start', 'date_end', 'meta_title', 'url'], 'safe'],
         ];
     }
@@ -37,7 +37,9 @@ class FormModelSearch extends FormModel {
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([ 'query' => $query, ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
         $this->load($params);
 
         if (!$this->validate()) {
@@ -52,7 +54,6 @@ class FormModelSearch extends FormModel {
             'date_start' => $this->date_start,
             'date_end' => $this->date_end,
             'maximum' => $this->maximum,
-            'answer' => $this->answer,
         ]);
 
         $query->andFilterWhere(['like', 'author', $this->author])

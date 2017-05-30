@@ -14,20 +14,18 @@ var version = '1.3.0',
 		sidebar_div_options = $('#sidebar div.options'),
 		options_form = form.options_form,
 		
-		select_field = $('select#select-field'),
+		select_field = $('#select-field'),
 
-		form_tab =		$('#form-tab'),
-		field_tab = 	$('#field-tab'),
-		udpate_tab =	$('#update-tab'),
-		delete_tab =	$('#delete-tab'),
+        // tabs
+		form_tab =		$('#form-tab'),     // form options tab
+		field_tab = 	$('#field-tab'),    // field options tab
+		udpate_tab =	$('#update-tab'),   // update options tab
+		delete_tab =	$('#delete-tab'),   // delete field tab
 		
 		update_div = $('#update'),
-		delete_div = $('#delete'),
-		clipboard = new Clipboard('#copy-json');
-		//quill = new Quill('.editor', { theme: 'snow'}),
+		delete_div = $('#delete');
 		
 		console.log('controller:', version);
-
 
 var quill = new Quill('#textdescription', {
     theme: 'snow',
@@ -58,21 +56,28 @@ preview_form
     	window.setTimeout(function() {button.replaceWith(clone);}, 1111)
    });
 
-// 2-1-a view-mode
- 	
-$('#view-mode')
-	.change(function (){
+$('#view-mode').change(function (){
         form.setView(this.value);
         form.render('off');
+        var clipboard = new Clipboard('#copy-to-clipboard');
+
+    clipboard.on('success', function(e) {
+       $('#copy-to-clipboard').text('Copied!').fadeOut().fadeIn(100, function () {
+       	$('#copy-to-clipboard').text('Copy')
+       });
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+
     })
 
-
-		
 sidebar_div_options
-    .on('click',    '#add-to-form',         function(e){ form.add( field.body);
-    
-$(e.delegateTarget).find("#name").val('');
-
+    .on('click',    '#add-to-form',         function(e){
+        form.add( field.body);
+        $(e.delegateTarget).find("#name").val('');
+        $(this).prop('disabled', true);
     })
 
     .on('click',    '.add-item',            function(){ addItem() }    ) 
@@ -202,13 +207,15 @@ $('.input-field').find('input, select').on( "keyup paste change", function(e) {
     				form.editTableName({
     					old_name: field.body.name,
 						new_name: el.value,
+
 						success: function () {
 							console.log('name changed correct');
 							field.body['name'] = el.value;
 							form.save()
 						},
+
 						error: function (message) {
-							
+
 							$(el).next().text(message)
 							$(el).addClass('empty');
 							
@@ -362,14 +369,5 @@ $('.input-field').find('input, select').on( "keyup paste change", function(e) {
 	
 	
 
-    clipboard.on('success', function(e) {
-       $('#copy-json').text('Copied!').fadeOut().fadeIn(100, function () {
-       	$('#copy-json').text('Copy')
-       });
-    });
-
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
 
 };

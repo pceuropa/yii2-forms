@@ -31,6 +31,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/examples.js',
 		'js/forms/test.js',
 		
+		'js/forms/clipboard.min.js',
 		'https://cdn.quilljs.com/1.2.0/quill.js',
 		'js/forms/clipboard.min.js',
 		

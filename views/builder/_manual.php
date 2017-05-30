@@ -2,7 +2,7 @@
 	<ol>
 	  <li><b><?= Yii::t('builder', 'Form options (right column)')  ?></b>
 	  		<ul>
-	  		  <li><?= Yii::t('builder', '<b>View</b> change the type of a code')  ?></li>
+	  		  <li><?= Yii::t('builder', '<b>View</b> changes the color of a displayed code')  ?></li>
 	  		  <li><?= Yii::t('builder', '<b>Title</b> does not appear in a form code, is used for differentiation in a list of forms. If you need a title, use Field -> Description')  ?></li>
 	  		  <li><?= Yii::t('builder', '<b>URL address</b> the URL address of a form')  ?></li>
 	  		  <li class="expert"><?= Yii::t('builder', '<b>Method (HTTP)</b> a way of data transmission between a form and a collection address')  ?></li>
