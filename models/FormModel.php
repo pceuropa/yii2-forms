@@ -48,11 +48,13 @@ class FormModel extends \yii\db\ActiveRecord {
     public function rules() {
         return [
                    [['body', 'title', 'url'], 'required'],
-                   [['body', 'response', 'language', 'method'], 'string'],
+                   [['body', 'response'], 'string'],
                    [['date_start', 'date_end'], 'safe'],
                    [['date_start'], 'default', 'value' => date('Y-m-d')],
-                   [['maximum', 'answer', 'author'], 'integer'],
-                   [['title',  'meta_title', 'url'], 'string', 'max' => 255],
+                   [['form_id','maximum', 'answer', 'author'], 'integer'],
+                   [['method'], 'string', 'max' => 4],
+                   [['language'], 'string', 'max' => 11],
+                   [['title',  'meta_title', 'url', 'id', 'class'], 'string', 'max' => 255],
                    [['url'], 'unique'],
                ];
     }
@@ -62,7 +64,7 @@ class FormModel extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-                   'form_id' => Yii::t('builder', 'ID'),
+                   'form_id' => Yii::t('builder', 'ID'),        //form_id - id for database
                    'author' => Yii::t('builder', 'Author'),
                    'title' => Yii::t('builder', 'Title'),
                    'body' => Yii::t('builder', 'Body'),
@@ -72,6 +74,8 @@ class FormModel extends \yii\db\ActiveRecord {
                    'maximum' => Yii::t('builder', 'Max'),
                    'meta_title' => Yii::t('builder', 'Meta Title'),
                    'url' => Yii::t('builder', 'URL'),
+                   'id' => Yii::t('builder', 'id'),             // id - for html
+                   'class' => Yii::t('builder', 'class'),       // class - for html
                ];
     }
     /**

@@ -62,11 +62,16 @@
 		  <input id="action" type="text" class="form-control" >
 		</div>
 	</div>
-		<?php
-			require('field/_id.php');
-			require('field/_class.php');
-		?>
+
+	<?php require('field/_id.php'); ?>
 		
+ <div class="row form-group-sm expert">
+    <label class="col-sm-3 control-label"><?= Yii::t('builder', 'Class') ?></label>
+    <div class="col-sm-9">
+      <input id="class" type="text" class="form-control data-source" >
+	</div>
+</div>
+
 	<div id="widget-form-options"></div>
 
 	<?php if (!$hide_button_form_save) {

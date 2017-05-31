@@ -91,7 +91,6 @@ class Form extends Widget {
 
     /**
      * Create form
-     *
      * Render form by PHP language.
      * @param array $form
      * @return View Form
@@ -147,7 +146,7 @@ class Form extends Widget {
             $field = self::input($form, $model, $field);
             break;
         case 'textarea':
-            $field = self::textArea($form, $model, $field);
+            $field = self::textarea($form, $model, $field);
             break;
         case 'radio':
             $field = self::radio($form, $model, $field);
@@ -182,41 +181,34 @@ class Form extends Widget {
     public static function div($width, $field) {
         return '<div class="'.$width.'">'. $field .'</div>';
     }
-
+    /**
+     * Title description
+     *
+     * @param string $arg
+     * @return void
+     */
+    public function mergeOptions($options, $field) {
+      
+        foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
+            if (isset($field[$value])) {
+                $options[$value] = $field[$value];
+            }
+        }
+    }
     /**
      * Renders an input tag
      * @param yii\bootstrap\ActiveForm $form
      * @param DynamicModel $model
-     * @param array $field
+     * @param array $_data
      * @return this The field object itself.
      */
-    public static function input($form, $model, $field) {
+    public function input($form, $model, $field) {
 
         $options = [];
+        if (!isset($field['name'])) return; 
 
-        if (!isset($field['name'])) {
-            return;
-        }
-
-        if (!isset($field['label']) || $field['label'] === '') {
-            $options['template'] = "{input}\n{hint}\n{error}";
-        }
-
-        foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
-            if (isset($field[$value])) {
-                $options['inputOptions'][$value] = $field[$value];
-            }
-        }
-
-        if (isset($field['description'])) {
-            $options['template'] = str_replace("{hint}", $field["description"]."{hint}", $options['template']);
-        }
-
-        $input = $form->field($model, $field['name'], $options)->input($field['type']);
-
-        if (isset($field['label'])) {
-            $input->label($field['label']);
-        }
+        $input = $form->field($model, $field['name'] )->input($field['type'], $options);
+        $input->label($field['label'] ?? false);
 
         return $input;
     }
@@ -228,17 +220,12 @@ class Form extends Widget {
       * @param array $field
       * @return $this The field object itself.
       */
-    public static function textArea($form, $model, $field) {
-
+    public static function textarea($form, $model, $field) {
         $options = [];
-        $template ='{input}\n{hint}\n{error}';
+        $template ="{label}\n{input}\n{hint}\n{error}";
 
         if (!isset($field['name'])) {
             return;
-        }
-
-        if (!isset($field['label']) || $field['label'] === '') {
-            $template = "{input}\n{hint}\n{error}";
         }
 
         foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
@@ -247,14 +234,14 @@ class Form extends Widget {
             }
         }
 
-        if (isset($field['description'])) {
-            $template = str_replace("{hint}", $field["description"]."{hint}", $options['template']);
+        if (isset($field['helpBlock'])) {
+            $options['template'] = str_replace("{hint}", $field["helpBlock"]."{hint}", $template);
         }
 
         $text_area = $form->field($model, $field['name'], ['template' => $template])->textArea($options);
 
         if (isset($field['label'])) {
-            $text_area->label($field['label']);
+            $text_area->label('label');
         }
 
         return $text_area;

@@ -101,9 +101,7 @@ class FormBase {
     
     /**
      * Return validation rule type.
-     *
      * Need to dynamic model validation
-     *
      * @param array $f Data field.
      * @return null|array 
     */

@@ -3,14 +3,18 @@ use yii\bootstrap\ActiveForm;
 use pceuropa\forms\Form;
 
 $form = ActiveForm::begin();
+if (count($form_body) != 0) {
+  
 	foreach ($form_body as $key => $row) {
 		echo ('<div class="row">');
 
 		    foreach ($row as $key => $value) {
-				echo count($form_body) != 0 ? Form::field($form, $model, $value) : '';
+				echo  Form::field($form, $model, $value);
 		    }
 		echo('</div>');
 	}
+} 
+
 
 ActiveForm::end();
 
