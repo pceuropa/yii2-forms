@@ -207,6 +207,12 @@ class Form extends Widget {
         $options = [];
         if (!isset($field['name'])) return; 
 
+        foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
+            if (isset($field[$value])) {
+                $options[$value] = $field[$value];
+            }
+        }
+
         $input = $form->field($model, $field['name'] )->input($field['type'], $options);
         $input->label($field['label'] ?? false);
 
@@ -224,9 +230,7 @@ class Form extends Widget {
         $options = [];
         $template ="{label}\n{input}\n{hint}\n{error}";
 
-        if (!isset($field['name'])) {
-            return;
-        }
+        if (!isset($field['name'])) return; 
 
         foreach (['placeholder', 'value', 'id', 'class'] as $key => $value) {
             if (isset($field[$value])) {
@@ -234,15 +238,8 @@ class Form extends Widget {
             }
         }
 
-        if (isset($field['helpBlock'])) {
-            $options['template'] = str_replace("{hint}", $field["helpBlock"]."{hint}", $template);
-        }
-
-        $text_area = $form->field($model, $field['name'], ['template' => $template])->textArea($options);
-
-        if (isset($field['label'])) {
-            $text_area->label('label');
-        }
+        $text_area = $form->field($model, $field['name'])->textArea($options);
+        $text_area->label($field['label'] ?? false);
 
         return $text_area;
     }
