@@ -181,9 +181,9 @@ class Form extends Widget {
     public static function div($width, $field) {
         return '<div class="'.$width.'">'. $field .'</div>';
     }
+
     /**
      * Title description
-     *
      * @param string $arg
      * @return void
      */
@@ -195,6 +195,7 @@ class Form extends Widget {
             }
         }
     }
+
     /**
      * Renders an input tag
      * @param yii\bootstrap\ActiveForm $form

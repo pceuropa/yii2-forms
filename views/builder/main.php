@@ -73,8 +73,6 @@ $this->registerCss("
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
 	#end-form {height: 25px;background-color: #C8EBFB; color:#6CBDE3; margin:0 0 50px 0; }
 	#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
-	#preview-field .show {display:block; }
-	#preview-field {display:block; }
 	
 	asside {height: 100%;}
 	.options { border:solid 1px #ccc; padding:5px;}
@@ -110,7 +108,16 @@ $this->registerCss("
 	.name-error {color: red}
 	.empty {border: solid 1px #D42323 }
 	.green {border: solid 1px #399D6E }
-	
+
+    .show-div-update {
+         border: solid 1px #399D6E;
+         background-color: rgba(9, 9, 9, 0.2);
+-moz-border-radius:10px; 
+-webkit-border-radius:10px;
+-khtml-border-radius:10px;
+border-radius:10px;
+behavior:url(border-radius.htc);
+    }
 	.input-item.update div.create-buttons {display:none}
 	.input-item.update div.update-buttons {display:block}
 	
@@ -119,6 +126,7 @@ $this->registerCss("
 	
 	#MyForm .ql-snow .ql-tooltip {z-index: 1000;}
 	#MyForm .ql-align-center {text-align: center}
+    #MyForm .ql-align-right { text-align:right }
 	#MyForm .border {border:solid 1cx #ccc}
 	
 	.glyphicon-pencil { cursor: e-resize;}

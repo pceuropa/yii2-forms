@@ -3,7 +3,7 @@ var MyFORM =  MyFORM || {};
 
 MyFORM.examples = function (form){
 
-var version = '1.6.0',
+var version = '1.2.4',
 	id_selector = "#examples-form",
 	
 temp = [
@@ -25,7 +25,8 @@ temp = [
                 "type": "text",
                 "label": "what are you thinking about",
                 "width": "col-md-12",
-                "require": true
+                "require": true,
+                "class": "form-control",
             },
             {
                 "field": "radio",
@@ -65,6 +66,7 @@ temp = [
         [
             {
                 "field": "textarea",
+                "class": "form-control",
                 "name": "ceta",
                 "width": "col-md-12",
                 "label": "What do you think about CETA?",
@@ -77,6 +79,7 @@ temp = [
                 "field": "input",
                 "name": "age",
                 "type": "number",
+                "class": "form-control",
                 "label": "Age",
                 "width": "col-md-4",
                 "require": true
@@ -84,6 +87,7 @@ temp = [
             {
                 "field": "select",
                 "width": "col-md-4",
+                "class": "form-control",
                 "items": [
                     {
                         "text": "Female",
@@ -106,6 +110,7 @@ temp = [
                 "field": "input",
                 "name": "color",
                 "type": "color",
+                "class": "form-control",
                 "label": "Favorite color",
                 "width": "col-md-4",
                 "require": true,
@@ -150,7 +155,178 @@ temp = [
                 "label": "Submit"
             }
         ]
-    ]},
+    ]},{
+    "title": "wiara",
+    "method": "post",
+    "language": "en",
+    "body": [
+        [
+            {
+                "field": "input",
+                "name": "wiek",
+                "class": "form-control",
+                "type": "number",
+                "label": "Ile masz lat ?",
+                "width": "col-md-4"
+            },
+            {
+                "field": "input",
+                "type": "number",
+                "width": "col-md-4",
+                "class": "form-control",
+                "name": "dzieci",
+                "label": "Ile masz dzieci ?",
+                "require": true
+            },
+            {
+                "field": "select",
+                "name": "wyksztalcenie",
+                "label": "Wykształcenie",
+                "class": "form-control",
+                "width": "col-md-4",
+                "items": [
+                    {
+                        "text": "podstawowe",
+                        "value": "podstawowe"
+                    },
+                    {
+                        "text": "gimnazjalne",
+                        "value": "gimnazjalne"
+                    },
+                    {
+                        "text": "zasadnicze",
+                        "value": "zasadnicze"
+                    },
+                    {
+                        "text": "średnie",
+                        "value": "średnie"
+                    },
+                    {
+                        "text": "wyższe",
+                        "value": "wyższe"
+                    }
+                ],
+                "require": true
+            }
+        ],
+        [
+            {
+                "field": "radio",
+                "width": "col-md-3",
+                "items": [
+                    {
+                        "text": "Tak",
+                        "value": "tak"
+                    },
+                    {
+                        "text": "Nie",
+                        "value": "nie"
+                    }
+                ],
+                "name": "wiara_w_boga",
+                "label": "Czy wieżysz w boga ?"
+            },
+            {
+                "field": "textarea",
+                "width": "col-md-9",
+                "class": "form-control",
+                "name": "chrzest_uzasadnij",
+                "label": "Czy możesz uzasadnic tą decyzję ?",
+                "rows": "4"
+            }
+        ],
+        [
+            {
+                "field": "radio",
+                "width": "col-md-3",
+                "items": [
+                    {
+                        "text": "Tak",
+                        "value": "tak"
+                    },
+                    {
+                        "text": "Nie",
+                        "value": "nie"
+                    }
+                ],
+                "name": "chrzest",
+                "label": "Czy chrzciłeś swoje dzieci ?",
+                "require": true
+            },
+            {
+                "field": "textarea",
+                "width": "col-md-9",
+                "class": "form-control",
+                "name": "wiara_boga_uzasadij",
+                "label": "Czy możesz uzasadnic tą decyzję ?",
+                "rows": "4"
+            }
+        ],
+        [
+            {
+                "field": "select",
+                "width": "col-md-9",
+                "class": "form-control",
+                "items": [
+                    {
+                        "text": "2 000 000 >",
+                        "value": "2000000+"
+                    },
+                    {
+                        "text": "1 000 000 - 2 000 000",
+                        "value": "1000000-2000000"
+                    },
+                    {
+                        "text": "700 000 - 1 000 000",
+                        "value": "700000-1000000"
+                    },
+                    {
+                        "text": "200 000 - 700 000",
+                        "value": "200000-700000"
+                    },
+                    {
+                        "text": "50 000 - 200 000",
+                        "value": "50000-200000"
+                    },
+                    {
+                        "text": "10 000 - 50 000",
+                        "value": "10000-50000"
+                    },
+                    {
+                        "text": "5 000 - 10 000",
+                        "value": "5000-10000"
+                    },
+                    {
+                        "text": "1000 - 5000",
+                        "value": "1000-5000"
+                    },
+                    {
+                        "text": "< 1000",
+                        "value": "<1000"
+                    }
+                ],
+                "name": "miasto",
+                "label": "Liczba mieszkańców twojego miasta mieści się w przedziale ?"
+            }
+        ],
+        [
+            {
+                "field": "submit",
+                "width": "col-md-12",
+                "class": "form-control",
+                "backgroundcolor": "btn-primary",
+                "label": "Wyślij"
+            }
+        ],
+    ],
+    "author": 1,
+    "date_start": "2017-05-29",
+    "date_end": null,
+    "maximum": null,
+    "meta_title": "",
+    "url": "wiara",
+    "response": "",
+},
     {
     "title": "login",
     "method": "post",
@@ -161,7 +337,8 @@ temp = [
                 "field": "input",
                 "type": "text",
                 "width": "col-md-6",
-                "name": "email",
+                "class": "form-control",
+                "name": "name",
                 "label": "Email",
                 "require": true
             },
@@ -169,11 +346,13 @@ temp = [
                 "field": "input",
                 "name": "pass",
                 "type": "text",
+                "class": "form-control",
                 "label": "Password",
                 "width": "col-md-6",
                 "require": true
             }
         ],
+        [],
         [
             {
                 "field": "checkbox",
@@ -215,6 +394,7 @@ temp = [
             {
                 "field": "textarea",
                 "width": "col-md-12",
+                "class": "form-control",
                 "rows": "5",
                 "name": "comment",
                 "placeholder": "",
@@ -225,6 +405,7 @@ temp = [
             {
                 "field": "input",
                 "type": "text",
+                "class": "form-control",
                 "width": "col-md-6",
                 "name": "name",
                 "label": "Name"
@@ -232,13 +413,13 @@ temp = [
             {
                 "field": "input",
                 "type": "email",
+                "class": "form-control",
                 "width": "col-md-6",
                 "name": "email",
                 "label": "Email",
                 "placeholder": "Email address will not be published"
             }
         ],
-        [],
         [
             {
                 "field": "submit",
@@ -271,6 +452,7 @@ temp = [
                 "field": "input",
                 "name": "name",
                 "type": "text",
+                "class": "form-control",
                 "label": "Name",
                 "width": "col-md-6",
                 "require": true
@@ -279,6 +461,7 @@ temp = [
                 "field": "input",
                 "name": "email",
                 "type": "email",
+                "class": "form-control",
                 "label": "E-mail",
                 "width": "col-md-6",
                 "require": true
@@ -287,6 +470,7 @@ temp = [
                 "field": "input",
                 "name": "birth",
                 "type": "date",
+                "class": "form-control",
                 "label": "Date of birth",
                 "width": "col-md-6",
                 "require": true
@@ -295,6 +479,7 @@ temp = [
                 "field": "input",
                 "name": "id",
                 "type": "text",
+                "class": "form-control",
                 "label": "Identity Card number",
                 "width": "col-md-6",
                 "require": true
@@ -318,6 +503,7 @@ temp = [
                 "field": "input",
                 "name": "name_org",
                 "type": "text",
+                "class": "form-control",
                 "label": "Name of the organization",
                 "width": "col-md-6",
                 "require": true
@@ -326,6 +512,7 @@ temp = [
                 "field": "input",
                 "name": "address",
                 "type": "text",
+                "class": "form-control",
                 "label": "Address",
                 "width": "col-md-6",
                 "require": true
@@ -334,6 +521,7 @@ temp = [
                 "field": "input",
                 "name": "phone",
                 "type": "tel",
+                "class": "form-control",
                 "label": "Phone",
                 "width": "col-md-6",
                 "require": true
@@ -373,6 +561,7 @@ temp = [
             {
                 "field": "textarea",
                 "label": " Comments",
+                "class": "form-control",
                 "width": "col-md-12",
                 "rows": "3",
                 "value": " ",
@@ -449,14 +638,14 @@ var div1 = document.createElement("div"),
 			})
 			
 			window.setTimeout(function() {
-			if(form.body.length) return;
+			if(form.model.body.length) return;
 				
 			
 				$("#form #widget-form-options").append( div1.outerHTML ).on( "change", id_selector, function() {
 							var value = this.value;
 							$("#section-confirm").empty().html( '<button id="confirm-example" type="button" class="btn btn-sm btn-warning">Confirm</button>' );
 							$("#confirm-example").click(function () {
-								form.body = temp[value].body
+								form.model.body = temp[value].body
 								form.render()
 								$("#section-confirm").empty()
 							})

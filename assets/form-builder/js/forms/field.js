@@ -1,38 +1,37 @@
-/*
- * field.js v1.2.1
- * https://pceuropa.net/yii2-extensions/yii2-forms/manual
- * Licensed MIT © Rafal Marguzewicz
+ /**
+ * Create fields as Htmlelement for forms.js. Provides functions help set field data, add|delete|update items of fields
+ * @author Rafal Marguzewicz
+ * @license MIT
+ * @constructor
+ * @param {Object} o - field data ex. {"field": "radio", "name": "string", "items": []}
+ * @return {Object} - field data and helpers functions
  */
  
+
  "use strict";
-
-
 var MyFORM =  MyFORM || {};
 MyFORM.field = (function(){
-	console.log('field: 1.2.1');
+	console.log('field: 2.0.0');
 
 var factory = function(o) {
 	this.body = o  || {};
+    if (!h.is(this.body.field)){
+        console.log("field type not exist");
+    }
 	this.init();
-	
 };
 
 factory.prototype = {
+
 	constructor: factory,
 	view: true,
+
 	init: function () {
-		this.set(MyFORM.field[this.body.field])
-	},
-	
-	set: function (o) {  // get all property.value
-        o = o || {};
-	    for (var prop in o) {
-			this[prop] = o[prop];
-		}
+        var field_data = MyFORM.field[this.body.field]
+		h.inheritAll(this, field_data)
 	},
 	
 	setDataFieldFrom: function (cl) {
-
 		var inputs = document.getElementById(this.body.field).getElementsByClassName(cl),
 			input;
 		for (var i = 0; i < inputs.length; i++) {
@@ -46,7 +45,12 @@ factory.prototype = {
 				}
 			}
 	},
-	
+
+    /**
+    * Set data items. Get data from class {cl} inputs
+    * @param {String} cl - CSS class
+    * @return {Object} item data
+    */
 	setDataItemFrom: function (cl) {
 		var o = {},
     	inputs = document.getElementById(this.body.field).getElementsByClassName(cl),
@@ -64,22 +68,35 @@ factory.prototype = {
 		}
 		return o
 	},
+
+    /**
+    * Add item to field (radio|checkbox|select)
+    * @param {Field} field  
+    * @param {Object} field  ex. {"text": "stringText", "value": null, "checked": true}
+    * @return {undefined}
+    */
 	addItem: function (field, item) {
-		
 		if(!h.is(item.value)){
 			item.value = field.body.items.length + 1
 		}
 		field.body.items.push(item);
 	},
 
-// RENDER SECTION : preview Field, 	Item update
+    /**
+    * Render field in div#preview-field. Render select (update-item) if field have items 
+    * @see disableButtonAddToForm()
+    * @see renderSelectUpdateItem()
+    * @return {string}
+    */
 	render: function(){  // render field
-		var preview  = $("#preview-field"), field = this;
+		var preview  = $("#preview-field"),
+            field = this,
+            html = field.html().innerHTML;
 			
 			if(this.view){
-				preview.html('(<a>html</a>) <br/><br/>' + field.html());
+				preview.html('(<a>html</a>) <br/><br/>' + html);
 			} else {
-				preview.html('(<a>text</a>) <br/><br/> <pre><code> </code></pre>').find('code').text(field.html());	
+				preview.html('(<a>text</a>) <br/><br/> <pre><code> </code></pre>').find('code').text(html);	
 			}
 
 		preview.find('a').click(function () {
@@ -88,142 +105,92 @@ factory.prototype = {
 		});
 		
 		this.disableButtonAddToForm();
-		h.renderSelectUpdateItem(this)
-		
+		this.renderSelectUpdateItem(this)
 	},
 	
+    /**
+     * Render Select input to select to update items
+     * @param {Object} field
+     * @return {String} render select tag
+    */
+    renderSelectUpdateItem: function(field) {
+        if(!h.is(field)) { return; }
+
+        if(field.body.hasOwnProperty('items')) {
+            if(field.body.items.length) {
+
+                $("#" + field.body.field + " .select-item-to-change").html(
+                (function () {
+                    var i = 0, text = '', itemOption = '';
+
+                    for (i; i < field.body.items.length; i++) {
+                        text = field.body.items[i].text ? field.body.items[i].text : '';
+                        itemOption += '<option value="' + i + '">'+(i + 1) +'. ' + h.subString(text, 60) +'</option>';
+                    }
+                    return '<select class="change-item form-control input-sm"><option>Update</option>'+ itemOption + '</select>';
+                })()
+                );
+            } else {
+                $("#" + field.body.field + " .select-item-to-change").empty()
+            }
+
+        }
+    },
+
 	disableButtonAddToForm:	function () {
-	   var boolean = true;
+	    var boolean = true;
    		boolean = ( this.body.field == 'description' || this.body.field == 'submit') ? false : !h.is(this.body.name)
    		
 		$("#" + this.body.field).find('#add-to-form').prop( 'disabled', boolean);
 	},
 
-	is: function (value) {
-		return value ? value : '';
-	},
+    /**
+    * Set label for fiels
+    * @param {htmlElement} element - element.appendChild(label)
+    */
+    label: function(element) {
+        var label, textlabel;
+        if (!h.is(this.body.label)) {
+            return;
+        }
+        textlabel = this.body.require ? this.body.label + ' *' : this.body.label;
+        label = document.createElement("label");
+        label.appendChild(document.createTextNode(textlabel));
+        element.appendChild(label);
+    },
+    
+    /**
+    * Generate list inputs and append to parent
+    * @param {HtmlElement} parent - to this element will adds inputs
+    * @return {undefined}
+    */
+	inputs: function(parent){
+        var i, div, text, item, input, label, name;
+		if(!h.is(this.body.items)){ this.body.items = [] }
+        name = (this.body.field === 'radio')? "name" : {"name": this.body.name + '[]'};
+		for (i =0; i < this.body.items.length; i++) {
+            item = this.body.items[i]
 
-	typeAttr: function () {
-		return this.body.type ? ' type="'+ this.body.type + '"' : '';
-	},
-	labelAttr: function () {
-		var require = '';
-		if (this.body.require) { require = ' *';}
-		return this.body.label ? '\n\t<label>' + this.body.label  + require + '</label>' : '';
-	},
-	nameAttr: function (multi) {
-		var multi = multi || false
-		if(multi){
-			return this.body['name'] ? ' name="'+ this.body['name'] + '[]"' : '';
-		} else {
-			return this.body['name'] ? ' name="'+ this.body['name'] + '"' : '';
+            div = this.createField("div", [{"class": this.body.field}]),
+            label = document.createElement("label");
+            input = this.createField("input", [{"type": this.body.field}, name, {"value": item.value}, {"checked": item.checked}]),
+            text = document.createTextNode(item.text);
+
+            div.appendChild(label).appendChild(input);
+            label.appendChild(text);
+            parent.appendChild(document.createTextNode("\n\t"));
+            parent.appendChild(div);
 		}
-		
-	},
-	valueAttr: function () {
-	
-		return this.body.value ? ' value="'+ this.body.value + '"' : ' ';
-	},
-	placeholderAttr: function () {
-		return this.body.placeholder ? ' placeholder="'+ this.body.placeholder + '"' : '';
-	},
-	idAttr: function () {
-		return this.body.id ? ' id="'+ this.body.id + '"' : '';
-	},
-	classAttr: function () {
-		return this.body['class'] ? ' class="form-control '+ this.body['class'] + '"' : ' class="form-control"';
-	},
-	dataAttr: function () {
-		return this.body.data ? ' data="'+ this.body.data + '"' : '';
-	},
-	rowsAttr: function () {
-		return this.body.rows ? ' rows="'+ this.body.rows + '"' : '';
-	},
-	
-	requireAttr: function () {
-		return this.body.require ? ' required' : '';
-	},
-	
-	checkedAttr: function() {
-		return this.body.require ? ' checked' : '' ;
-	},
-	
-	helpBlockAttr: function () {
-		return this.body.helpBlock ? '\n\t<span class="help-block">' + this.body.helpBlock + '</span>' : '';
-	},
-	div: function () {
-		return '<div class="form-group ' + this.body.width + '">';
 	},
 
-	divEnd: function () {
-		return '\n</div>';
-	},
- 
-	attr: function(){
-		var i, t = '', max = arguments.length;
-
-		for (var i = 0;  i < max; i += 1){
-			t += this[arguments[i] + 'Attr']();
-		}
-		return t;
-	},
-	el: function(j){
-		var i, t = '', fn, max = arguments.length;
-
-		for (var i = 1;  i < max; i += 1){
-			fn = arguments[i] + 'El';
-			t += this[fn](j);
-		}
-		return t;
-	},
-	labelEl: function (i) {
-			var text = this.body.items[i].text;
-			return text ? text : '';
-	},
-	valueEl: function (i) {
-		var el = this.body.items[i].value;
-		return el ? ' value="'+ el + '"' : '';
-	},
-	idEl: function (i) {
-		var el = this.body.items[i].id;
-		return  el ? ' id="'+ el + '"' : '';
-	},
-	classEl: function (i) {
-		var el = this.body.items[i]['class'];
-		return  el ? ' class="'+ el + '"' : '';
-	},
-	checkedEl: function (i) {
-		return this.body.items[i].checked ? ' checked' : '';
-	},
-	selectedEl: function (i) {
-		return this.body.items[i].checked ? ' selected' : '';
-	},
-	requireEl: function () {
-		return this.require ? ' required' : '';
-	},
-
-	inputs: function(){
-		var i = 0, input = '';
-
-		if(typeof this.body.items === "undefined"){
-			this.body.items = []
-		}
-		
-
-
-		for (i; i < this.body.items.length; i++) {
-		    input += this.input(i) 
-		}
-		return input;
-	},
 	inputHtml: function (type, i) {
-		return '<input type="'+ this.is(type) +'"'+ this.attr('name') + this.el(i, 'value', 'id', 'class', 'checked', 'require') +'>'+ this.labelEl(i);// + this.editElement(i);
+		return '<input type="'+ this.is(type) +'"'+ this.attr('name') + this.el(i, 'value', 'id', 'class', 'checked', 'require') +'>'+ this.labelEl(i);
 	},
-
 
 	editElement: function (i) {
 		return Form.prototype.editEl.call(this, i)
 	},
+
 	glyphicon: function (index, cl) {
 			return '<span class="glyphicon ' + cl + '" data-index="' + index + '" aria-hidden="true"></span>';
 	},
@@ -237,7 +204,6 @@ factory.prototype = {
             console.log('Delete item by index:');
             throw index
         }
-        
 	},
     // depraced
 	cloneItem: function(index){
@@ -249,116 +215,214 @@ factory.prototype = {
             console.log('Clone item by index:');
             throw index 
         }
-        
-		
-	}
-} // end Field()
+	},
 
+    /**
+    * Create div element and set attributes
+    * @param {Object} param - desc
+    * @returm {Boolean}
+    */
+    div: function() {
+        var div = this.createField("div", [{"class": "form-group "+ this.body.width}]); 
+        return div;
+    },
 
-var input = {
-	html: function() {
-		
-		var html_element = document.createElement("input");
-		html_element.setAttribute("name", this.body.name);
-		console.log(html_element);
-		return  html_element.outerHTML;
-	}
+    /**
+    * Set attributes for field
+    * @param {htmlElement} field
+    * @param {Array} attributes - list attributes to check
+    */
+    setAttributes: function(field, attributes) {
+        for (var i = 0, len = attributes.length; i < len; i++) {
+            var attribute = attributes[i]
+
+            if (h.isObject(attribute) && h.is(h.firstValue(attribute))) {
+                h.setAttribute(field, h.firstProp(attribute), h.firstValue(attribute));
+            }
+
+            if (h.isString(attribute)) {
+                h.setAttribute(field, attribute, this.body[attribute]);
+            }
+        } 
+    },
+
+    /**
+    * Create field, set attributes and append
+    * @param {String} param - name created Html element
+    * @returm {HtmlElement}
+    */
+    createField: function(param, listAttributes) {
+        var field = document.createElement(param);
+        this.setAttributes(field, listAttributes);
+        return field;
+    },
+
+    /**
+    * Create text node
+    * @param {String} text - if param is string will be convert on text node
+    * @returm {textNode}
+    */
+    createTextNode: function(text) {
+        if (h.isString(text)) {
+            return document.createTextNode(text);
+        } 
+        return document.createElement(false);
+    },
+    
+    /**
+    * Create description (helpBlock) under field
+    * @param {Object} param - desc
+    * @returm {HtmlElement}
+    */
+    helpBlock: function(parent) {
+        if (h.is(this.body.helpBlock)) {
+            parent.appendChild(document.createTextNode(this.body.helpBlock));
+        }
+    },
+
+    /**
+    * Append element
+    * @param {HTMLElement} child - desc
+    * @returm {this}
+    */
+    append: function(child) {
+        this.child = child; 
+        return this;
+    },
+
+    /**
+    * set Defalut value to field
+    * @returm {Boolean}
+    */
+    setDefaultValue: function(element, param) {
+        if (h.is(this.body[param])) {
+            element.defaultValue = this.body[param];  
+        }
+    },
+
+    /**
+    * Select parent where add child element 
+    * @param {HTMLElement} parent 
+    * @returm {Boolean}
+    */
+    to: function(parent) {
+      if (h.is(this.child)) {
+            parent.appendChild(this.child); 
+      }
+    },
+    is: function (value) {
+           return value ? value : '';
+    },
+
+    
 }
 
-
 var input = {
-	html: function() {
-	
-		return  this.div() +
-				this.labelAttr() + 
-				'\n\t<input' + this.attr('name', 'type', 'value', 'placeholder', 'id', 'class', 'data', 'require') + '>' +
-				this.helpBlockAttr() + 
-				this.divEnd();
+    html: function() {
+    var field = this.createField("input", ["type", "name", "placeholder", "require", "value", "id", "class"]),
+            div = this.div();
+
+            this.label(div);
+            div.appendChild(field);
+            this.helpBlock(div);
+		return  div;
 	}
 }
 
 var textarea = {
 	html: function() {
-	
-		var value = this.body.value ? this.body.value : '';
-		return  this.div() +
-				this.labelAttr() +
-				'\t<textarea ' + this.attr('name', 'id', 'class', 'data', 'rows', 'placeholder', 'require') + '>' + value + '</textarea>'+
-				this.helpBlockAttr() +
-				this.divEnd();
-	}
+	    
+		var field = this.createField("textarea", ["name", "placeholder", "require", "id", "class", "rows" ]),
+            div = this.div();
+
+            this.label(div);
+            div.appendChild(field);
+            this.setDefaultValue(field, "value");
+            this.helpBlock(div);
+		return  div;
+    }
 }
 
 var radio = {
 	html: function() {
-		return  this.div() +
-				this.labelAttr() +
-				this.inputs() +
-				this.helpBlockAttr() +
-				this.divEnd();
-	},
-	labelAttr: function () {
-		var req = '';
-		if (this.body.require) { req = ' *';}
-		return this.body.label ? '\t<p>' + this.body.label + req + '</p>' : '';
-	},
-	
-	input: function(i){
-		
-		return '\n\t<div class="radio"><label>' + this.inputHtml('radio', i) + '<label></div>';
-	},
-		
-}
+        var div = this.div();
+            this.label(div);
+            this.inputs(div)
+            div.appendChild(document.createTextNode("\n\t"));
+            this.helpBlock(div);
+		return  div;
+}}
 
 var checkbox = {
 	html: function() {
-			return  this.div() +
-			this.labelAttr() +
-			this.inputs() +
-			this.helpBlockAttr() +
-			this.divEnd();
-	},
-	input: function(i){
-		return '\n\t<div class="checkbox"><label><input type="checkbox"'+ this.nameAttr('multi') + this.el(i, 'value', 'id', 'class', 'checked', 'require') +'>'+ this.labelEl(i) +'<label></div>';
-	}
-}
+        var div = this.div();
+
+            this.label(div);
+            this.inputs(div)
+            div.appendChild(document.createTextNode("\n\t"));
+            this.helpBlock(div);
+		return  div;
+}}
 
 var select = {
-		html: function() { 
-			return this.div() +
-				this.labelAttr() +
-				'\n\t<select ' + this.attr('id', 'class', 'name', 'require') + '>' +this.inputs() + '\n\t</select>' +
-				this.helpBlockAttr() +
-				this.divEnd();
-		},
-		input: function(i){
-			return '\n\t\t<option ' + this.el(i ,'value', 'selected') + '>' + this.labelEl(i) + '</option>';
+    html: function() { 
+        var div = this.div();
+            this.label(div);
+            this.select(div)
+            div.appendChild(document.createTextNode("\n\t"));
+            this.helpBlock(div);
+		return  div;
+	},
+	select: function(parent){
+        var i, text, item, option, select = this.createField("select", ['class', 'id', 'name']);
+
+		if(!h.is(this.body.items)){ this.body.items = [] }
+
+            select.appendChild(document.createTextNode("\n\t\t"));
+		for (i =0; i < this.body.items.length; i++) {
+            item = this.body.items[i]
+
+            option = this.createField("option", [{"value": item.value}, {"selected": item.selected}]);
+            text = document.createTextNode(item.text);
+
+            select.appendChild(option).appendChild(text);
+            select.appendChild(document.createTextNode("\n\t\t"));
 		}
+            parent.appendChild(document.createTextNode("\n\t\t"));
+            parent.appendChild(select);
+	},
+    template: {
+          div: {
+            label: {},
+            select: {attributes: {}},
+            text: {value:''},
+            attributes: {},
+          }
+       }
 	}
 	
 var description = {
 		
-		classAttr: function () {
-			return this.body['class'] ? ' '+ this.body['class'] : '';
-		},
-		div: function () {
-			return '<div ' + this.idAttr() + ' class="form-group '+ this.body.width + this.classAttr() +'">';
-		},
-		
 		html: function() { 
-		
-			return this.div() + this.is(this.body.textdescription) + this.divEnd();;
+		    var div = this.createField("div", ['id', {"class": this.body.class}]);
+                if(h.is(this.body.width)){
+                    div.classList.add(this.body.width);
+                }
+                div.innerHTML = this.is(this.body.textdescription);
+                console.log(div);
+			return div;
 		}
 	}
 
 var submit = {
-		color:	function () {
-			return this.body['color'] ? 'style="color:'+ this.body['color'] +';"'  : '';
-		},
+
 		html: function() {
-		return  this.div() +
-				'\t<button type="submit" ' + this.color() + ' class="btn ' +  this.is(this.body.backgroundcolor) + '">' + this.is(this.body.label) + '</button>' +
-				this.divEnd();
+		var submit = this.createField("button", [{"class": "btn " + this.is(this.body.backgroundcolor)}]),
+            div = this.div();
+
+            submit.appendChild(this.createTextNode(this.body.label));
+            div.appendChild(submit);
+		return  div;
 		}
 	}
 

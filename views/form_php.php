@@ -1,6 +1,5 @@
 <?php
-use yii\bootstrap\ActiveForm;
-use pceuropa\forms\Form;
+use pceuropa\forms\bootstrap\ActiveForm;
 
 $form = ActiveForm::begin();
 if (count($form_body) != 0) {
@@ -9,7 +8,7 @@ if (count($form_body) != 0) {
 		echo ('<div class="row">');
 
 		    foreach ($row as $key => $value) {
-				echo  Form::field($form, $model, $value);
+            echo  $form->dynamicField($model, $value);
 		    }
 		echo('</div>');
 	}
@@ -19,7 +18,7 @@ if (count($form_body) != 0) {
 ActiveForm::end();
 
 $this->registerCss("
-    .ql-align-center { text-align:center }, 
-    .ql-align-right { text-align:right }, 
+    .ql-align-center { text-align:center } 
+    .ql-align-right { text-align:right }
 ");
 ?>

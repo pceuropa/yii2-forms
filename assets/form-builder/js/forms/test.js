@@ -161,7 +161,7 @@ var version = '2.0.0',
 if(form){
 	form.generate(object_form);
 	form.deleteField(0, 1)
-	form.body = [];
+	form.model.body = [];
 	form.generate(object_form)
 	form.add(object_form.body[0][0]);
 	form.add(object_form.body[2][1]);

@@ -17,7 +17,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
     public $sourcePath = '@vendor/pceuropa/yii2-forms/assets/form-builder';
     public $baseUrl = '@web';
     public $css = [
-    	'https://cdn.quilljs.com/1.2.0/quill.snow.css',
+    	'css/forms/quill.snow.css',
     ];
     public $js = [
         'js/forms/Sortable.min.js',
@@ -31,7 +31,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/examples.js',
 		'js/forms/test.js',
 		
-		'https://cdn.quilljs.com/1.2.0/quill.js',
+		'js/forms/quill.js',
 		'js/forms/clipboard.min.js',
 		
     ];

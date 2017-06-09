@@ -139,9 +139,6 @@ var o2 = {
   	expect(h.replaceChars('!@#$$%^&><:"{}')).toBe('_')
   });
   
-  it('renderSelectUpdateItem', function () {
-  	expect(h.renderSelectUpdateItem()).toBe(undefined)
-  });
   
   it('subString', function () {
   	expect(h.subString('Adam', 1)).toBe('A...')
