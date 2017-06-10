@@ -49,12 +49,10 @@ use yii\helpers\Json;
 			<div id="select" class="options form-horizontal"><?= $this->render('options/select'); ?></div>
 			<div id="description" class="options form-horizontal"><?= $this->render('options/description'); ?></div>
 			<div id="submit" class="options form-horizontal"><?= $this->render('options/submit'); ?></div>
-			<div id="update" class="options form-horizontal">update</div>
 			
 			<div id="delete" class="options form-horizontal">
                 <?= $this->render('options/button/_back'); ?> - 
                 <?= $this->render('options/button/_delete'); ?>
-                
 			</div>
 			
 		</div> <!-- end id.sidebar -->
@@ -71,13 +69,19 @@ $this->registerCss("
 	#preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
 	
 	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
+    #preview-form .row .update {
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+        behavior: url(border-radius.htc);
+    }
+
 	#end-form {height: 25px;background-color: #C8EBFB; color:#6CBDE3; margin:0 0 50px 0; }
 	#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
 	
 	asside {height: 100%;}
 	.options { border:solid 1px #ccc; padding:5px;}
-	.options.active-option {display: block}
-	
 	#sidebar > ul { margin:0 0 0 5px;  }
 	#sidebar > ul li { color:#3894B0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 4px 10px; margin-bottom: -3px;}
 	#sidebar > ul li:hover { background-color:#eee}
@@ -86,6 +90,8 @@ $this->registerCss("
 		background-color: #fff; color:#244BAC; padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;
 	}
 	
+    #sidebar > ul li#update-tab {  background-color:#e5f6e5}
+    #sidebar > ul li#delete-tab {  background-color:#FFF4F4}
 	#sidebar.update #add-to-form{display:none}
 	#sidebar .well {
 		padding: 5px;
@@ -94,6 +100,18 @@ $this->registerCss("
 		border: 1px solid #e3e3e3;
 		margin-top: 5px;
 	}
+
+	#sidebar.update, #preview-form .row .update-field {
+        border: solid 1px #B5DAB5;
+        background-color: #e5f6e5;
+    }
+
+	#delete, #preview-form .row .delete-field {
+         border: solid 1px #F7B68F;
+         background-color: #FFF4F4; 
+    }
+
+	.options.active-option {display: block}
 	#select-field {
 		font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;
 	}
@@ -109,15 +127,7 @@ $this->registerCss("
 	.empty {border: solid 1px #D42323 }
 	.green {border: solid 1px #399D6E }
 
-    .show-div-update {
-         border: solid 1px #399D6E;
-         background-color: rgba(9, 9, 9, 0.2);
--moz-border-radius:10px; 
--webkit-border-radius:10px;
--khtml-border-radius:10px;
-border-radius:10px;
-behavior:url(border-radius.htc);
-    }
+
 	.input-item.update div.create-buttons {display:none}
 	.input-item.update div.update-buttons {display:block}
 	

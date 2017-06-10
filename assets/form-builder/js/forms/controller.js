@@ -4,7 +4,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form){
 	
-var version = '2.0.0',
+var version = '2.0.1',
   field = {},
     key_item_change = 0,
     update_mode = false,				// selectItemToChange()
@@ -121,6 +121,22 @@ var quill = new Quill('#textdescription', {
         $(e.delegateTarget).find("#name").val('');
         $(e.delegateTarget).find("#add-to-form").prop('disabled', true);
     }
+
+   /**
+   * Test canvas
+   * @param {HTMLElement} div 
+   */ 
+   function loadCanvas(div) {
+        var canvas = document.createElement('canvas');
+
+        canvas.id     = "CursorLayer";
+        canvas.width  = 500;
+        canvas.height = 2;
+        canvas.style.zIndex   = 8;
+        canvas.style.position = "absolute";
+        line(canvas)
+        div.appendChild(canvas)
+    } 
     
     /**
     * Action edit field
@@ -128,10 +144,13 @@ var quill = new Quill('#textdescription', {
     * @return {undefined}
     */
     function updateField(e){
-		var field_selector, map = e.target.dataset, id = 0;
-		sidebar.addClass( "update" );
+		var field_selector, map = e.target.dataset, id = 0,
+            element = e.currentTarget.parentElement.parentElement;
 
-        $("#row"+map.row).find("div:nth-child(2)").addClass("show-div-update");
+		sidebar.addClass( "update" );
+        element.classList.add("update-field");
+
+
         $('.input-item').removeClass( "update" );
         $('.item-of-field').val( null );
 
@@ -183,10 +202,13 @@ var quill = new Quill('#textdescription', {
     * @return {undefined}
     */
 	function deleteField(e){
-		var map = e.target.dataset;
+		var map = e.target.dataset, element = e.currentTarget.parentElement.parentElement;
+
 
 			activeTab(delete_tab);
 			activeAction('#delete');
+
+        element.classList.add("delete-field");
 
 		$('button#btn-delete-confirm').unbind().click(function () {
 			form.deleteField(map.row, map.index);

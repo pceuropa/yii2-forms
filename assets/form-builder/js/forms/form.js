@@ -1,16 +1,14 @@
-/*
- * https://pceuropa.net/yii2-extensions/yii2-forms/manual
- * Licensed MIT © 2016-2017 Rafal Marguzewicz
- */
 /**
 * Create forms objects, render forms, and run controller(events) 
+* https://pceuropa.net/yii2-extensions/yii2-forms/manual
 * @author Rafal Marguzewicz
 * @license MIT
 * @constructor
 * @return {Object} - public functions and FormModel
 */
+
 "use strict";
-console.log('form: 2.0.0');
+console.log('form: 2.0.1');
 
 var MyFORM = MyFORM || {};
 
@@ -22,7 +20,7 @@ MyFORM = (function() {
             body: [],
         }
         this.time = 0;
-        this.fields_with_data = []
+        this.fields_with_data = [];
         this.c =  {
             get: false,
             save: true,
@@ -326,9 +324,8 @@ MyFORM = (function() {
                         });
                     };
                     console.log('Delete item [', row, index, ']');
-                    this.render();
                     this.fields_with_data.splice(this.fields_with_data.indexOf(field.name), 1);
-                    console.log(this.fields_with_data);
+                    this.render();
                     return true;
                 }  else {
                   return false;
@@ -411,24 +408,6 @@ MyFORM = (function() {
         // default save button if title or url are empty
         preventNotValidaData: function() {
             $("#save-form").prop('disabled', !(h.isString(this.model.title) && h.isString(this.model.url) && !this.c.autosave))
-        },
-
-        attr: function() {
-            var i, temp = '',
-                max = arguments.length;
-
-            for (var i = 0; i < max; i += 1) {
-                temp += this[arguments[i] + 'Attr']();
-            }
-            return temp;
-        },
-
-        idAttr: function() {
-            return this.id ? ' id="' + this.id + '"' : '';
-        },
-
-        classAttr: function() {
-            return this['class'] ? ' class=" ' + this['class'] + '"' : ' class=""';
         },
 
         rows: function() {

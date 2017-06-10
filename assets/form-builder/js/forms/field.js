@@ -15,6 +15,7 @@ MyFORM.field = (function(){
 
 var factory = function(o) {
 	this.body = o  || {};
+
     if (!h.is(this.body.field)){
         console.log("field type not exist");
     }
@@ -417,10 +418,16 @@ var description = {
 var submit = {
 
 		html: function() {
-		var submit = this.createField("button", [{"class": "btn " + this.is(this.body.backgroundcolor)}]),
+		var submit = this.createField("button", ["id", {"class": "btn"}]),
             div = this.div();
 
-            submit.appendChild(this.createTextNode(this.body.label));
+                if(h.is(this.body.width)){
+                    submit.classList.add(this.body.backgroundcolor);
+                }
+                if(h.is(this.body.class)){
+                    submit.classList.add(this.body.class);
+                }
+                submit.innerHTML = this.is(this.body.label);
             div.appendChild(submit);
 		return  div;
 		}
