@@ -83,4 +83,20 @@ class Module extends \yii\base\Module{
      * @var string The sender's address
      */
     public $emailSender = null;
+
+public function init()
+    {
+        parent::init();
+        $this->registerTranslations();
+    }
+
+    public function registerTranslations()
+    {
+        Yii::$app->i18n->translations['builder'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => '@pceuropa/forms/messages',
+                    'fileMap' => [ 'builder' => 'builder.php', ]
+        ];
+    }
 }

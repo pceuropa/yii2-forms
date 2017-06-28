@@ -55,6 +55,7 @@ class FormModel extends \yii\db\ActiveRecord {
                    [['method'], 'string', 'max' => 4],
                    [['language'], 'string', 'max' => 11],
                    [['title',  'meta_title', 'url', 'id', 'class', 'action'], 'string', 'max' => 255],
+                   [['action'], 'default', 'value' => 'POST'],
                    [['url'], 'unique'],
                ];
     }

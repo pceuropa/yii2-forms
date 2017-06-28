@@ -81,8 +81,8 @@ var quill = new Quill('#textdescription', {
         .on('click',    '#add-to-form',         function(e){ addField(e) })
         .on('click',    '.add-item',            function() { addItem() }) 
         .on('change',   '.change-item',   		function(e){ updateItem(e)})   
-        .on('click',    '.clone-item-field',    function(e){ cloneItem(e); $('.input-item input').unbind() })    
-        .on('click',    '.delete-item-field',   function(e){ deleteItem(e); $('.input-item input').unbind() })
+        .on('click',    '.clone-item-field',    function(e){ cloneItem(); $('.input-item input').unbind() })    
+        .on('click',    '.delete-item-field',   function(e){ deleteItem(); $('.input-item input').unbind() })
 
         .on('click',    '.back',    			function(e){ back(e); $('.input-item input').unbind() }) 
         .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e) })
@@ -262,15 +262,19 @@ var quill = new Quill('#textdescription', {
 	        }
         );
     }
-
-    function cloneItem(e){
+    /**
+    * Clone item of field
+    * @param {Event} e - 
+    * @return {undefined}
+    */
+    function cloneItem(){
         var o = form.filter(field.body.items[key_item_change]);
         o.value = field.body.items.length + 1
         field.body.items.push(o)
         toggleButtonsUpdateItem();
     }
 
-    function deleteItem(e){
+    function deleteItem(){
         field.body.items.splice(key_item_change, 1);
         toggleButtonsUpdateItem();
     }
@@ -291,7 +295,8 @@ var quill = new Quill('#textdescription', {
     }
 		
     // Event (keyup|paste|change) set form data
-    options_form.find('span').find('input, textarea').on('keyup paste change', function(){
+    options_form.find('span').find('input, select, textarea').on('keyup paste change', function(){
+      console.log('test');
         form.model[this.id] = this.value = (this.id === 'url') ? h.replaceChars(this.value, '-') : this.value;
         form.render()
     });
