@@ -68,6 +68,7 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionUser() {
         $searchModel = new FormModelSearch();
+        $searchModel->author  = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('user', [
                                  'searchModel' => $searchModel,

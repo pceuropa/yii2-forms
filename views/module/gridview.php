@@ -1,12 +1,13 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
-$template =  ($buttonsEditOnIndex) ? '{update} {view} {delete} | {clone}':'{view}';
- 
-
+$template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}':'{view}';
 ?>
 
-<h1><?= Yii::t('builder', 'Forms') ?> <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?> </h1>
+<h1>
+    <?= Yii::t('builder', 'Forms') ?>
+    <?= Html::a('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['create'], ['class' => 'btn btn-success btn-sm']) ?>
+</h1>
 
 <?= Gridview::widget([
     'dataProvider' => $dataProvider,
