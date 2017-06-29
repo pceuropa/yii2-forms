@@ -149,7 +149,11 @@ class ModuleController extends \yii\web\Controller {
             $form->createTable();
             return $form->response();
         } else {
-            return $this->render('create');
+          return $this->render('create', [
+            'testMode' => $this->module->testMode,
+            'easyMode' => $this->module->easyMode
+         ] 
+          );
         }
     }
 
@@ -194,7 +198,8 @@ class ModuleController extends \yii\web\Controller {
 
             return ['success' => $form->success];
         } else {
-            return $this->render('update', ['id' => $id]);
+            return $this->render('update', ['id' => $id,             'easyMode' => $this->module->easyMode
+             ]);
         }
     }
 

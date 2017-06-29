@@ -9,8 +9,10 @@ $this->params['breadcrumbs'][] = Yii::t('builder', 'Form create');
 ?>
 
 <h1 class="header"><?= Yii::t('builder', 'Form Builder') ?></h1>
+
 <?= FormBuilder::widget([
-		'test_mode' => false,
-		'easy_mode' => false
+		'test_mode' => $testMode ?? false,
+		'easy_mode' => $easyMode ?? true
 ]);
+
 ?>

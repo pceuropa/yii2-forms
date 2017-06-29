@@ -32,20 +32,42 @@ factory.prototype = {
 		h.inheritAll(this, field_data)
 	},
 	
+    /**
+    * Set default values of input from field template
+    * @param {String} cl - class of inputs where this functions set default data
+    * @return {undefined}
+    */
+    setDefaultValuesInputs: function() {
+        var input;
+        if (!this.data) {
+            return;
+        }
+        for (var prop in this.data) {
+          input = document.querySelector("#"+ this.body.field+ " #"+ prop);
+          if (input.value == '') {
+            input.value = this.data[prop];
+          }
+          console.log(input);
+        }
+    },
+
 	setDataFieldFrom: function (cl) {
 		var inputs = document.getElementById(this.body.field).getElementsByClassName(cl),
 			input;
+
 		for (var i = 0; i < inputs.length; i++) {
 		
-				input = inputs[i]
-				if(input.type === 'checkbox'){
-					if ( input.checked === true ) this.body[input.id] = input.checked;
-				} else {
-					if( h.is(input.value) ) this.body[input.id] = input.value;
-						
-				}
-			}
+            input = inputs[i]
+
+            if(input.type === 'checkbox'){
+                if ( input.checked === true ) this.body[input.id] = input.checked;
+            } else {
+                if( h.is(input.value) ) this.body[input.id] = input.value;
+                    
+            }
+		}
 	},
+    
 
     /**
     * Set data items. Get data from class {cl} inputs
@@ -319,6 +341,7 @@ factory.prototype = {
 }
 
 var input = {
+    data: {"class": "form-control"}, 
     html: function() {
     var field = this.createField("input", ["type", "name", "placeholder", "require", "value", "id", "class"]),
             div = this.div();
@@ -331,6 +354,7 @@ var input = {
 }
 
 var textarea = {
+    data: {"class": "form-control"}, 
 	html: function() {
 	    
 		var field = this.createField("textarea", ["name", "placeholder", "require", "id", "class", "rows" ]),
@@ -345,6 +369,7 @@ var textarea = {
 }
 
 var radio = {
+    data: {"class": "form-control"}, 
 	html: function() {
         var div = this.div();
             this.label(div);
@@ -355,6 +380,7 @@ var radio = {
 }}
 
 var checkbox = {
+    data: {"class": "form-control"}, 
 	html: function() {
         var div = this.div();
 
@@ -366,6 +392,7 @@ var checkbox = {
 }}
 
 var select = {
+    data: {"class": "form-control"}, 
     html: function() { 
         var div = this.div();
             this.label(div);
@@ -410,14 +437,13 @@ var description = {
                     div.classList.add(this.body.width);
                 }
                 div.innerHTML = this.is(this.body.textdescription);
-                console.log(div);
 			return div;
 		}
 	}
 
 var submit = {
 
-		html: function() {
+	html: function() {
 		var submit = this.createField("button", ["id", {"class": "btn"}]),
             div = this.div();
 

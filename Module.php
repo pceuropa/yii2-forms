@@ -88,6 +88,15 @@ class Module extends \yii\base\Module{
      */
     public $buttonsEditOnIndex = false;
     
+    /**
+     * @var boolean if true, only necesaire options
+     */
+    public $easyMode = true;
+
+    /**
+     * @var boolean if true, example form
+     */
+    public $testMode = false;
     
     public function init()
     {

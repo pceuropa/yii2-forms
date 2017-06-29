@@ -2,7 +2,7 @@
 var MyFORM =  MyFORM || {};
 MyFORM.test = function(form){
 
-var version = '2.0.0',
+var version = 'test: 2.0.0',
 	object_form = {
     "title": "Title-test",
     "method": "get",
@@ -26,7 +26,7 @@ var version = '2.0.0',
                 "require": true,
                 "value": "value1",
                 "id": "id",
-                "class": "class"
+                "class": "form-control"
             }
         ],
         [
@@ -38,7 +38,7 @@ var version = '2.0.0',
                 "width": "col-md-6",
                 "require": true,
                 "id": "id",
-                "class": "class",
+                "class": "form-control",
                 "items": [
                     {
                         "text": "radio1",
@@ -61,7 +61,7 @@ var version = '2.0.0',
                 "name": "checkbox4",
                 "width": "col-md-6",
                 "id": "id",
-                "class": "class",
+                "class": "form-control",
                 "items": [
                     {
                         "text": "checkbox1",
@@ -86,7 +86,7 @@ var version = '2.0.0',
                 "width": "col-md-6",
                 "require": true,
                 "id": "",
-                "class": "",
+                "class": "form-control",
                 "items": [
                     {
                         "text": "select1",
@@ -134,9 +134,8 @@ var version = '2.0.0',
             },
             {
                 "field": "description",
-                "description": "<h1> Lorem Ipsum </h1>jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. <br /> Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym.",
+                "textdescription": "<h1> Lorem Ipsum </h1>jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. <br /> Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym.",
                 "width": "col-md-12",
-                "class": "class",
                 "id": "id"
             }
         ],
@@ -144,20 +143,22 @@ var version = '2.0.0',
             {
                 "field": "input",
                 "type": "text",
-                "width": "col-md-6"
+                "width": "col-md-6",
+                "class": "form-control"
             }
         ],
         [
             {
                 "field": "submit",
                 "label": "Submit",
-                "width": "col-md-6"
+                "width": "col-md-6",
+                "backgroundcolor": "btn-primary"
             }
         ]
        
     ]
 }
-
+console.log(version);
 if(form){
 	form.generate(object_form);
 	form.deleteField(0, 1)

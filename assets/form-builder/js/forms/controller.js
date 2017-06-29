@@ -42,9 +42,10 @@ var quill = new Quill('#textdescription', {
   });
 
 
+
     /**
-    * List events
-    * Actions:
+    * Events - triger by click on form html elements
+    * @return {undefined}
     */
     preview_form
         .on('click',	'.edit', 	 function(e){ updateField(e)  })
@@ -59,8 +60,7 @@ var quill = new Quill('#textdescription', {
     });
     
    /**
-    * Cahgne view mode (text, html, json, Yii2)
-    * @param {stringl} 
+    * Change view mode (text, html, json, Yii2-beta)
     * @return {undefined}
    */
     $('#view-mode').change(function (){
@@ -108,6 +108,7 @@ var quill = new Quill('#textdescription', {
 		field_selector.find('.input-item').removeClass( "update" );
 		
 		field = new MyFORM.field.factory({field: this.value});
+        field.setDefaultValuesInputs("data-source");
 		field.setDataFieldFrom("data-source")  // class
 		field.render();
 	});

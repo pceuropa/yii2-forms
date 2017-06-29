@@ -343,7 +343,11 @@ MyFORM = (function() {
         */
         generate: function(o) {
             var result = false;
-            o.body = JSON.parse(o.body);
+
+            if (h.isString(o.body)) {
+                o.body = JSON.parse(o.body);
+            }
+
             h.inheritAll(this.model, o);
             this.setValueInputOptions();
             this.fields_with_data = h.getAllProperty('name', this.model.body);
