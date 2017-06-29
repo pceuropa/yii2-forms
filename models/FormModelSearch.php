@@ -34,7 +34,6 @@ class FormModelSearch extends FormModel {
 */
     public function search($params) {
         $query = FormModel::find();
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([ 'query' => $query, ]);
@@ -48,6 +47,7 @@ class FormModelSearch extends FormModel {
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'author' => $this->author,
             'form_id' => $this->form_id,
             'date_start' => $this->date_start,
             'date_end' => $this->date_end,
@@ -55,8 +55,7 @@ class FormModelSearch extends FormModel {
             'answer' => $this->answer,
         ]);
 
-        $query->andFilterWhere(['like', 'author', $this->author])
-            ->andFilterWhere(['like', 'title', $this->title])
+        $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'body', $this->body])
             ->andFilterWhere(['like', 'meta_title', $this->meta_title])
             ->andFilterWhere(['like', 'url', $this->url]);

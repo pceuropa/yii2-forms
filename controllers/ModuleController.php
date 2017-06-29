@@ -23,16 +23,13 @@ use yii\validators\DateValidator;
 
 /**
  * Example controller help to use all functions of formBuilder
- *
  * FormBuilder controller of module.
  * @author Rafal Marguzewicz <info@pceuropa.net>
  * @version 1.4.1
  * @license MIT
- *
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
  * https://github.com/pceuropa/yii2-forum/issues
- *
  */
 class ModuleController extends \yii\web\Controller {
 
@@ -40,8 +37,6 @@ class ModuleController extends \yii\web\Controller {
 
     /**
      * This method is invoked before any actions
-     *
-     * @param string $arg
      * @return void
      */
     public function behaviors() {
@@ -71,7 +66,10 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionUser() {
         $searchModel = new FormModelSearch();
-        $searchModel->author    = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
+
+        if (Yii::$app->user->can('updateOnwForm')) {
+            $searchModel->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
+        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('user', [
                                  'searchModel' => $searchModel,
@@ -241,24 +239,3 @@ class ModuleController extends \yii\web\Controller {
         } while ($count > 0);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
