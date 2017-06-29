@@ -58,7 +58,9 @@ class ModuleController extends \yii\web\Controller {
     public function actionIndex() {
         $searchModel = new FormModelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
+                                 'buttonsEditOnIndex' => $this->module->buttonsEditOnIndex,
                                  'searchModel' => $searchModel,
                                  'dataProvider' => $dataProvider,
                              ]);
@@ -66,10 +68,6 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionUser() {
         $searchModel = new FormModelSearch();
-
-        if (Yii::$app->user->can('updateOnwForm')) {
-            $searchModel->author = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
-        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('user', [
                                  'searchModel' => $searchModel,

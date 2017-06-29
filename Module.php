@@ -61,7 +61,6 @@ class Module extends \yii\base\Module{
      *                   ]
      *               ];
      */
-    
     public $rules = [
                        [
                            'allow' => true,
@@ -84,7 +83,13 @@ class Module extends \yii\base\Module{
      */
     public $emailSender = null;
 
-public function init()
+    /**
+     * @var Boolean If true, you can see action buttons on index action
+     */
+    public $buttonsEditOnIndex = false;
+    
+    
+    public function init()
     {
         parent::init();
         $this->registerTranslations();
