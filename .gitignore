@@ -1,6 +1,6 @@
 # phpstorm project files
 .idea
-tags
+/tags
 # netbeans project files
 nbproject
 
