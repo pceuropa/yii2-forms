@@ -133,6 +133,7 @@ firstValue: function (o) {
      */
 getAllProperty: function (prop, o) {
         var help = this, result = [];
+        console.log(o);
         if(o.length == 0) return result;
 
         help.each(o, function (i, value) {

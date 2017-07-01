@@ -48,6 +48,7 @@ return [
     'Address URL' => 'Adres URL',
     
     'Preview field' => 'Podgląd pola',  
+    'Form completed' => 'Formularz wypełniony poprawnie',  
     
 // manual   
     'Manual' => 'Podręcznik',  

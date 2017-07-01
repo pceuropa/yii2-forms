@@ -153,27 +153,27 @@ $this->registerCss("
 	}
 ");
 
-if ($easy_mode){
-	$this->registerCss(".expert {display:none}"); // hide many options
-}
+    if ($easy_mode){
+        $this->registerCss(".expert {display:none}"); // hide many options
+    }
 
-if ($generator_mode){
-	$this->registerCss(".generator_mode {display:none}"); // hide many options
-}
-	$this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
+    if ($generator_mode){
+        $this->registerCss(".generator_mode {display:none}"); // hide many options
+    }
+        $this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
 
-if ($email_response){
-  // add module Email send after submit form (work if in forms is field with name email)
-  // form.modules are initalize each time when form is render
-	$this->registerJs("form.modules.response = MyFORM.response(form)", 4);
-}
-$this->registerJs("
-form.init(".Json::encode($jsConfig).");
-form.controller();
-", 4);
+    if ($email_response){
+      // add module Email send after submit form (work if in forms is field with name email)
+      // form.modules are initalize each time when form is render
+        $this->registerJs("console.log(form);form.modules.response = MyFORM.response(form)", 4);
+    }
+    $this->registerJs("
+        form.init(".Json::encode($jsConfig).");
+        form.controller();
+    ", 4);
 
-if ($test_mode){
-	$this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
-}
-	$this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
+    if ($test_mode){
+        $this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
+    }
+        $this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
 ?>		

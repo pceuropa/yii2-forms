@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = Yii::t('builder', 'Form create');
 
 <?= FormBuilder::widget([
 		'test_mode' => $testMode ?? false,
-		'easy_mode' => $easyMode ?? true
+		'easy_mode' => $easyMode ?? true,
+		'email_response' => $emailResponse ?? false
 ]);
 
 ?>

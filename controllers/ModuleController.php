@@ -151,7 +151,8 @@ class ModuleController extends \yii\web\Controller {
         } else {
           return $this->render('create', [
             'testMode' => $this->module->testMode,
-            'easyMode' => $this->module->easyMode
+            'easyMode' => $this->module->easyMode,
+            'emailResponse' => $this->module->emailResponse
          ] 
           );
         }

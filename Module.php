@@ -97,6 +97,11 @@ class Module extends \yii\base\Module{
      * @var boolean if true, example form
      */
     public $testMode = false;
+
+    /**
+     * @var boolean if true module response by email is on
+     */
+    public $emailResponse = false;
     
     public function init()
     {
