@@ -27,7 +27,7 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
             'url' => $this->string(255)->notNull(),
             'response' => $this->text()->comment('by email'),
             'answer' => $this->integer(11)->notNull()->defaultValue('0'),
-            'action' => $this->string(255)->notNull(),
+            'action' => $this->string(255),
             'method' => $this->string(4)->defaultValue('post'),
             'language' => $this->string(11)->defaultValue('en'),
             'class' => $this->string(255)->notNull()->comment('html'),
