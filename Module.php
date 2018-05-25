@@ -37,7 +37,7 @@ class Module extends \yii\base\Module{
     /**
      * @var string The database table storing the forms
      */
-    public $formTable = '{{%forms}';
+    public $formTable = '{{%forms}}';
 
     /**
      * @var string The database table storing the data from forms
@@ -97,11 +97,6 @@ class Module extends \yii\base\Module{
      * @var boolean if true, example form
      */
     public $testMode = false;
-
-    /**
-     * @var boolean if true module response by email is on
-     */
-    public $emailResponse = false;
     
     public function init()
     {

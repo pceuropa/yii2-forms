@@ -18,6 +18,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
     public $baseUrl = '@web';
     public $css = [
     	'css/forms/quill.snow.css',
+    	'css/forms/form-builder.css',
     ];
     public $js = [
         'js/forms/Sortable.min.js',

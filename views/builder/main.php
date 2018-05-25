@@ -61,119 +61,27 @@ use yii\helpers\Json;
 
 <?php
 
-$this->registerCss("
-	#MyForm h1.header {color: #C8EBFB}
-	.options, .update-buttons, #update-tab, #delete-tab, #select-field, #preview-field, #name-field-empty {display:none}
+if ($easy_mode){
+	$this->registerCss(".expert {display:none}"); // hide many options
+}
 
-	#preview-form {min-height: 50px; border:dashed 1px #C8EBFB; border-top: solid 3px #C8EBFB;}
-	#preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
-	
-	#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
-    #preview-form .row .update {
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -khtml-border-radius: 5px;
-        border-radius: 5px;
-        behavior: url(border-radius.htc);
-    }
+if ($generator_mode){
+	$this->registerCss(".generator_mode {display:none}"); // hide many options
+}
+	$this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
 
-	#end-form {height: 25px;background-color: #C8EBFB; color:#6CBDE3; margin:0 0 50px 0; }
-	#text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
-	
-	asside {height: 100%;}
-	.options { border:solid 1px #ccc; padding:5px;}
-	#sidebar > ul { margin:0 0 0 5px;  }
-	#sidebar > ul li { color:#3894B0; box-shadow: none; border: solid 1px #ccc; border-bottom: none; padding: 4px 10px; margin-bottom: -3px;}
-	#sidebar > ul li:hover { background-color:#eee}
-	#sidebar > ul li#field-tab.active-tab  {display:none}
-	#sidebar > ul li.active-tab { 
-		background-color: #fff; color:#244BAC; padding: 6px 25px; margin-bottom:-1px; z-index:2; font-weight:bold; border-color: #ccc; display:inline-block; border-bottom: none;
-	}
-	
-    #sidebar > ul li#update-tab {  background-color:#e5f6e5}
-    #sidebar > ul li#delete-tab {  background-color:#FFF4F4}
-	#sidebar.update #add-to-form{display:none}
-	#sidebar .well {
-		padding: 5px;
-		margin-bottom: 10px;
-		background-color: #ECF9FF;
-		border: 1px solid #e3e3e3;
-		margin-top: 5px;
-	}
+if ($email_response){
+  // add module Email send after submit form (work if in forms is field with name email)
+  // form.modules are initalize each time when form is render
+	$this->registerJs("form.modules.response = MyFORM.response(form)", 4);
+}
+$this->registerJs("
+  form.init(".Json::encode($jsConfig).");
+  form.controller();
+", 4);
 
-	#sidebar.update, #preview-form .row .update-field {
-        border: solid 1px #B5DAB5;
-        background-color: #e5f6e5;
-    }
-
-	#delete, #preview-form .row .delete-field {
-         border: solid 1px #F7B68F;
-         background-color: #FFF4F4; 
-    }
-
-	.options.active-option {display: block}
-	#select-field {
-		font-weight: bold;  width: 130px; margin: -10px 40px 0px 0 ;  padding-left: 10px;  border-bottom:none; height: 40px; box-shadow: none;
-	}
-	#select-field .show {display:inline-block}
-	.change-item {width: 145px}
-	
-	@media screen and (min-width: 1024px){
-	  #sidebar { position: fixed;}
-	  #preview-field {margin-bottom:200px}
-	}
-	
-	.name-error {color: red}
-	.empty {border: solid 1px #D42323 }
-	.green {border: solid 1px #399D6E }
-
-
-	.input-item.update div.create-buttons {display:none}
-	.input-item.update div.update-buttons {display:block}
-	
-	#MyForm .ghost { opacity: 0.2;outline: 0;background: #C8EBFB;}
-	#MyForm .edit-field span { color:#A6E0FB; margin-left: 7px;}
-	
-	#MyForm .ql-snow .ql-tooltip {z-index: 1000;}
-	#MyForm .ql-align-center {text-align: center}
-    #MyForm .ql-align-right { text-align:right }
-	#MyForm .border {border:solid 1cx #ccc}
-	
-	.glyphicon-pencil { cursor: e-resize;}
-	.glyphicon-duplicate { cursor: pointer;}
-	.glyphicon-trash { cursor: no-drop;}
-	
-	#MyForm .btn-danger {margin-left:20px}
-	#MyForm #save-form {margin-top:5px}
-	#MyForm .manual {
-		background-color: #FAFAFA;
-		color: #ADADAD;
-		padding: 10px;
-		margin:0;
-	}
-");
-
-    if ($easy_mode){
-        $this->registerCss(".expert {display:none}"); // hide many options
-    }
-
-    if ($generator_mode){
-        $this->registerCss(".generator_mode {display:none}"); // hide many options
-    }
-        $this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
-
-    if ($email_response){
-      // add module Email send after submit form (work if in forms is field with name email)
-      // form.modules are initalize each time when form is render
-        $this->registerJs("console.log(form);form.modules.response = MyFORM.response(form)", 4);
-    }
-    $this->registerJs("
-        form.init(".Json::encode($jsConfig).");
-        form.controller();
-    ", 4);
-
-    if ($test_mode){
-        $this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
-    }
-        $this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
+if ($test_mode){
+	$this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
+}
+	$this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
 ?>		

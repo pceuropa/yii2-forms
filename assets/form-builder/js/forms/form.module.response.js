@@ -20,7 +20,7 @@ MyFORM.response = function (form, field){
 	$("#widget-form-options").append(html);
 
 	return	function(){
-		fields_with_data = h.getAllProperty('name', form.model.body);
+		fields_with_data = h.getAllProperty('name', form.body);
 		
 		for (var i = 0; i < fields_with_data.length; i++) {
 		    
