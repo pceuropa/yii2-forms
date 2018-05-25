@@ -10,7 +10,6 @@ namespace pceuropa\forms;
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
  * https://github.com/pceuropa/yii2-forum/issues
- *
  */
 
 class FormBuilderAsset extends \yii\web\AssetBundle {
