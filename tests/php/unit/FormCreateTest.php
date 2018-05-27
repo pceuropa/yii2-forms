@@ -34,7 +34,7 @@ class FormCreateTest extends Unit {
     /**
      * @var string The database table storing the forms
      */
-    public $formTable = '{{%forms}';
+    public $formTable = '{{%forms}}';
 
     /**
      * @var string The database table storing the data from forms
@@ -61,14 +61,14 @@ class FormCreateTest extends Unit {
     /**
      * @var array Error not unique url
      */
-    public $notUniqueUrl = ['url' => 'Url "url" has already been taken.'];
+    public $notUniqueUrl = ['url' => 'URL "url" has already been taken.'];
 
     protected function _before() {
         $this->form = new FormBuilder([
-                                          'formTable' => $this->formTable,
-                                          'formDataTable' => $this->formDataTable,
-                                          'formData' => $this->postData
-                                      ]);
+                'formTable' => $this->formTable,
+                'formDataTable' => $this->formDataTable,
+                'formData' => $this->postData
+         ]);
     }
 
     public function testInit() {
@@ -82,11 +82,11 @@ class FormCreateTest extends Unit {
     public function testTableSchema() {
         $schema = $this->form->tableSchema($this->bodyForm);
         $this->assertEquals($schema, [
-                                'id' => 'pk',
-                                'name' => 'string',
-                                'pass' => 'string',
-                                'remember' => 'string'
-                            ]);
+                'id' => 'pk',
+                'name' => 'string',
+                'pass' => 'string',
+                'remember' => 'string'
+         ]);
     }
 
     public function testNotUniqueUrl() {

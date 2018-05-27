@@ -10,7 +10,7 @@ use yii\helpers\Json;
 		</div>
 		
 			<div id="preview-form">
-				<div class="manual" ><?= $this->render('_manual'); ?></div>
+				<div class="manual" ></div>
 			</div>
 			<p id="end-form" class="text-uppercase text-center">-- <?= Yii::t('builder', 'Form end') ?> --</p>
 			
@@ -70,9 +70,9 @@ if ($generator_mode){
 }
 	$this->registerJs("var form = new MyFORM.Form(); ", 4); // init form.js
 
-if ($email_response){
-  // add module Email send after submit form (work if in forms is field with name email)
-  // form.modules are initalize each time when form is render
+if ($send_email){
+  // add module Email send after submit form (work if in forms is field with attribute name 'email')
+  // form.modules are initalized each time the form is rendered
 	$this->registerJs("form.modules.response = MyFORM.response(form)", 4);
 }
 $this->registerJs("
@@ -83,5 +83,8 @@ $this->registerJs("
 if ($test_mode){
 	$this->registerJs(" MyFORM.test(form);", 4); // init test form on begining
 }
+
+if (!$easy_mode){
 	$this->registerJs(" MyFORM.examples(form);", 4);	// add module with examples of formsj
+}
 ?>		

@@ -247,7 +247,7 @@ MyFORM = (function() {
                         if (r.success === true) {
                             console.log('correct add');
                         } else {
-                            console.log('Post: somting wrong: ' + r.success);
+                            console.log('POST method: somting wrong: ' + r.success);
                         }
                     });
             }

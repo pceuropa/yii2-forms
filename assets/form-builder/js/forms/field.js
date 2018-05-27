@@ -114,7 +114,7 @@ factory.prototype = {
 	render: function(){  // render field
 		var preview  = $("#preview-field"),
             field = this,
-            html = field.html().innerHTML;
+            html = field.html().outerHTML;
 			
 			if(this.view){
 				preview.html('(<a>html</a>) <br/><br/>' + html);
@@ -343,11 +343,9 @@ factory.prototype = {
 var input = {
     data: {"class": "form-control"}, 
     html: function() {
-    var field = this.createField("input", ["type", "name", "placeholder", "require", "value", "id", "class"]),
-            div = this.div();
-
+    var div = this.div();
             this.label(div);
-            div.appendChild(field);
+            div.appendChild(this.createField("input", ["type", "name", "placeholder", "require", "value", "id", "class"]));
             this.helpBlock(div);
 		return  div;
 	}

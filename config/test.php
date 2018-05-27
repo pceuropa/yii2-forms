@@ -1,6 +1,5 @@
 <?php
 $params = require(__DIR__ . '/params.php');
-$dbParams = require(__DIR__ . '/test_db.php');
 
 /**
  * Application configuration shared by all test types
@@ -12,7 +11,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=pceuropa_net',
+            'dsn' => 'mysql:host=localhost;dbname=yii2_basic_tests',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',

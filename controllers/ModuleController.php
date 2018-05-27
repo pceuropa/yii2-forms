@@ -33,7 +33,7 @@ use yii\validators\DateValidator;
  */
 class ModuleController extends \yii\web\Controller {
 
-    protected $list_action = ['create', 'update', 'delete', 'user'];
+    protected $list_action = ['create', 'update', 'delete', 'deleteitem', 'user'];
 
     /**
      * This method is invoked before any actions
@@ -43,7 +43,7 @@ class ModuleController extends \yii\web\Controller {
         return [
                    'access' => [
                        'class' => \yii\filters\AccessControl::className(),
-                       'only' => ['user', 'create', 'update', 'delete', 'clone'],
+                       'only' => ['user', 'create', 'update', 'delete', 'deleteitem', 'clone'],
                        'rules' => $this->module->rules
                    ],
                    'verbs' => [
@@ -60,20 +60,21 @@ class ModuleController extends \yii\web\Controller {
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                                 'buttonsEditOnIndex' => $this->module->buttonsEditOnIndex,
-                                 'searchModel' => $searchModel,
-                                 'dataProvider' => $dataProvider,
-                             ]);
+                    'buttonsEditOnIndex' => $this->module->buttonsEditOnIndex,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionUser() {
         $searchModel = new FormModelSearch();
-        $searchModel->author  = (isset(Yii::$app->user->identity->id)) ? Yii::$app->user->identity->id : null;
+        $searchModel->author  = Yii::$app->user->identity->id ?? null;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('user', [
-                                 'searchModel' => $searchModel,
-                                 'dataProvider' => $dataProvider,
-                             ]);
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                ]);
     }
 
 
@@ -115,8 +116,6 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionList(int $id) {
         $form = FormModel::findModel($id);
-        $form_body = Json::decode($form->body);
-        $onlyDataFields = FormBase::onlyCorrectDataFields($form_body);
 
         $dataProvider = new ActiveDataProvider([
                           'query' => (new Query)->from( $this->module->formDataTable.$id ),
@@ -126,7 +125,7 @@ class ModuleController extends \yii\web\Controller {
         return $this->render('list', [
                           'form' => $form,
                           'dataProvider' => $dataProvider,
-                          'only_data_fields' => ArrayHelper::getColumn($onlyDataFields, 'name')
+                            'only_data_fields' => FormBase::gridViewItemsForm(Json::decode($form->body))
                         ]);
     }
 
@@ -152,7 +151,8 @@ class ModuleController extends \yii\web\Controller {
         } else {
           return $this->render('create', [
             'testMode' => $this->module->testMode,
-            'easyMode' => $this->module->easyMode
+            'easyMode' => $this->module->easyMode,
+            'sendEmail' => $this->module->sendEmail
          ] 
           );
         }
@@ -166,10 +166,10 @@ class ModuleController extends \yii\web\Controller {
      */
     public function actionUpdate(int $id) {
         $form = new FormBuilder([
-                                    'db' => $this->module->db,
-                                    'formTable' => $this->module->formTable,
-                                    'formDataTable' => $this->module->formDataTable,
-                                ]);
+                    'db' => $this->module->db,
+                    'formTable' => $this->module->formTable,
+                    'formDataTable' => $this->module->formDataTable,
+                ]);
 
         $form->findModel($id);
         $r = Yii::$app->request;
@@ -230,6 +230,20 @@ class ModuleController extends \yii\web\Controller {
         $form = FormModel::findModel($id);
         $form->delete();
         return $this->redirect(['user']);
+    }
+
+    public function actionDeleteitem(int $form, int $id ) {
+        
+        $tablename = $this->module->formDataTable . $form;
+
+        $command = Yii::$app->db->createCommand("DELETE FROM {$tablename} WHERE id=:id")
+              ->bindValues([':id' => $id])
+              ->execute();
+
+        if ($command) {
+            return $this->redirect(['list' , 'id' => $form]);
+        } 
+        
     }
 
     /**
