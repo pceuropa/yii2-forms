@@ -23,7 +23,7 @@
 	],
 	"require": {
         "php": ">=7.0.0",
-		"yiisoft/yii2": "~2.0.0",
+		"yiisoft/yii2": "^2.0",
 		"pceuropa/yii2-email": "*"
 	},
 	"autoload": {
