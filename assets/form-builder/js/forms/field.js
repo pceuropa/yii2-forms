@@ -47,7 +47,6 @@ factory.prototype = {
           if (input.value == '') {
             input.value = this.data[prop];
           }
-          console.log(input);
         }
     },
 

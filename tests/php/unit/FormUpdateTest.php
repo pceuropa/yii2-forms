@@ -30,7 +30,7 @@ class FormUpdateTest extends Unit {
         $this->assertEquals( $this->formBuilder->db, 'db');
         $this->assertFalse( $this->formBuilder->test_mode);
         $this->assertTrue( $this->formBuilder->easy_mode);
-        $this->assertFalse( $this->formBuilder->email_response);
+        $this->assertFalse( $this->formBuilder->send_email);
     }
 
     public function testTableSchema() {

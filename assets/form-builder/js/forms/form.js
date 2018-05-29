@@ -259,12 +259,16 @@ MyFORM = (function() {
         * @returm {Boolean}
         */
         add: function(o) {
+          console.log(o);
+
             try {
                 if (o.hasOwnProperty('field')) {
                     var field = this.filter(o);
+                  console.log(field);
 
                     this.model.body.push([field]);
                     this.fields_with_data.push(field.name);
+                  console.log(o);
                     this.post(o);
                     this.render();
 
@@ -274,7 +278,7 @@ MyFORM = (function() {
                 }
             } catch (err) {
                 console.log(err);
-                alert('Error add field to form: uncorrect  data')
+                alert('Error add field to form: uncorrect data')
             }
         },
 
@@ -368,7 +372,7 @@ MyFORM = (function() {
         */
         executeModules: function() {
             for (var prop in this.modules) {
-                    this.modules[prop]();
+                    this.modules[prop](this);
             }
         },
 

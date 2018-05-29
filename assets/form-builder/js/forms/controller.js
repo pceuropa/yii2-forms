@@ -112,6 +112,7 @@ var quill = new Quill('#textdescription', {
 		field.setDataFieldFrom("data-source")  // class
 		field.render();
 	});
+
     /**
     * Add field to form
     * @param {event} e - event data object

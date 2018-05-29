@@ -73,7 +73,7 @@ if ($generator_mode){
 if ($send_email){
   // add module Email send after submit form (work if in forms is field with attribute name 'email')
   // form.modules are initalized each time the form is rendered
-	$this->registerJs("form.modules.response = MyFORM.response(form)", 4);
+	$this->registerJs("form.modules.response = MyFORM.response()", 4);
 }
 $this->registerJs("
   form.init(".Json::encode($jsConfig).");
