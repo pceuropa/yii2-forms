@@ -1,0 +1,25 @@
+{
+  "name": "yii2-forms-tests",
+  "version": "1.0.0",
+  "description": "Depencies necessary to run tests",
+  "main": "karma.conf.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "jasmine-core": "^3.1.0",
+    "karma": "^2.0.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-phantomjs-launcher": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start"
+  },
+  "keywords": [
+    "tests"
+  ],
+  "author": "Rafal Marguzewicz",
+  "license": "MIT"
+}
