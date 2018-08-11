@@ -458,8 +458,15 @@ MyFORM = (function() {
             var
               edit = h.createElement("span", [{"class": "glyphicon edit glyphicon-pencil"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
               clone = h.createElement("span", [{"class": "glyphicon clone glyphicon-duplicate"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
-              del= h.createElement("span", [{"class": "glyphicon delete glyphicon-trash"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
+              del = h.createElement("span", [
+                {"class": "glyphicon delete glyphicon-trash"},
+                {"data-row": row}, {"data-index": index},
+                {"aria-hidden": "true"},
+              ]),
+
+
               div = h.createElement("div", [{"class": "edit-field pull-right"}]);
+
             div.appendChild(edit);
             div.appendChild(clone);
             div.appendChild(del);

@@ -92,18 +92,21 @@ class ModuleController extends \yii\web\Controller {
 
             if ($query->execute()) {
                 $form->updateCounters(['answer' => 1 ]);
+
                 Yii::$app->session->setFlash('success', Yii::t('builder', 'Form completed'));
 
                 if ($this->module->sendEmail && is_string($this->module->emailSender) && isset($data['email']) && isset($form['response']) ) {
+
                     SendEmail::widget([
-                                          'from' => $this->module->emailSender,
-                                          'to' => $data['email'],
-                                          'subject' => 'subject',
-                                          'textBody' => $form['response'],
-                                      ]);
+                      'from' => $this->module->emailSender,
+                      'to' => $data['email'],
+                      'subject' => 'subject',
+                      'textBody' => $form['response'],
+                    ]);
                 }
 
 
+                Yii::$app->session->setFlash('success', Yii::t('app', 'An confirmation email was sent'));
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'An confirmation email was not sent'));
             }

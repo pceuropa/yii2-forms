@@ -1,9 +1,5 @@
 <span class='input-field'>
-	<?php
-		require('field/_description.php');
-	?>
-	<br/>
-	
+	<?php require('field/_description.php'); ?>
 	<?php
 		require('field/_width.php');
 		require('field/_class.php');

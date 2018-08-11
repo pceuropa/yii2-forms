@@ -9,11 +9,12 @@
 var MyFORM = MyFORM || {};
 MyFORM.response = function (){
 
-	var html = '<div class="row form-group-sm"> ' +
-		'<label class="col-sm-3 control-label">Text respond</label> ' +
-		'<div class="col-sm-9"> ' +
-		  '<textarea id="response" class="form-control input-sm" rows="5" disabled>Respond work if in form is field with name email</textarea> ' +
-		'</div></div>';
+	var html = 
+        '<div class="form-group-sm">' +
+        '<div class="input-group">' +
+        '<div class="input-group-addon">Email<br/>response</div>' +
+		'<textarea id="response" class="form-control" rows="5" disabled>Respond work if in form is field with name email</textarea> ' +
+        '</div></div>';
 	
 	$("#widget-form-options").append(html);
 

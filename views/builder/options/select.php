@@ -9,20 +9,19 @@
 	?>
 </span>
 
-<div class="input-item well">
+<div class="input-item">
 	<b><?= Yii::t('builder', 'Items') ?></b>
-	
 	<?php
 		require('item/_text.php');
 		require('item/_value.php');
 		require('item/_selected.php');
     ?>
+
     <div class="create-buttons row">
         <div class="col-md-5">
             <?php require('button/_add-item.php'); ?>
         </div>
-        <div class="select-item-to-change col-md-7">
-        </div>
+        <div class="select-item-to-change col-md-7"> </div>
     </div>
 
     <div class="update-buttons">
@@ -34,5 +33,4 @@
     </div>
 
 </div>
-
 <?php require('button/_add-to-form.php'); ?>

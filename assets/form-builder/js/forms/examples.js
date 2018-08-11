@@ -613,15 +613,14 @@ temp = [
 
 var div1 = document.createElement("div"),
 
-	innerHTML = '<label class="col-sm-3 control-label">Examples</label>' +
-				'<div class="col-sm-6">' +
+    innerHTML = '<div class="input-group">' +
+                '<div class="input-group-addon">Examples</div>' +
 				'<select id="examples-form" class="form-control"><option>-</option> </select>'+
-				'</div><div id="section-confirm"></div>';
-	
-	
+				'<div id="section-confirm"></div>' +
+                '</div>';
 				
 	(function(){
-			div1.setAttribute('class', 'row form-group-sm');
+			div1.setAttribute('class', 'form-group-sm');
 			div1.innerHTML = innerHTML;
 		
 			$(div1).find(id_selector).append( function() {
@@ -657,20 +656,3 @@ var div1 = document.createElement("div"),
 	console.log('template: ' + version);
 	return temp;
 };
-		
-		
-		/*
-		
-<div class="form-group">
-	<label class="col-sm-4 control-label">Template</label>
-	<div class="col-sm-8">
-		<select id="template" class="form-control input-sm">
-			<option value="1">template 1</option>
-		</select>
-	</div>
-</div>
-	*/	
-		
-	
-
-

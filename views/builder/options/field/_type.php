@@ -1,7 +1,7 @@
-<div class="row form-group-sm">
-	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Type') ?></label>
-	<div class="col-sm-6">
-		<select id="type" class="form-control input-sm data-source">
+<div class="form-group-sm">
+    <div class="input-group">
+      <div class="input-group-addon"><?= Yii::t('builder', 'Type') ?></div>
+		<select id="type" class="form-control data-source">
 			<option value="text"><?= Yii::t('builder', 'text') ?></option>
 			<option value="email"><?= Yii::t('builder', 'email') ?></option>
 			<option value="password"><?= Yii::t('builder', 'password') ?></option>
@@ -12,5 +12,5 @@
 			<option value="color"><?= Yii::t('builder', 'color') ?></option>
 			<option value="range"><?= Yii::t('builder', 'range') ?></option>
 		</select>
-	</div>
+    </div>
 </div>

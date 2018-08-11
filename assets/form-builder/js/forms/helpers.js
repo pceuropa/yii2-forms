@@ -38,6 +38,25 @@ capitalizeFirstLetter: function (s) {
     },
 
     /**
+     * Get element by query
+     * @param {String} query
+     * @return {htmlelement}
+     */
+query: function(query){
+  return document.querySelector(query);
+},
+
+    /**
+     * Get element by id
+     * @param {String} id
+     * @return {htmlelement}
+     */
+id: function(id){
+    return document.getElementById(id);
+},
+
+
+    /**
      * Removes empty viariables
      * @param {Object} object
      * @return {Object} return object without empty variables
@@ -236,6 +255,17 @@ subString: function(str, len) {
         return str
     },
 
+
+/**
+* Insert element after referenced Node
+* @param {HTMLElement} newNode 
+* @param {HTMLElement} referenceNode
+* @returm {HTMLElement}
+*/
+insertAfter: function(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+},
+
 /**
 * Set attribute with chech is() 
 * @param {String} attribute - name of attribute which will be add
@@ -278,9 +308,12 @@ setAttributes: function(field, attributes) {
     * @param {Array} listAttributes - list of attributes
     * @returm {HtmlElement}
     */
-createElement: function(param, listAttributes) {
+createElement: function(param, listAttributes, inner=0) {
         var field = document.createElement(param);
         this.setAttributes(field, listAttributes);
+        if (inner) {
+          field.innerHTML = inner
+        }
         return field;
     },
 

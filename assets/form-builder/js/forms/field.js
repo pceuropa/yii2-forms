@@ -71,7 +71,7 @@ factory.prototype = {
     /**
     * Set data items. Get data from class {cl} inputs
     * @param {String} cl - CSS class
-    * @return {Object} item data
+    * @return {Object} item datahtml
     */
 	setDataItemFrom: function (cl) {
 		var o = {},
@@ -86,7 +86,6 @@ factory.prototype = {
 			} else {
 				if ( h.is(input.value) ) o[input.id] = input.value;
 			}
-			
 		}
 		return o
 	},
@@ -98,6 +97,9 @@ factory.prototype = {
     * @return {undefined}
     */
 	addItem: function (field, item) {
+		if(!h.is(item.text)){
+			item.text = ''
+		}
 		if(!h.is(item.value)){
 			item.value = field.body.items.length + 1
 		}
@@ -114,7 +116,6 @@ factory.prototype = {
 		var preview  = $("#preview-field"),
             field = this,
             html = field.html().outerHTML;
-			
 			if(this.view){
 				preview.html('(<a>html</a>) <br/><br/>' + html);
 			} else {
