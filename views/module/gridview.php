@@ -49,9 +49,9 @@ $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}'
     
    </div>
 	<div class="col-md-4 pull-right">
-    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> - <?= Yii::t('app', 'Edit form')  ?><br />
-    	<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> - <?= Yii::t('app', 'View form')  ?><br />
-    	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> - <?= Yii::t('app', 'Delete form')  ?><br />
-    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('app', 'Data received from completed forms')  ?>
+    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> - <?= Yii::t('builder', 'Edit form')  ?><br />
+    	<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> - <?= Yii::t('builder', 'View form')  ?><br />
+    	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> - <?= Yii::t('builder', 'Delete form')  ?><br />
+    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('builder', 'Completed forms')  ?>
 	</div>
 </div>

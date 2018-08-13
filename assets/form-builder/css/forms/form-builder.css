@@ -1,13 +1,19 @@
-#MyForm h1.header {color: #C8EBFB}
-.options, .update-buttons, #preview-field, ul#options-tabs li.delete, #name-field-empty {display:none}
-#margin-left{ margin-left:5px;}
-#preview-form {
-    min-height: 60px; border-left:dashed 1px #C8EBFB; border-right:dashed 1px #C8EBFB;border-top: solid 2px #C8EBFB;
-    padding-right:9px; border-bottom: solid 2px #C8EBFB; margin-bottom:40px
+
+#margin-left{margin-left:5px;}
+
+.update-buttons, #preview-field, ul#options-tabs li.delete, #name-field-empty {display:none}
+#MyForm h1.header {font-size:14px}
+#MyForm #preview-form {
+    min-height: 60px; border-left:dashed 1px #C8EBFB; border-right:dashed 1px #C8EBFB;border-top: solid 2px #C8EBFB; border-bottom: solid 2px #C8EBFB; margin-bottom:40px
 }
-#preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
-#preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
-#preview-form .row .update {
+#MyForm #preview-form .row { border-bottom:dashed 1px #C8EBFB; border-left:solid 7px #C8EBFB; margin-top:15px;}
+#MyForm #preview-form input, #preview-form textarea, #preview-form select, #preview-form radio, #preview-form checkbox{cursor: grab;}
+#MyForm #preview-form pre {
+	margin: 0;
+	border-radius: 0; 
+}
+
+#MyForm #preview-form .row .update {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     -khtml-border-radius: 5px;
@@ -18,9 +24,6 @@ div#preview-form.edit div.edit-field {
 	display: none;
 }
 
-#sidebar.update .nav-tabs > li.active > a {
-	border: 0;
-}
 
 #text-bofore-preview-field {margin: 0 0px 10px 0; float:left }
 
@@ -34,6 +37,10 @@ ul#options-tabs li.delete .active{
 
 .nav-tabs {border-bottom: 0;}
 
+
+#sidebar.update .nav-tabs > li.active > a {
+	border: 0;
+}
 #sidebar #add-to-form{margin: 5px}
 #sidebar.update #add-to-form{display:none}
 #sidebar .input-item {
@@ -55,7 +62,7 @@ ul#options-tabs li.delete .active{
 	border-radius: 0;
 }
 
-#sidebar .form-horizontal .checkbox{
+#sidebar .form-horizontal .checkbox {
 	padding-top: 0;
     margin-left: 8px;
 }

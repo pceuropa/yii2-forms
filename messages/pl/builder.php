@@ -4,7 +4,11 @@
 #1.1.1
 return [
     'Form Builder' => 'Form budowniczy',  
+    'All forms' => 'Wszystkie formularze',
     'Form' => 'Formularz',  
+    'Forms' => 'Formularze',  
+    'Your forms' => 'Twoje formularze',  
+    'Create' => 'Stwórz',  
     'Field' => 'Pole',  
     'Input' => 'Pole tekstowe',  
     'TextArea' => 'Pole tekstowe wieloliniowe',  
@@ -20,8 +24,15 @@ return [
     'Save Form' => 'Zapisz formularz',  
     'Name' => 'Nazwa',  
     'Type' => 'Typ',  
+    'Limit Entries' => 'Limit',  
+    'Start' => 'Aktywy od',  
+    'End' => 'Aktywy do',  
+    'Type' => 'Typ',  
     
     'text' => 'tekst',
+    'URL' => 'Adres URL',
+    'Address URL' => 'Adres URL',
+    'Answers' => 'Odpowiedzi',
     'email' => 'email',
     'password' => 'hasło',
     'date' => 'data',
@@ -29,6 +40,10 @@ return [
     'phone' => 'telefon',
     'color' => 'kolor',
     'range' => 'zakres',
+    'Edit form' => 'Edytuj formularz',
+    'View form' => 'Zobacz formularz',
+    'Delete form' => 'Skasuj',
+    'Completed forms' => 'Wypełnione formularze',
     
     'Label' => 'Etykieta',  
     'Placeholder' => 'Tekst zastępczy',  
@@ -39,15 +54,15 @@ return [
     'Rows' => 'Ilość wierszy',  
     'Add to form' => 'Dodaj do formularza',  
     'Add item' => 'Dodaj do pola',  
-    'Items' => 'Elementy pola',  
-    'Checked' => 'Zaznaczony',  
+    'Items' => 'Opcje wyboru',  
+    'Checked' => 'Zaznaczone',  
     'Selected' => 'Domyślnie wybrany',  
     'Method' => 'Metoda wysyłki',  
     'Action' => 'Adres odbioru',  
     'Template' => 'Szablon',  
-    'Address URL' => 'Adres URL',
     
     'Preview field' => 'Podgląd pola',  
+    'Preview form' => 'Podgląd formularza',  
     'Form completed' => 'Formularz wypełniony poprawnie',  
     
 // manual   

@@ -5,6 +5,7 @@ pceuropa\forms\FormBuilderAsset::register($this);
 <div id="MyForm" class="row">
 
 	<section class="col-md-8">
+        <h1 class="header"><?= Yii::t('builder', 'Preview form') ?>:</h1>
 		<div id="widget-form-header" class="pull-right">
 			<span class="glyphicon glyphicon-info-sign hidden" aria-hidden="true"></span>
 		</div>

@@ -6,11 +6,9 @@ use pceuropa\forms\Module;
 
 /**
  * AR model for Yii2-forms extensions
- *
  * @author Rafal Marguzewicz <info@pceuropa.net>
  * @version 1.4.1
  * @license MIT
- *
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
  * https://github.com/pceuropa/yii2-forum/issues
@@ -71,7 +69,7 @@ class FormModel extends \yii\db\ActiveRecord {
                    'body' => Yii::t('builder', 'Body'),
                    'date_start' => Yii::t('builder', 'Date'),
                    'answer' => Yii::t('builder', 'Answers'),
-                   'date_end' => Yii::t('builder', 'Date Expire'),
+                   'date_end' => Yii::t('builder', 'End'),
                    'maximum' => Yii::t('builder', 'Max'),
                    'meta_title' => Yii::t('builder', 'Meta Title'),
                    'url' => Yii::t('builder', 'URL'),
