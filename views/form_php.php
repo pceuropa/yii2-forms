@@ -8,7 +8,7 @@ if (count($form_body) != 0) {
 		echo ('<div class="row">');
 
 		    foreach ($row as $key => $value) {
-            echo  $form->dynamicField($model, $value);
+                echo $form->dynamicField($model, $value);
 		    }
 		echo('</div>');
 	}

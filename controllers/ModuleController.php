@@ -4,22 +4,13 @@ use Yii;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
 
-use yii\web\Response;
-use yii\web\NotFoundHttpException;
-
 use yii\filters\VerbFilter;
-use yii\helpers\Url;
 use yii\helpers\Json;
-use yii\helpers\ArrayHelper;
 
-use pceuropa\forms\FormBase;
-use pceuropa\forms\Form;
 use pceuropa\forms\FormBuilder;
-use pceuropa\forms\Module;
 use pceuropa\forms\models\FormModel;
 use pceuropa\forms\models\FormModelSearch;
 use pceuropa\email\Send as SendEmail;
-use yii\validators\DateValidator;
 
 /**
  * Controller of formBuilder
@@ -59,31 +50,33 @@ class ModuleController extends \yii\web\Controller {
 
     public function actionIndex() {
         $searchModel = new FormModelSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'buttonsEditOnIndex' => $this->module->buttonsEditOnIndex,
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'buttonsEditOnIndex' => $this->module->buttonsEditOnIndex,
+                'searchModel' => $searchModel,
+                'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
         ]);
     }
 
     public function actionUser() {
         $searchModel = new FormModelSearch();
-        $searchModel->author  = Yii::$app->user->identity->id ?? null;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->author = Yii::$app->user->identity->id ?? null;
 
         return $this->render('user', [
                     'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                    'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
                 ]);
     }
 
 
     public function actionView(string $url) {
-      $form = FormModel::findModelByUrl($url);
-      if ($form->endForm()) { return $this->render('end'); } 
+        $form = FormModel::findModelByUrl($url);
+
+        if ($form->endForm()) { 
+          return $this->render('end');
+        } 
       
+        // request - use form
         if (($data = Yii::$app->request->post('DynamicModel')) !== null) {
 
             foreach ($data as $i => $v) {
@@ -93,45 +86,26 @@ class ModuleController extends \yii\web\Controller {
             $query = (new Query)->createCommand()->insert($this->module->formDataTable.$form->form_id, $data);
 
             if ($query->execute()) {
-                $form->updateCounters(['answer' => 1 ]);
-
-                Yii::$app->session->setFlash('success', Yii::t('builder', 'Form completed'));
-
-                if ($this->module->sendEmail && is_string($this->module->emailSender) && isset($data['email']) && isset($form['response']) ) {
-
-                    SendEmail::widget([
-                      'from' => $this->module->emailSender,
-                      'to' => $data['email'],
-                      'subject' => 'subject',
-                      'textBody' => $form['response'],
-                    ]);
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'An confirmation email was sent'));
-                }
-
-
-            } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'An confirmation email was not sent'));
-            }
+              $form->updateCounters(['answer' => 1 ]);
+              Yii::$app->session->setFlash('success', Yii::t('builder', 'Form completed'));
+              $this->sendEmail($data, $form);
+            } 
 
             return $this->redirect(['index']);
-        } else {
-            return $this->render('view', [ 'form' => $form] );
-        }
+        } 
+        return $this->render('view', [ 'form' => $form] );
     }
 
     public function actionList(int $id) {
-        $form = FormModel::findModel($id);
-
-        $dataProvider = new ActiveDataProvider([
-                          'query' => (new Query)->from( $this->module->formDataTable.$id ),
-                          'db' => $this->module->db
-                        ]);
 
         return $this->render('list', [
-                          'form' => $form,
-                          'dataProvider' => $dataProvider,
-                            'only_data_fields' => FormBase::gridViewItemsForm(Json::decode($form->body))
-                        ]);
+                'form' => FormModel::findModel($id),
+                'dataProvider' => new ActiveDataProvider([
+                        'query' => (new Query)->from( $this->module->formDataTable.$id ),
+                        'db' => $this->module->db
+                ]),
+                'only_data_fields' => FormBase::gridViewItemsForm(Json::decode($form->body))
+        ]);
     }
 
     /**
@@ -216,7 +190,10 @@ class ModuleController extends \yii\web\Controller {
      */
     public function actionClone(int $id) {
 
-        $form = FormModel::find()->select(['body', 'title', 'author', 'date_start', 'date_start', 'maximum', 'meta_title', 'url', 'response'])->where(['form_id' => $id])->one();
+        $form = FormModel::find()
+            ->select(['body', 'title', 'author', 'date_start', 'date_end', 'maximum', 'meta_title', 'url', 'responsea', 'class', 'id'])
+            ->where(['form_id' => $id])
+            ->one();
         $form->answer = 0;
         $this->uniqueUrl($form);
 
@@ -262,4 +239,26 @@ class ModuleController extends \yii\web\Controller {
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();
         } while ($count > 0);
     }
+
+    /**
+     * Send email if in form is email filed
+     * @param array $data
+     * @param array $form
+     * @return void
+     */
+    public function sendEmail($data, $form) {
+        if ($this->module->sendEmail && is_string($this->module->emailSender) && isset($data['email']) && isset($form['response']) ) {
+
+            SendEmail::widget([
+              'from' => $this->module->emailSender,
+              'to' => $data['email'],
+              'subject' => 'form: ' . $form['title'],
+              'textBody' => $form['response'],
+            ]);
+            Yii::$app->session->setFlash('success', Yii::t('app', 'An confirmation email was sent'));
+        }
+      
+    }
+    
+    
 }

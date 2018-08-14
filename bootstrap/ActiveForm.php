@@ -84,7 +84,7 @@ class ActiveForm extends \yii\bootstrap\ActiveForm
             $field = parent::field($model, $field['name'], $options)->checkboxList($items)->label($field['label'] ?? false);
             break;
         case 'select':
-            $field = parent::field($model, $field['name'], $options)->dropDownList($items)->label(false);
+            $field = parent::field($model, $field['name'], $options)->dropDownList($items)->label($field['label'] ?? false);
             break;
         case 'description':
             $field = self::description($field);
