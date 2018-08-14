@@ -22,10 +22,8 @@ use pceuropa\email\Send as SendEmail;
 use yii\validators\DateValidator;
 
 /**
- * Example controller help to use all functions of formBuilder
- * FormBuilder controller of module.
+ * Controller of formBuilder
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
  * @license MIT
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
@@ -33,26 +31,30 @@ use yii\validators\DateValidator;
  */
 class ModuleController extends \yii\web\Controller {
 
-    protected $list_action = ['create', 'update', 'delete', 'deleteitem', 'user'];
-
     /**
      * This method is invoked before any actions
      * @return void
      */
     public function behaviors() {
-        return [
-                   'access' => [
-                       'class' => \yii\filters\AccessControl::className(),
-                       'only' => ['user', 'create', 'update', 'delete', 'deleteitem', 'clone'],
-                       'rules' => $this->module->rules
-                   ],
-                   'verbs' => [
-                       'class' => VerbFilter::className(),
-                       'actions' => [
-                           'delete' => ['post'],
-                       ],
-                   ],
-               ];
+        $config = [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
+            ],
+        ];
+        
+        if (Yii::$app->User->can('admin')) {
+          return $config;
+        } 
+
+        $config['access'] = [
+            'class' => \yii\filters\AccessControl::className(),
+            'only' => ['user', 'create', 'update', 'delete', 'deleteitem', 'clone'],
+            'rules' => $this->module->rules
+        ];
+        return $config;
     }
 
     public function actionIndex() {
@@ -103,10 +105,10 @@ class ModuleController extends \yii\web\Controller {
                       'subject' => 'subject',
                       'textBody' => $form['response'],
                     ]);
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'An confirmation email was sent'));
                 }
 
 
-                Yii::$app->session->setFlash('success', Yii::t('app', 'An confirmation email was sent'));
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app', 'An confirmation email was not sent'));
             }
