@@ -608,6 +608,170 @@ temp = [
     ],
     "url": "wizyta-studyjna",
     "response": "Thank you for your registration, You are on the list submitted to the event"
+},{
+    "title": "polska",
+    "url": "matryca",
+    "method": "post",
+    "language": "pl",
+    "body": [
+        [
+            {
+                "field": "radio",
+                "width": "col-md-6",
+                "class": "form-control",
+                "items": [
+                    {
+                        "text": "Kobieta",
+                        "value": "kobieta"
+                    },
+                    {
+                        "text": "Mężczyzna",
+                        "value": "mężczyzna"
+                    }
+                ],
+                "name": "plec",
+                "label": "Płeć"
+            },
+            {
+                "field": "select",
+                "width": "col-md-6",
+                "class": "form-control",
+                "items": [
+                    {
+                        "text": "Dolnośląskie",
+                        "value": "dolnośląskie"
+                    },
+                    {
+                        "text": "Kujawsko-pomorskie",
+                        "value": "kujawsko-pomorskie"
+                    },
+                    {
+                        "text": "Lubelskie",
+                        "value": "lubelskie"
+                    },
+                    {
+                        "text": "Lubuskie",
+                        "value": "lubuskie"
+                    },
+                    {
+                        "text": "Łódzkie",
+                        "value": "łódzkie"
+                    },
+                    {
+                        "text": "Małopolskie",
+                        "value": "małopolskie"
+                    },
+                    {
+                        "text": "Mazowieckie",
+                        "value": "mazowieckie"
+                    },
+                    {
+                        "text": "Opolskie",
+                        "value": "opolskie"
+                    },
+                    {
+                        "text": "Podkarpackie",
+                        "value": "podkarpackie"
+                    },
+                    {
+                        "text": "Podlaskie",
+                        "value": "podlaskie"
+                    },
+                    {
+                        "text": "Pomorskie",
+                        "value": "pomorskie"
+                    },
+                    {
+                        "text": "Śląskie",
+                        "value": "śląskie"
+                    },
+                    {
+                        "text": "Świętokrzyskie",
+                        "value": "świętokrzyskie"
+                    },
+                    {
+                        "text": "Warmińsko-mazurskie",
+                        "value": "warmińsko-mazurskie"
+                    },
+                    {
+                        "text": "Wielkopolskie",
+                        "value": "wielkopolskie"
+                    },
+                    {
+                        "text": "Zachodniopomorskie",
+                        "value": "zachodniopomorskie"
+                    }
+                ],
+                "name": "wojewodztwo",
+                "label": "Województwo"
+            }
+        ],
+        [
+            {
+                "field": "input",
+                "type": "number",
+                "class": "form-control",
+                "width": "col-md-6",
+                "name": "wiek",
+                "label": "Wiek",
+                "helpBlock": "W latach",
+                "require": true
+            },
+            {
+                "field": "select",
+                "width": "col-md-6",
+                "class": "form-control",
+                "items": [
+                    {
+                        "text": "2 000 000 >",
+                        "value": "2000000+"
+                    },
+                    {
+                        "text": "1 000 000 - 2 000 000",
+                        "value": "1000000-2000000"
+                    },
+                    {
+                        "text": "700 000 - 1 000 000",
+                        "value": "700000-1000000"
+                    },
+                    {
+                        "text": "200 000 - 700 000",
+                        "value": "200000-700000"
+                    },
+                    {
+                        "text": "50 000 - 200 000",
+                        "value": "50000-200000"
+                    },
+                    {
+                        "text": "10 000 - 50 000",
+                        "value": "10000-50000"
+                    },
+                    {
+                        "text": "5 000 - 10 000",
+                        "value": "5000-10000"
+                    },
+                    {
+                        "text": "1000 - 5000",
+                        "value": "1000-5000"
+                    },
+                    {
+                        "text": "< 1000",
+                        "value": "<1000"
+                    }
+                ],
+                "name": "miasto",
+                "label": "Liczba mieszkańców twojego miasta  ?"
+            }
+        ],
+        [
+            {
+                "field": "submit",
+                "width": "col-md-12",
+                "backgroundcolor": "btn-primary",
+                "label": "Wyślij"
+            }
+        ]
+    ]
 }
 ];
 
