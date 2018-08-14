@@ -9,8 +9,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('builder', 'Your forms') , '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h1 class="header"><?= Yii::t('builder', 'Form Builder') ?></h1>
-
 <?= FormBuilder::widget([
 	'formTable' => Module::getInstance()->formTable,
     'db' => Module::getInstance()->db,

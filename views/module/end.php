@@ -1,5 +1,5 @@
 <?php
-$this->title = Yii::t('Form end registration');
+$this->title = Yii::t('builder', 'End registration');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('builder', 'All forms') , 'url' => ['index']];
 ?>
 

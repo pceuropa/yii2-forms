@@ -2,6 +2,10 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}':'{view}';
+if (Yii::$app->User->can('admin')) {
+    $template = '{update} {view} {delete} | {clone}';
+} 
+
 ?>
 
 <h1>
@@ -33,6 +37,7 @@ $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}'
             'attribute' => 'date_end',
             'format' => 'datetime',
         ],
+
         ['class' => 'yii\grid\ActionColumn',
             'buttons' => [
 		        'view' => function ($url, $model, $key) {
