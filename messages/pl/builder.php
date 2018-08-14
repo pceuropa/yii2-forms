@@ -58,7 +58,9 @@ return [
     'Checked' => 'Zaznaczone',  
     'Selected' => 'Domyślnie wybrany',  
     'Method' => 'Metoda wysyłki',  
-    'Action' => 'Adres odbioru',  
+    'Action' => 'Adres odbioru żądania',  
+    'ID' => 'Html Id',  
+    'Class' => 'Html Class',  
     'Template' => 'Szablon',  
     
     'Preview field' => 'Podgląd pola',  
