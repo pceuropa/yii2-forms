@@ -196,7 +196,7 @@ class ModuleController extends \yii\web\Controller {
     public function actionClone(int $id) {
 
         $form = FormModel::find()
-            ->select(['body', 'title', 'author', 'date_start', 'date_end', 'maximum', 'meta_title', 'url', 'responsea', 'class', 'id'])
+            ->select(['body', 'title', 'author', 'date_start', 'date_end', 'maximum', 'meta_title', 'url', 'response', 'class', 'id'])
             ->where(['form_id' => $id])
             ->one();
         $form->answer = 0;

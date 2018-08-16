@@ -23,15 +23,17 @@ if (Yii::$app->User->can('admin')) {
             'attribute' => 'url',
             'format' => 'html',
             'value' => function ($model) {
-                        return  Html::a ( $model->url, '/forms/'.$model->url, ['target' => 'new']);
+                        return  Html::a ($model->url, ['view', 'url' => $model->url], ['target' => 'new']);
                     },
         ],[
             'attribute' => 'answer',
             'format' => 'html',
             'value' => function ($model) {
              $maximum = null;
-             if ($model->maximum !== null) { $maximum = ' /'. $model->maximum; } 
-             return html::a ('<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> '.$model->answer.$maximum, ['list', 'id' => $model->form_id]);
+             if ($model->maximum !== null) { 
+               $maximum = ' /'. $model->maximum; 
+             } 
+                return html::a ('<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> ' . $model->answer.$maximum, ['list', 'id' => $model->form_id]);
              },
         ],[
             'attribute' => 'date_end',

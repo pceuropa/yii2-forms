@@ -782,6 +782,10 @@ var div1 = document.createElement("div"),
 				'<select id="examples-form" class="form-control"><option>-</option> </select>'+
 				'<div id="section-confirm"></div>' +
                 '</div>';
+console.log(form.model.body.length);
+		if (form.model.body.length > 0) {
+          return
+		}	
 				
 	(function(){
 			div1.setAttribute('class', 'form-group-sm');
@@ -803,7 +807,6 @@ var div1 = document.createElement("div"),
 			window.setTimeout(function() {
 			if(form.model.body.length) return;
 				
-			
 				$("#form #widget-form-options").append( div1.outerHTML ).on( "change", id_selector, function() {
 							var value = this.value;
 							$("#section-confirm").empty().html( '<button id="confirm-example" type="button" class="btn btn-sm btn-warning">Confirm</button>' );

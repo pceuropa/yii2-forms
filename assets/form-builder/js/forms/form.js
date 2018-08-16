@@ -157,9 +157,15 @@ MyFORM = (function() {
         * Fill all form options inputs
         */
         setValueInputOptions: function() {
+          console.log(this.model);
             this.options_form.find('#title').val(this.model.title);
             this.options_form.find('#url').val(this.model.url);
             this.options_form.find('#response').val(this.model.response);
+            this.options_form.find('#maximum').val(this.model.maximum);
+            this.options_form.find('#date_start').val(this.model.date_start);
+            this.options_form.find('#date_end').val(this.model.date_end);
+            this.options_form.find('#id').val(this.model.id);
+            this.options_form.find('#class').val(this.model.class);
         },
 
         /**
