@@ -1,6 +1,6 @@
- <div class="row form-group-sm expert">
-    <label class="col-sm-3 control-label"><?= Yii::t('builder', 'ID') ?></label>
-    <div class="col-sm-9">
-      <input id="id" type="text" class="data-source form-control" >
-	</div>
+<div class="form-group-sm expert">
+    <div class="input-group">
+      <div class="input-group-addon"><?= Yii::t('builder', 'ID') ?></div>
+    	<input id="id" type="text" class="form-control data-source">
+    </div>
 </div>

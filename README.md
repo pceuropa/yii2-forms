@@ -24,11 +24,10 @@ FormBuilder module for Yii2
  * Add table column after add field to form 
  * Rename table column after change the name of field
  * Drop table column after delete field in form
- 
 
 ## Installation Form Builder
 ```
-composer require pceuropa/yii2-forms "dev-master"
+composer require pceuropa/yii2-forms
 ```
 
 ## Configuration Form Builder
@@ -51,9 +50,9 @@ URLs for the translating tool:
 
 ```
 /forms/module/index                    // List of all forms                     
-/forms/module/user                     // List of user forms
+/forms/module/user                     // List user's forms
 /forms/module/view                     // Preview form
-/forms/module/create                   // FormBuilder - create form
+/forms/module/create                   // Create form - FormBuilder 
 /forms/module/update                   // Update form 
 /forms/module/delete                   // Delete form
 ```
@@ -66,7 +65,7 @@ URLs for the translating tool:
           'class' => 'pceuropa\forms\Module',
           'db' => 'db',
           'formsTable' => '{{%forms}}',
-          'formDataTable' => 'form_', // dont use prefix please
+          'formDataTable' => 'form_',
           'sendEmail' => true, 
           'emailSender' => 'info@email.net',
           'rules' => [
@@ -76,13 +75,22 @@ URLs for the translating tool:
                     'roles' => ['updateOwnForm'],   // rule only owner can edit form
                 ],
                 [
-                    'actions' => ['user', 'create'],
+                    'actions' => ['user'],
                     'allow' => true,
-                    'roles' => ['user'],            // role only authenticated user can
+                    'roles' => ['user'],     // role only authenticated user can see user's forms
+                ],
+                [
+                    'actions' => ['create'],
+                    'allow' => true,
+                    'roles' => ['@'],        // role only logged user can create form
                 ]
             ]
       ]
 ],
+
+'components' => [
+	  'authManager' => ['class' => 'yii\rbac\DbManager',],
+]
 ```
 
 ## Form renderer widget
@@ -101,15 +109,7 @@ or
 ```
 
 ## Configure RBAC Component
-Before you can go on you need to create those tables in the database.
-
-```
-yii migrate --migrationPath=@yii/rbac/migrations
-```
-
-Building autorization data
-
-To use generator console, add fallowing code to config console file
+To use generator console, add fallowing code to console config (console.php)
 ```
 'controllerMap' => [
   'formsrbac' => [
@@ -117,22 +117,58 @@ To use generator console, add fallowing code to config console file
   ],
 ],
 ```
-Create rbac tables in the database
+
+
+To use RBAC dont forget add fallowing code to app config (web.php or main.php)
 ```
-yii migrate --migrationPath=@yii/rbac/migrations
-```
-Create rules and roles for form module
-```
-php yii formsrbac/generate
+'components' => [
+	  'authManager' => ['class' => 'yii\rbac\DbManager',],
+]
 ```
 
+Create rbac tables in the database
+```yii migrate --migrationPath=@yii/rbac/migrations```
+
+Create RBAC rules and roles. Asssign role user to all users. You can add assign role acction in SignupController
+```php yii formsrbac/generate```
+
+
 ## Tests
-For tests run 
+Php tests run 
 ```
-composer exec -v -- codecept -c vendor/pceuropa/forms run
+vendor/bin/codecept run -c vendor/pceuropa/yii2-forms
 ```
 or
 ```
 cd vendor/pceuropa/yii2-forms
-codecept run
+../../bin/codecept run
+```
+
+JavaScript tests run
+On begining install depencies:
+```
+cd vendor/pceuropa/yii2-forms
+npm install
+```
+
+run test
+```
+cd vendor/pceuropa/yii2-forms
+karma start
+//or if you use karma localy
+npm run test
+```
+## ex. Menu
+```
+[
+'label' => 'forms',
+    'items' => [
+        ['label' => 'List of all forms', 'url' => ['/forms/module/index']],
+        ['label' => 'User\'s forms', 
+            'url' => ['/forms/module/user'],
+            'visible' => !Yii::$app->user->isGuest
+        ],
+        ['label' => 'Create form', 'url' => ['/forms/module/create']],
+    ],
+],
 ```

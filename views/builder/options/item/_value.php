@@ -1,6 +1,6 @@
- <div class="row form-group-sm">
-    <label class="col-sm-3 control-label"><?= Yii::t('builder', 'Value item') ?></label>
-    <div class="col-sm-9">
-    	<input id="value" class="item-of-field form-control" type="text"  >
+<div class="form-group-sm">
+    <div class="input-group">
+      <div class="input-group-addon"><?= Yii::t('builder', 'Value item') ?></div>
+    	<input id="value" type="text" class="item-of-field form-control">
     </div>
 </div>

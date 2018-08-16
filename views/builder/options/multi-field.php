@@ -9,7 +9,7 @@
 	?>
 </span>
 
-<div class="input-item well">
+<div class="input-item">
 	<?= Yii::t('builder', 'Items') ?>
 
 	<?php

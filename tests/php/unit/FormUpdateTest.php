@@ -20,27 +20,27 @@ class FormUpdateTest extends Unit {
 
 
     protected function _before() {
-        $this->formBuilder = new FormBuilder([
+         $this->formBuilder = new FormBuilder([
                 'formTable' => '{{%forms}}',
                 'formDataTable' => 'form_',
-                                             ]);
+         ]);
     }
 
     public function testInit() {
         $this->assertEquals( $this->formBuilder->db, 'db');
         $this->assertFalse( $this->formBuilder->test_mode);
         $this->assertTrue( $this->formBuilder->easy_mode);
-        $this->assertFalse( $this->formBuilder->email_response);
+        $this->assertFalse( $this->formBuilder->send_email);
     }
 
     public function testTableSchema() {
         $schema = $this->formBuilder->tableSchema($this->bodyForm);
         $this->assertEquals($schema, [
-                                'id' => 'pk',
-                                'name' => 'string',
-                                'pass' => 'string',
-                                'remember' => 'string'
-                            ]);
+                  'id' => 'pk',
+                  'name' => 'string',
+                  'pass' => 'string',
+                  'remember' => 'string'
+         ]);
 
     }
 
@@ -60,8 +60,3 @@ class FormUpdateTest extends Unit {
     public function testDropColumn() {
     }
 }
-
-
-
-
-

@@ -1,6 +1,6 @@
-	 <div class="row form-group-sm">
-    	<label class="col-sm-3 control-label"><?= Yii::t('builder', 'Rows') ?></label>
-		<div class="col-sm-4">
-		  <input type="number" id="rows" value="3" class="form-control" >
-		</div>
+<div class="form-group-sm">
+    <div class="input-group">
+      <div class="input-group-addon"><?= Yii::t('builder', 'Rows') ?></div>
+    	<input id="rows" type="number" value="3" class="form-control data-source">
     </div>
+</div>

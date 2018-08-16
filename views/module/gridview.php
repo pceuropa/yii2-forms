@@ -2,6 +2,10 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}':'{view}';
+if (Yii::$app->User->can('admin')) {
+    $template = '{update} {view} {delete} | {clone}';
+} 
+
 ?>
 
 <h1>
@@ -33,6 +37,7 @@ $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}'
             'attribute' => 'date_end',
             'format' => 'datetime',
         ],
+
         ['class' => 'yii\grid\ActionColumn',
             'buttons' => [
 		        'view' => function ($url, $model, $key) {
@@ -49,9 +54,9 @@ $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}'
     
    </div>
 	<div class="col-md-4 pull-right">
-    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> - <?= Yii::t('app', 'Edit form')  ?><br />
-    	<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> - <?= Yii::t('app', 'View form')  ?><br />
-    	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> - <?= Yii::t('app', 'Delete form')  ?><br />
-    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('app', 'Data received from completed forms')  ?>
+    	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> - <?= Yii::t('builder', 'Edit form')  ?><br />
+    	<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> - <?= Yii::t('builder', 'View form')  ?><br />
+    	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> - <?= Yii::t('builder', 'Delete form')  ?><br />
+    	<span class="glyphicon glyphicon-list" aria-hidden="true"></span> - <?= Yii::t('builder', 'Completed forms')  ?>
 	</div>
 </div>

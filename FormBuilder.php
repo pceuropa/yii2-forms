@@ -58,7 +58,7 @@ class FormBuilder extends Widget {
      * @var bool If true - form can send email response
      * @since 1.4
      */
-    public $email_response = false;
+    public $send_email = false;
 
     /**
      * @var array  Configuration data for JavaScript assets
@@ -80,7 +80,7 @@ class FormBuilder extends Widget {
     /**
      * @var string The database table storing the forms
      */
-    public $formTable = '{{%forms}';
+    public $formTable = '{{%forms}}';
 
     /**
      * @var string The database table storing the data from forms
@@ -120,13 +120,13 @@ class FormBuilder extends Widget {
         }
 
         $this->options = [
-                             'easy_mode' => $this->easy_mode,
-                             'test_mode' => $this->test_mode,
-                             'generator_mode' => $this->generator_mode,
-                             'email_response' => $this->email_response,
-                             'hide_button_form_save' => $this->hide_button_form_save,
-                             'jsConfig' =>  $this->jsConfig
-                         ];
+              'easy_mode' => $this->easy_mode,
+              'test_mode' => $this->test_mode,
+              'generator_mode' => $this->generator_mode,
+              'send_email' => $this->send_email,
+              'hide_button_form_save' => $this->hide_button_form_save,
+              'jsConfig' =>  $this->jsConfig
+        ];
     }
 
     /**
@@ -308,13 +308,11 @@ class FormBuilder extends Widget {
      * @return null
     */
     public function registerTranslations() {
-      if (!is_object(Yii::$app->i18n->translations['builder'])) {
         Yii::$app->i18n->translations['builder'] = [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'sourceLanguage' => 'en-US',
-                    'basePath' => '@vendor/pceuropa/yii2-forms/messages',
-              ];
-      } 
-    }
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => '@vendor/pceuropa/yii2-forms/messages',
+        ];
+    } 
 }
 ?>

@@ -7,9 +7,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?= Html::encode($this->title) ?></h1>
 
+
 <?= GridView::widget([
-                          'dataProvider' => $dataProvider,
-                          'columns' => $only_data_fields
-                      ]);
+          'dataProvider' => $dataProvider,
+          'columns' =>  iterator_to_array($only_data_fields)
+      ]);
 ?>
+
 

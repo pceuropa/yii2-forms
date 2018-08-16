@@ -30,8 +30,8 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
             'action' => $this->string(255),
             'method' => $this->string(4)->defaultValue('post'),
             'language' => $this->string(11)->defaultValue('en'),
-            'class' => $this->string(255)->notNull()->comment('html'),
-            'id' => $this->string(255)->notNull()->comment('html'),
+            'class' => $this->string(255)->Null()->comment('html'),
+            'id' => $this->string(255)->Null()->comment('html'),
         ], $tableOptions);
 
         $this->createIndex('url', '{{%forms}}', 'url', true);

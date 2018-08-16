@@ -7,14 +7,15 @@ use yii\rbac\Permission;
 use yii\rbac\Role;
 use yii\rbac\Rule;
 use yii\db\Query;
+
 /**
  * Rbac init
  * Create rbac rules and role
  * @author Rafal Marguzewicz
  * @licence MIT
  */
-class InitController extends  Controller
-{
+class InitController extends  Controller {
+
     const CREATE_FORM = 'createForm';
     const UPDATE_FORM = 'updateForm';
     const DELETE_FORM = 'deleteForm';
@@ -22,10 +23,10 @@ class InitController extends  Controller
     const USER = 'user';
     const UPDATE_OWN_FORM = 'updateOwnForm';
 
-    public function actionIndex($message = 'hello world from module')
-    {
+    public function actionIndex($message = 'hello world from module yii2-forms') {
         echo $message . "\n";
     }
+
     /**
      * Generate rules rbas
      * @return void
@@ -33,7 +34,6 @@ class InitController extends  Controller
     public function actionRbac() {
 
         $authManager = new DbManager();
-
         $permission = self::CREATE_FORM;
 
         try {
@@ -148,7 +148,7 @@ class InitController extends  Controller
             echo "\n";
         }
 
-        if ($this->confirm("Could you assign roles to all users.")) {
+        if ($this->confirm("Could you assign role `user` to all users.")) {
             $query = (new Query())->from('user');
             $count = $query->count();
             echo $this->ansiFormat($count .' users in database', Console::FG_RED);
@@ -170,6 +170,3 @@ class InitController extends  Controller
     }
 }
 ?>
-
-
-

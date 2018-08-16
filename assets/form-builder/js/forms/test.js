@@ -82,6 +82,7 @@ var version = 'test: 2.0.0',
             {
                 "field": "select",
                 "label": "select label",
+                "name": "field5",
                 "helpBlock": "desc checkbox",
                 "width": "col-md-6",
                 "require": true,
@@ -96,40 +97,10 @@ var version = 'test: 2.0.0',
                     },
                     {
                         "text": "select2",
-                        "value": "select-value1",
+                        "value": "select-value2",
                         "class": "",
                         "checked": false
                     },
-                    {
-                        "text": "select2",
-                        "value": "select-value1",
-                        "class": "",
-                        "checked": false
-                    },
-                    {
-                        "text": "select2",
-                        "value": "select-value1",
-                        "class": "",
-                        "checked": false
-                    },
-                    {
-                        "text": "select2",
-                        "value": "select-value1",
-                        "class": "",
-                        "checked": false
-                    },
-                    {
-                        "text": "select2",
-                        "value": "select-value1",
-                        "class": "",
-                        "checked": false
-                    },
-                    {
-                        "text": "select2",
-                        "value": "select-value1",
-                        "class": "",
-                        "checked": false
-                    }
                 ]
             },
             {
@@ -142,6 +113,7 @@ var version = 'test: 2.0.0',
         [
             {
                 "field": "input",
+                "name": "field6",
                 "type": "text",
                 "width": "col-md-6",
                 "class": "form-control"
@@ -159,6 +131,7 @@ var version = 'test: 2.0.0',
     ]
 }
 console.log(version);
+
 if(form){
 	form.generate(object_form);
 	form.deleteField(0, 1)

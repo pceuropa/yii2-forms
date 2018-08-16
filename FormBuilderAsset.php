@@ -10,14 +10,14 @@ namespace pceuropa\forms;
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
  * https://github.com/pceuropa/yii2-forum/issues
- *
  */
 
 class FormBuilderAsset extends \yii\web\AssetBundle {
     public $sourcePath = '@vendor/pceuropa/yii2-forms/assets/form-builder';
     public $baseUrl = '@web';
     public $css = [
-    	'css/forms/quill.snow.css',
+//    	'css/forms/quill.snow.css',
+    	'css/forms/form-builder.css',
     ];
     public $js = [
         'js/forms/Sortable.min.js',
@@ -31,7 +31,7 @@ class FormBuilderAsset extends \yii\web\AssetBundle {
 		'js/forms/examples.js',
 		'js/forms/test.js',
 		
-		'js/forms/quill.js',
+		'js/forms/quill.min.js',
 		'js/forms/clipboard.min.js',
 		
     ];

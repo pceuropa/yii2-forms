@@ -5,29 +5,22 @@ var MyFORM =  MyFORM || {};
 MyFORM.controller = function(form){
 	
 var version = '2.0.1',
-  field = {},
+    field = {},
     key_item_change = 0,
-    update_mode = false,				// selectItemToChange()
+    mode = 'form',   // form, create, update, delete
     preview_form = form.div_form,
     preview_field = $('#preview-field'),
     field_selector,
+
     sidebar = $('#sidebar'),
-    sidebar_div_options = $('#sidebar div.options'),
     options_form = form.options_form,
     
-    select_field = $('#select-field'),
-
-    form_tab =		$('#form-tab'),     // form options tab
     field_tab = 	$('#field-tab'),    // field options tab
-    udpate_tab =	$('#update-tab'),   // update options tab
-    delete_tab =	$('#delete-tab'),   // delete field tab
-    
-    update_div = $('#update'),
-    delete_div = $('#delete');
+    delete_tab =	$('#delete-tab');   // delete field tab
     
     console.log('controller:', version);
 
-var quill = new Quill('#textdescription', {
+    var quill = new Quill('#textdescription', {
     theme: 'snow',
        modules: {
         'toolbar': [
@@ -41,8 +34,6 @@ var quill = new Quill('#textdescription', {
       },
   });
 
-
-
     /**
     * Events - triger by click on form html elements
     * @return {undefined}
@@ -51,10 +42,9 @@ var quill = new Quill('#textdescription', {
         .on('click',	'.edit', 	 function(e){ updateField(e)  })
         .on('click',	'.clone', 	 function(e){ cloneField(e) })
         .on('click',	'.delete', 	 function(e){ deleteField(e)   })
-        .on('click',	'button', 	 function(e){
+        .on('click',	'button:not(.back)', 	 function(e){
             var button = $(this), clone = button.clone();
             e.preventDefault(); 
-
             button.text('edit mode');
             window.setTimeout(function() {button.replaceWith(clone);}, 1111)
     });
@@ -67,51 +57,45 @@ var quill = new Quill('#textdescription', {
         form.setView(this.value);
         form.render('off');
         var clipboard = new Clipboard('#copy-to-clipboard');
-
         clipboard.on('success', function(e) {
             $('#copy-to-clipboard').text('Copied!').fadeOut().fadeIn(100, function () {
                 $('#copy-to-clipboard').text('Copy')
             });
         });
-
-        clipboard.on('error', function(e) { console.log(e) });
+        clipboard.on('error', function(e) { consdeleteg(e) });
     })
-
-    sidebar_div_options
+    sidebar
+        .on('click',    'a[href="#form"]',      function(e){ action('form'); })
         .on('click',    '#add-to-form',         function(e){ addField(e) })
         .on('click',    '.add-item',            function() { addItem() }) 
         .on('change',   '.change-item',   		function(e){ updateItem(e)})   
         .on('click',    '.clone-item-field',    function(e){ cloneItem(); $('.input-item input').unbind() })    
         .on('click',    '.delete-item-field',   function(e){ deleteItem(); $('.input-item input').unbind() })
+        .on('click',    '.back',   function(e){ cancelEditItem();})
 
         .on('click',    '.back',    			function(e){ back(e); $('.input-item input').unbind() }) 
         .on('mouseenter','#prevent-empty-name', function(e){ preventEmptyName(e) })
         .on('mouseenter','#widget-form-options',function(e){ preventEmptyTitleUrl(e) })
 
-    $('#sidebar')
-        .on('click',    '#form-tab',            function(e){ activeTab(e.target); activeAction('#form') })   
-        .on('click',    '#field-tab',           function(e){ activeTab(e.target); select_field.change() })   
+        .on('click',    '#select-field a',     function(e){ 
+              e.preventDefault()
+              var id = e.target.dataset.id
+
+              field_selector = $(id);
+              action('create');
+              
+              window.scrollTo(0, document.body.scrollHeight - 50);
+              
+              field_selector.find('.input-item').removeClass( "update" );
+              
+              field = new MyFORM.field.factory({field: id});
+              field.setDefaultValuesInputs("data-source");
+              field.setDataFieldFrom("data-source")  // class
+              field.render();
+        })   
         .on('click', 	'#save-form',           function() { form.save() })  
 
-    
-    /**
-    * Event (change) on select (dropdown) Every change field set field to edit
-    * @return {undefined}
-    */
-    select_field.change(function () {
-        field_selector = $('#' + this.value);
-		select_field.addClass('show');
-		activeAction(field_selector);
-		
-		window.scrollTo(0, document.body.scrollHeight - 50);
-		
-		field_selector.find('.input-item').removeClass( "update" );
-		
-		field = new MyFORM.field.factory({field: this.value});
-        field.setDefaultValuesInputs("data-source");
-		field.setDataFieldFrom("data-source")  // class
-		field.render();
-	});
+
     /**
     * Add field to form
     * @param {event} e - event data object
@@ -148,20 +132,20 @@ var quill = new Quill('#textdescription', {
 		var field_selector, map = e.target.dataset, id = 0,
             element = e.currentTarget.parentElement.parentElement;
 
-		sidebar.addClass( "update" );
-        element.classList.add("update-field");
-
+		action('update');
+        //element.classList.add("update-field");
+        var f = form.model.body[map.row][map.index];
+        field = new MyFORM.field.factory({field: f.field});
+        console.log(f);
+        console.log(field);
 
         $('.input-item').removeClass( "update" );
         $('.item-of-field').val( null );
 
-        field.body = form.model.body[map.row][map.index];
-        console.log(field.body);
-        
+        field.body = f;
         field_selector = $("#" + field.body.field)
+        $('a[href="#' + field.body.field + '"]').tab('show')
         
-        activeTab('#update-tab');
-		activeAction(field_selector);
 			
 			if(field.body.field != 'description'){
 				for (var prop in field.body) {
@@ -203,23 +187,27 @@ var quill = new Quill('#textdescription', {
     * @return {undefined}
     */
 	function deleteField(e){
-		var map = e.target.dataset, element = e.currentTarget.parentElement.parentElement;
+		var map = e.target.dataset,
+            element = e.currentTarget.parentElement.parentElement,
+            div = h.createElement("div", [{"class": "delete-box"}], h.id('delete').innerHTML);
+        var m = mode
 
-
-			activeTab(delete_tab);
-			activeAction('#delete');
-
+		action('delete');
         element.classList.add("delete-field");
+        element.appendChild(div)
+        //$(element).html(el.innerHTML)
+
+		$('button.back').unbind().click(function () {
+            action(m)
+			form.render();
+		});	
 
 		$('button#btn-delete-confirm').unbind().click(function () {
 			form.deleteField(map.row, map.index);
+            action(m)
 			form.render();
-			field_tab.click();
-			
 		});	
 	}
-    
-
     
    /**
    * Add item to field (radio|checkbox|select)
@@ -227,6 +215,7 @@ var quill = new Quill('#textdescription', {
    */
     function addItem(){
         var o = field.setDataItemFrom('item-of-field'); // class
+        console.log(o);
         field.addItem(field, o);
         render();
     }
@@ -241,8 +230,6 @@ var quill = new Quill('#textdescription', {
         	el = $(e.delegateTarget).find('.input-item');
         
         	key_item_change = e.currentTarget.value;
-        	console.log(key_item_change);
-        	
         	toggleButtonsUpdateItem();
         
         for (var prop in item) {
@@ -251,18 +238,26 @@ var quill = new Quill('#textdescription', {
             	el.find('input#' + prop).prop('checked', item[prop]) :
             	el.find('input#' + prop).val(item[prop]);
         }
-
         $(e.delegateTarget).find('.input-item input').on('keyup change', 
 	        function() {
 		        item[this.id] = (this.type === 'checkbox') ? this.checked : this.value;
                 if (!item.checked) {
                     delete item.checked
                 }
-                console.log(item);
 		        render();
 	        }
         );
     }
+
+    /**
+    * Cancel edit 
+    * @param {Event} e - 
+    * @return {undefined}
+    */
+    function cancelEditItem(){
+        toggleButtonsUpdateItem();
+    }
+
     /**
     * Clone item of field
     * @param {Event} e - 
@@ -286,6 +281,10 @@ var quill = new Quill('#textdescription', {
     * @return {undefined}
     */
     function back(e) {
+      form.render()
+    }
+
+    function back2(e) {
         if(e.delegateTarget.id == 'delete'){
             field_tab.click();
         } else {
@@ -295,14 +294,13 @@ var quill = new Quill('#textdescription', {
         }
     }
 		
-    // Event (keyup|paste|change) set form data
+    // Event (keyup|paste|change) set FORM data
     options_form.find('span').find('input, select, textarea').on('keyup paste change', function(){
-      console.log('test');
         form.model[this.id] = this.value = (this.id === 'url') ? h.replaceChars(this.value, '-') : this.value;
         form.render()
     });
 
-    // Event (keyup|paste|change) set field data. Create or update.
+    // Event (keyup|paste|change) set FIELD data. Create or update.
     $('.input-field').find('input, select').on( "keyup paste change", function(e) {
         var el = this;
         
@@ -315,7 +313,7 @@ var quill = new Quill('#textdescription', {
         
                 this.value = h.replaceChars(this.value);
                 
-                if(update_mode) {
+                if(mode == 'update') {
                     
                     form.saveOnlyOneTime(function () { // async function
                     
@@ -369,7 +367,8 @@ var quill = new Quill('#textdescription', {
     * @return {undefined}
     */
     function render() {
-        if(update_mode){
+      console.log(mode);
+        if(mode == 'update'){
             form.render()
             renderSelectUpdateItem(field)
         } else {
@@ -443,34 +442,29 @@ var quill = new Quill('#textdescription', {
 		    }	
 	}
 
-    /**
-    * Set active tab
-    * @param {HTMLelement} target - Delegate object
-    * @return {undefined}
-    */
-    function activeTab(target) {
-        update_mode = (target === '#update-tab')
-        if(!update_mode){
-            sidebar.removeClass('update')
-        }
-        
-        select_field.removeClass('show');
-        $('#tabs li.active-tab').removeClass('active-tab');
-        $(target).addClass('active-tab');
-    }
         
     /**
     * Set active action. Show active tab
     * @param {string} target - id of html element
     * @return {undefined}
     */
-    function activeAction(target) {
-        if(!$(target).hasClass('active-option')) {
-             $('.active-option').removeClass('active-option');
-             $(target).addClass('active-option');
+    function action(m) {
+        mode = m
+        console.log(mode);
+        preview_form.removeClass('edit')
+
+        if(mode == 'update'){
+            sidebar.addClass('update')
+        }  else {
+            sidebar.removeClass('update')
         }
-            
-        if(field_tab.hasClass('active-tab')){
+
+        if(mode == 'delete'){
+            $('a[href="#delete"]').tab('show')
+            preview_form.addClass('edit')
+        }
+
+        if(mode == 'create'){
             preview_field.addClass('show');
         } else {
             preview_field.removeClass('show');

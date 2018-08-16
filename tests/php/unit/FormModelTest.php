@@ -19,7 +19,7 @@ class FormModelTest extends Unit {
       $this->assertEquals('forms', $tableName);
     }
     public function testModelFindById() {
-      $form = FormModel::findModel(15);
+      $form = FormModel::findModel(1);
       $this->assertEquals('title', $form->title);
     }
     public function testModelFindByUrl() {

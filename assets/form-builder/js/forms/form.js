@@ -247,7 +247,7 @@ MyFORM = (function() {
                         if (r.success === true) {
                             console.log('correct add');
                         } else {
-                            console.log('Post: somting wrong: ' + r.success);
+                            console.log('POST method: somting wrong: ' + r.success);
                         }
                     });
             }
@@ -259,12 +259,16 @@ MyFORM = (function() {
         * @returm {Boolean}
         */
         add: function(o) {
+          console.log(o);
+
             try {
                 if (o.hasOwnProperty('field')) {
                     var field = this.filter(o);
+                  console.log(field);
 
                     this.model.body.push([field]);
                     this.fields_with_data.push(field.name);
+                  console.log(o);
                     this.post(o);
                     this.render();
 
@@ -274,7 +278,7 @@ MyFORM = (function() {
                 }
             } catch (err) {
                 console.log(err);
-                alert('Error add field to form: uncorrect  data')
+                alert('Error add field to form: uncorrect data')
             }
         },
 
@@ -368,7 +372,7 @@ MyFORM = (function() {
         */
         executeModules: function() {
             for (var prop in this.modules) {
-                    this.modules[prop]();
+                    this.modules[prop](this);
             }
         },
 
@@ -454,8 +458,15 @@ MyFORM = (function() {
             var
               edit = h.createElement("span", [{"class": "glyphicon edit glyphicon-pencil"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
               clone = h.createElement("span", [{"class": "glyphicon clone glyphicon-duplicate"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
-              del= h.createElement("span", [{"class": "glyphicon delete glyphicon-trash"}, {"data-row": row}, {"data-index": index}, {"aria-hidden": "true"}]),
+              del = h.createElement("span", [
+                {"class": "glyphicon delete glyphicon-trash"},
+                {"data-row": row}, {"data-index": index},
+                {"aria-hidden": "true"},
+              ]),
+
+
               div = h.createElement("div", [{"class": "edit-field pull-right"}]);
+
             div.appendChild(edit);
             div.appendChild(clone);
             div.appendChild(del);
