@@ -94,12 +94,7 @@ class ModuleController extends \yii\web\Controller {
                 Yii::$app->session->setFlash('success', Yii::t('builder', 'Form completed'));
 
                 if ($this->module->sendEmail && is_string($this->module->emailSender) && isset($data['email']) && isset($form['response']) ) {
-                    SendEmail::widget([
-                                          'from' => $this->module->emailSender,
-                                          'to' => $data['email'],
-                                          'subject' => 'subject',
-                                          'textBody' => $form['response'],
-                                      ]);
+      
                 }
 
 

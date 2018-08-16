@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= FormBuilder::widget([
 	'formTable' => Module::getInstance()->formTable,
     'db' => Module::getInstance()->db,
+    'email_response' => true,
 	'easy_mode' => $easyMode ?? true,
 	'jsConfig' => [
       'get'=> true, 

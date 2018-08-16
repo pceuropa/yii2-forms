@@ -19,7 +19,7 @@ $template = ($buttonsEditOnIndex ?? true) ? '{update} {view} {delete} | {clone}'
             'attribute' => 'url',
             'format' => 'html',
             'value' => function ($model) {
-                        return  Html::a ( $model->url, ['view', 'url' => $model->url], ['target' => 'new']);
+                        return  Html::a ( $model->url, '/forms/'.$model->url, ['target' => 'new']);
                     },
         ],[
             'attribute' => 'answer',
