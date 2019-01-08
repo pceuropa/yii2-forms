@@ -723,7 +723,7 @@ temp = [
                 "class": "form-control",
                 "items": [
                     {
-                        "text": "2 000 000 >",
+                        "text": "> 2 000 000",
                         "value": "2000000+"
                     },
                     {

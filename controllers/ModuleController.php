@@ -92,7 +92,7 @@ class ModuleController extends \yii\web\Controller {
               $this->sendEmail($data, $form);
             } 
 
-            return $this->redirect(['index']);
+            return $this->redirect(['list' , 'id' => $form->form_id]);
         } 
         return $this->render('view', [ 'form' => $form] );
     }
@@ -101,8 +101,8 @@ class ModuleController extends \yii\web\Controller {
         $form = FormModel::findModel($id);
 
         return $this->render('list', [
-                'form' => $form,
-                'dataProvider' => new ActiveDataProvider([
+                        'form' => $form,
+                        'dataProvider' => new ActiveDataProvider([
                         'query' => (new Query)->from( $this->module->formDataTable.$id ),
                         'db' => $this->module->db
                 ]),
