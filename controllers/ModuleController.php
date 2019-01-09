@@ -12,6 +12,7 @@ use pceuropa\forms\FormBuilder;
 use pceuropa\forms\models\FormModel;
 use pceuropa\forms\models\FormModelSearch;
 use pceuropa\email\Send as SendEmail;
+use yii2tech\spreadsheet\Spreadsheet;
 
 /**
  * Controller of formBuilder
@@ -217,6 +218,20 @@ class ModuleController extends \yii\web\Controller {
         $form = FormModel::findModel($id);
         $form->delete();
         return $this->redirect(['user']);
+    }
+
+    public function actionExport(int $id = 1) {
+
+        $dataProvider = new ActiveDataProvider([
+                        'query' => (new Query)->select('*')->from( $this->module->formDataTable.$id ),
+                        'db' => $this->module->db
+                ]);
+
+        $exporter = new Spreadsheet([
+            'dataProvider' => $dataProvider
+        ]);
+
+        return $exporter->send('items.csv');
     }
 
     public function actionDeleteitem(int $form, int $id ) {
