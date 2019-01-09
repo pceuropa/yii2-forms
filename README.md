@@ -67,6 +67,8 @@ URLs for the translating tool:
           'formsTable' => '{{%forms}}',
           'formDataTable' => 'form_',
           'sendEmail' => true, 
+	  'testMode' => false, 
+          'easyMode' => true,
           'emailSender' => 'info@email.net',
           'rules' => [
                 [
