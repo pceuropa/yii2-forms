@@ -41,7 +41,6 @@ use pceuropa\email\Send as SendEmail;
  */
 
 class Form extends Widget {
-
     /**
      * @var int Id of form. If set, widget take data from FormModel.
      * @see pceuropa\models\FormModel
@@ -94,7 +93,7 @@ class Form extends Widget {
     public function phpRender($form) {
 
         $data_fields = FormBase::onlyCorrectDataFields($form);
-        $DynamicModel = new DynamicModel( ArrayHelper::getColumn($data_fields, 'name') );
+        $DynamicModel = new DynamicModel(ArrayHelper::getColumn($data_fields, 'name'));
 
         foreach ($data_fields as $v) {
 

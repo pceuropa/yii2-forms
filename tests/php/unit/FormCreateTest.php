@@ -92,6 +92,6 @@ class FormCreateTest extends Unit {
     public function testNotUniqueUrl() {
         $this->form->save();
         $this->form->createTable();
-        $this->assertEquals( $this->notUniqueUrl, $this->form->success);
+        $this->assertEquals($this->notUniqueUrl, $this->form->success);
     }
 }

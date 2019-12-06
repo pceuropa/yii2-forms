@@ -13,4 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	'body' => $form->body,
 	'typeRender' => 'php'
 ]);
+
+$this->registerJs("
+      Fingerprint2.get(function(c) {
+        var fp = Fingerprint2.x64hash128(c.map(function (pair) { return pair.value }).join(), 31);
+        $('input#fp').val(fp);
+      })
+", 4);
 ?>

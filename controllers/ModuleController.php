@@ -70,32 +70,62 @@ class ModuleController extends \yii\web\Controller {
                 ]);
     }
 
+    /**
+     * Send only once
+     *
+     * Protected against send twice
+     *
+     */
+    public function sendOnlyOnce(string $form_id)
+    {
+        return false;
+        return Yii::$app->request->cookies->getValue($form_id, null) ?? 
+            Yii::$app->session->get($form_id) ?? false;
+    }
+    
 
     public function actionView(string $url) {
         $form = FormModel::findModelByUrl($url);
+        $request = Yii::$app->request;
+        $session = Yii::$app->session;
+        $form_id = $this->module->formDataTable.$form->form_id;
+
+        if ($this->sendOnlyOnce($form_id)) {
+            return $this->render('view_only_once');
+        }
 
         if ($form->endForm()) { 
-          return $this->render('end');
+            return $this->render('end');
         } 
-      
-        // request - use form
-        if (($data = Yii::$app->request->post('DynamicModel')) !== null) {
+
+        if (($data = $request->post()) ) {
+            $data = $data['DynamicModel'];
+            $data['ip'] = $request->userIP ?? null;
+            $data['csrf'] = $request->post('_csrf');
+            $data['user_agent'] = $request->userAgent;
+            $data['same_site'] = PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null;
 
             foreach ($data as $i => $v) {
                 if (is_array($data[$i])) $data[$i] = join(',', $data[$i]);
             }
 
-            $query = (new Query)->createCommand()->insert($this->module->formDataTable.$form->form_id, $data);
+            $query = (new Query)->createCommand()->insert($form_id, $data);
 
             if ($query->execute()) {
-              $form->updateCounters(['answer' => 1 ]);
-              Yii::$app->session->setFlash('success', Yii::t('builder', 'Form completed'));
-              $this->sendEmail($data, $form);
+                $form->updateCounters(['answer' => 1 ]);
+                $session->setFlash('success', Yii::t('builder', 'Form completed'));
+                $session->set($form_id, 'sent');
+                 Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => $form_id,
+                    'value' => 'sent',
+                ]));
+
+                $this->sendEmail($data, $form);
             } 
 
             return $this->redirect(['list' , 'id' => $form->form_id]);
         } 
-        return $this->render('view', [ 'form' => $form] );
+        return $this->render('view', ['form' => $form]);
     }
 
     public function actionList(int $id) {
