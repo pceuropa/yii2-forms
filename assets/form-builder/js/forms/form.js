@@ -166,6 +166,8 @@ MyFORM = (function() {
             this.options_form.find('#date_end').val(this.model.date_end);
             this.options_form.find('#id').val(this.model.id);
             this.options_form.find('#class').val(this.model.class);
+            this.options_form.find('#only_once').val(this.model.only_once);
+            this.options_form.find('#method').val(this.model.method);
         },
 
         /**

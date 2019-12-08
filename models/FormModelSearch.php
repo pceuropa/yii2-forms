@@ -19,7 +19,8 @@ use pceuropa\forms\models\FormModel;
  */
 class FormModelSearch extends FormModel {
 
-    public function rules(){
+    public function rules() : array
+    {
         return [
             [['form_id', 'maximum', 'answer'], 'integer'],
             [['author', 'title', 'body', 'date_start', 'date_end', 'meta_title', 'url'], 'safe'],

@@ -7,12 +7,11 @@ use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 
-use pceuropa\forms\FormBase;
-use pceuropa\forms\FormBuilder;
-use pceuropa\forms\models\FormModel;
-use pceuropa\forms\models\FormModelSearch;
+use pceuropa\forms\{FormBase, FormBuilder};
+use pceuropa\forms\models\{FormModel, FormModelSearch};
 use pceuropa\email\Send as SendEmail;
 use yii2tech\spreadsheet\Spreadsheet;
+use yii\db\Exception as DbExcpetion;
 
 /**
  * Controller of formBuilder
@@ -65,45 +64,38 @@ class ModuleController extends \yii\web\Controller {
         $searchModel->author = Yii::$app->user->identity->id ?? null;
 
         return $this->render('user', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
-                ]);
+            'searchModel' => $searchModel,
+            'dataProvider' => $searchModel->search(Yii::$app->request->queryParams)
+        ]);
     }
-
-    /**
-     * Send only once
-     *
-     * Protected against send twice
-     *
-     */
-    public function sendOnlyOnce(string $form_id)
-    {
-        return false;
-        return Yii::$app->request->cookies->getValue($form_id, null) ?? 
-            Yii::$app->session->get($form_id) ?? false;
-    }
-    
 
     public function actionView(string $url) {
+        (int) $count_insert = 0;
         $form = FormModel::findModelByUrl($url);
         $request = Yii::$app->request;
         $session = Yii::$app->session;
         $form_id = $this->module->formDataTable.$form->form_id;
 
-        if ($this->sendOnlyOnce($form_id)) {
-            return $this->render('view_only_once');
-        }
-
         if ($form->endForm()) { 
             return $this->render('end');
         } 
 
+        if ($form->isFormSentOnlyOnce($form_id)) {
+            return $this->render('view_only_once');
+        }
+
         if (($data = $request->post()) ) {
             $data = $data['DynamicModel'];
-            $data['ip'] = $request->userIP ?? null;
-            $data['csrf'] = $request->post('_csrf');
-            $data['user_agent'] = $request->userAgent;
-            $data['same_site'] = PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null;
+            $data['_number_fraud'] = $form->checkCorrectnessData($data);
+            $data['_form_created'] = $request->post('form_created');
+            $data['_ip'] = $request->userIP ?? null;
+            $data['_user_agent'] = $request->userAgent;
+            $data['_same_site'] = PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null;
+
+            if ($form->only_once) {
+                $data['_csrf'] = $request->post('_csrf');
+                $data['_finger_print'] = $request->post('_fp');
+            }
 
             foreach ($data as $i => $v) {
                 if (is_array($data[$i])) $data[$i] = join(',', $data[$i]);
@@ -111,17 +103,26 @@ class ModuleController extends \yii\web\Controller {
 
             $query = (new Query)->createCommand()->insert($form_id, $data);
 
-            if ($query->execute()) {
+            try {
+              $count_insert = $query->execute();
+            } catch (DbExcpetion $e) {
+              $count_insert = 0;
+              $session->setFlash('error', $e->getMessage());
+            }
+
+            if ($count_insert) {
                 $form->updateCounters(['answer' => 1 ]);
                 $session->setFlash('success', Yii::t('builder', 'Form completed'));
                 $session->set($form_id, 'sent');
-                 Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
                     'name' => $form_id,
                     'value' => 'sent',
                 ]));
 
                 $this->sendEmail($data, $form);
-            } 
+            } else {
+                $session->setFlash('warning', Yii::t('builder', 'Form can be completed only once'));
+            }
 
             return $this->redirect(['list' , 'id' => $form->form_id]);
         } 
@@ -132,12 +133,12 @@ class ModuleController extends \yii\web\Controller {
         $form = FormModel::findModel($id);
 
         return $this->render('list', [
-                        'form' => $form,
-                        'dataProvider' => new ActiveDataProvider([
-                        'query' => (new Query)->from( $this->module->formDataTable.$id ),
-                        'db' => $this->module->db
-                ]),
-                'only_data_fields' => FormBase::gridViewItemsForm(Json::decode($form->body))
+            'form' => $form,
+            'dataProvider' => new ActiveDataProvider([
+                'query' => (new Query)->from($this->module->formDataTable.$id)->where('_number_fraud = 0'),
+                'db' => $this->module->db
+            ]),
+            'only_data_fields' => FormBase::gridViewItemsForm(Json::decode($form->body))
         ]);
     }
 
@@ -211,11 +212,12 @@ class ModuleController extends \yii\web\Controller {
 
             return ['success' => $form->success];
         } else {
+
           return $this->render('update', [
             'id' => $id,
             'easyMode' => $this->module->easyMode,
             'sendEmail' => $this->module->sendEmail
-        ]);
+          ]);
         }
     }
 
@@ -309,6 +311,4 @@ class ModuleController extends \yii\web\Controller {
         }
       
     }
-    
-    
 }

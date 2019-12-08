@@ -206,6 +206,4 @@ class ActiveForm extends \yii\bootstrap\ActiveForm
     public static function submit($data) {
         return Html::submitButton($data['label'], ['class' => 'btn '.$data['backgroundcolor'] ]);
     }
-
 }
-

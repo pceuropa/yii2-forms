@@ -47,35 +47,40 @@ class Module extends \yii\base\Module{
      * If you modify, you also need to enable authManager.
      * http://www.yiiframework.com/doc-2.0/guide-security-authorization.html
      *     $rules = [
-     *                   [
-     *                       'actions' => [ 'update', 'delete', 'clone' ],
-     *                       'allow' => true,
-     *                       'roles' => ['updateOwnForm'],
-     *                   ],
-     *                   [
-     *                       'actions' => ['user', 'create'],
-     *                       'allow' => true,
-     *                       'roles' => ['user'],
-     *                   ]
-     *               ];
+     *        [
+     *           'actions' => [ 'update', 'delete', 'clone' ],
+     *           'allow' => true,
+     *           'roles' => ['updateOwnForm'],
+     *        ],
+     *        [
+     *           'actions' => ['user', 'create'],
+     *           'allow' => true,
+     *           'roles' => ['user'],
+     *        ]
+     *     ];
      */
     public $rules = [
-                       [
-                           'allow' => true,
-                           'actions' => [],
-                           'roles' => ['?'],
-                       ],[
-                           'allow' => true,
-                           'actions' => [],
-                           'roles' => ['@'],
-                       ]
-                   ];
+                [
+                    'allow' => true,
+                    'actions' => [],
+                    'roles' => ['?'],
+                ],[
+                    'allow' => true,
+                    'actions' => [],
+                    'roles' => ['@'],
+                ]
+            ];
 
     /**
      * @var boolean If true after completing the form the message is sent
      */
     public $sendEmail = false;
-    
+
+    /**
+     * @var boolean If true turn on anty bot and check had human sent 
+     */
+    public $humanSendOnlyOne  = false;
+  
     /**
      * @var string The sender's address
      */

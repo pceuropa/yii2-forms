@@ -33,17 +33,27 @@
     </div>
 </div>
 
+<div class="form-group-sm">
+    <div class="input-group">
+      <div class="input-group-addon"><?= Yii::t('builder', 'Can be completed only once') ?></div>
+          <select id="only_once" class="form-control">
+              <option value="1" >Yes</option>
+              <option value="0">No</option>
+          </select>
+    </div>
+</div>
+
 <div class="form-group-sm generator_mode">
     <div class="input-group">
       <div class="input-group-addon"><?= Yii::t('builder', 'Start') ?></div>
-		<input id="date_start" type="date" class="form-control" placeholder="yyyy-mm-dd">
+		<input id="date_start" type="date" class="form-control pt-0" placeholder="yyyy-mm-dd">
     </div>
 </div>
 
 <div class="form-group-sm generator_mode">
     <div class="input-group">
       <div class="input-group-addon"><?= Yii::t('builder', 'End') ?></div>
-		<input id="date_end" type="date" class="form-control" placeholder="yyyy-mm-dd">
+		<input id="date_end" type="date" class="form-control pt-0" placeholder="yyyy-mm-dd">
     </div>
 </div>
 

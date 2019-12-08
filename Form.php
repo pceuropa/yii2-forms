@@ -87,6 +87,7 @@ class Form extends Widget {
 
     /**
      * Render form by PHP and add rules
+     * TODO: each rule for checkbox
      * @param array $form
      * @return View Form
     */
@@ -102,8 +103,10 @@ class Form extends Widget {
                 if (isset($v["require"]) && $v["require"]) {
                     $DynamicModel->addRule($v["name"], 'required');
                 }
-
-                $DynamicModel->addRule($v["name"], FormBase::ruleType($v) );
+                $rule = FormBase::ruleType($v);
+                $DynamicModel->addRule($v["name"], $rule);
+                
+                
             }
         }
 

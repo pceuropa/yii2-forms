@@ -31,6 +31,8 @@ use pceuropa\forms\models\FormModel;
 
 class FormBuilder extends Widget {
 
+    use \yii\db\SchemaBuilderTrait;
+
     /**
      * @var array preLoaded data of form
      */
@@ -110,6 +112,11 @@ class FormBuilder extends Widget {
      * @since 1.0
      *
     */
+    public function getDb() {
+      return Yii::$app->{$this->db};
+    }
+
+
     public function init() {
         parent::init();
 
@@ -202,9 +209,25 @@ class FormBuilder extends Widget {
         if ($this->success !== true) {
             return;
         }
-        $table_name = $this->formDataTable . $this->model->form_id;
-        $table_schema = $this->tableSchema($this->model->body);
-        $query = Yii::$app->{$this->db}->createCommand()->createTable($table_name,  $table_schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci');
+
+        $tableOptions = null;
+        if (Yii::$app->{$this->db}->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
+        }
+
+        (string) $table_name = $this->formDataTable . $this->model->form_id;
+        (array) $table_schema = $this->tableSchema($this->model->body);
+        $query = Yii::$app->{$this->db}->createCommand()->createTable($table_name, array_merge([
+            'id' => $this->primaryKey() ?? 'pk',
+            '_ip' => $this->string(15),
+            '_csrf' => $this->char(88),
+            '_user_agent' => $this->string(),
+            '_same_site' => $this->string(),
+            '_finger_print' => $this->string(),
+            '_number_fraud' => $this->tinyInteger()->unsigned()->notNull()->defaultValue('0'),
+            '_form_created' => $this->dateTime()->notNull(),
+            '_datetime_response' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+        ], $table_schema), $tableOptions);
         return $this->execute($query);
     }
 

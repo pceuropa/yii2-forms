@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /**
  * Base method for Yii2-forms extension
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
+ * @version 1.5.1
  * @license MIT
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
@@ -15,11 +15,11 @@ use yii\helpers\Html;
 
 class FormBase {
 
-/**
- * Filter fields array and retun only fields with attribute name (data fields)
- * @param array $array Array represent elements of form
- * @return array Only fields with attribute name
-*/
+    /**
+    * Filter fields array and retun only fields with attribute name (data fields)
+    * @param array $array Array represent elements of form
+    * @return array Only fields with attribute name
+    */
     public function gridViewItemsForm($array = []){
         yield ['class' => 'yii\grid\SerialColumn'];
 
@@ -69,13 +69,13 @@ class FormBase {
      * @return array
     */
     public static function tableSchema($array = []){
-    	$schema['id'] = 'pk';
-    	
+        $schema = []; 
+
     	foreach ($array as $row) {
 			foreach ($row as $v) {
 			
 				if ( isset($v['name']) ){
-					$schema[ $v['name'] ] = ($v['field'] === 'textarea') ? 'text' : 'string';
+					$schema[$v['name']] = ($v['field'] === 'textarea') ? 'text' : 'string';
 				}
 			}
 		}
@@ -130,22 +130,22 @@ class FormBase {
     */
     public function ruleType($f){
     	
-    		$types = ['input' =>  [
-								'text' => 'string',
-								'email' => 'email',
-								'password' => 'string',
-								'date' => 'date',
-								'number' => 'integer',
-								'url' => 'url',
-								'tel' => 'string',
-								'color' => 'string',
-								'range' => 'string',
-							],
-						'textarea' => 'string',
-						'checkbox' => 'string',
-						'radio' => 'string',
-						'select' => 'string',
-    			];
+        $types = ['input' => [
+                'text' => 'string',
+                'email' => 'email',
+                'password' => 'string',
+                'date' => 'date',
+                'number' => 'integer',
+                'url' => 'url',
+                'tel' => 'string',
+                'color' => 'string',
+                'range' => 'string',
+            ],
+            'textarea' => 'string',
+            'checkbox' => 'each' ,
+            'radio' => 'string',
+            'select' => 'string',
+        ];
     			
     	if ($f['field'] === 'input'){
     		return $types[$f['field']][$f['type']];
@@ -154,5 +154,3 @@ class FormBase {
 		return $types[$f['field']];
     }
 }
-    
-?>

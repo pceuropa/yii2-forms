@@ -67,6 +67,10 @@ ul#options-tabs li.delete .active{
     margin-left: 8px;
 }
 
+.pt-0 {
+	padding-top: 0;
+}
+
 #preview-form .row .update-field {
     border: solid 1px #B5DAB5;
     background-color: #e5f6e5;
