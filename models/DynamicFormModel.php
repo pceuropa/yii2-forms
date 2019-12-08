@@ -33,7 +33,7 @@ class DynamicFormModel extends DynamicModel {
     * @param array $table_schema List of columns and types thus
     *
     */
-    public function createTable(string $table_name, array $table_schema): void
+    public function createTable(string $table_name, array $table_schema)
     {
         $db = $this->getDb();
         $command = $db->createCommand();
