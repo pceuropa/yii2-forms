@@ -16,7 +16,7 @@ use pceuropa\email\Send as SendEmail;
  * Two method form render: php or js (beta)
  *
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 2.0
+ * @version 3.0.2
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forum

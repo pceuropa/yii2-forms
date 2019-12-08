@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 /**
  * AR model for Yii2-forms extensions
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
+ * @version 3.0.2
  * @license MIT
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub
@@ -87,6 +87,42 @@ class FormModel extends \yii\db\ActiveRecord {
             'id' => Yii::t('builder', 'id'),             // id - for html
             'class' => Yii::t('builder', 'class'),       // class - for html
         ];
+    }
+    /**
+     * Unique URL
+     * @param $array form
+     * @return void
+     */
+    public function setUniqueUrl() {
+        do {
+            $this->url .= '_2';
+            $count = FormModel::find()->select(['url'])->where(['url' => $this->url])->count();
+        } while ($count > 0);
+    }
+
+    /**
+     * Get form by id number (form_id) in database
+     * @param int $id number of form
+     * @return array|boolean The first row of the query result represent one form. False is reurned if the query results in nothing
+     */
+    public static function cloneModel(int $id) {
+
+        $form = self::find()
+            ->select(['body', 'title', 'author', 'date_start', 'date_end', 'maximum', 'meta_title', 'url', 'response', 'class', 'id', 'only_once'])
+            ->where(['form_id' => $id])
+            ->asArray()
+            ->one();
+
+        $new_form = new FormModel();
+        foreach ($form as $key => $value) {
+            $new_form->{$key} = $value;
+        }
+        $new_form->setUniqueUrl();
+        if ($new_form->save()) {
+            return $new_form;
+        } else {
+            return $new_form->getFirstErrors();
+        }
     }
 
     /**

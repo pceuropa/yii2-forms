@@ -8,7 +8,7 @@ use yii\web\GroupUrlRule;
  * Module Yii2-forms
  * FormBuilder module. All controllers and views in one place.
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.4.1
+ * @version 3.0.2
  * @license MIT
  * https://github.com/pceuropa/yii2-forum
  * Please report all issues at GitHub

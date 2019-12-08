@@ -8,7 +8,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 
 use pceuropa\forms\{FormBase, FormBuilder};
-use pceuropa\forms\models\{FormModel, FormModelSearch};
+use pceuropa\forms\models\{FormModel, DynamicFormModel, FormModelSearch};
 use pceuropa\email\Send as SendEmail;
 use yii2tech\spreadsheet\Spreadsheet;
 use yii\db\Exception as DbExcpetion;
@@ -107,7 +107,7 @@ class ModuleController extends \yii\web\Controller {
               $count_insert = $query->execute();
             } catch (DbExcpetion $e) {
               $count_insert = 0;
-              $session->setFlash('error', $e->getMessage());
+              //$session->setFlash('error', $e->getMessage());
             }
 
             if ($count_insert) {
@@ -226,22 +226,15 @@ class ModuleController extends \yii\web\Controller {
      * @throws yii\base\InvalidParamException
      * @return void
      */
-    public function actionClone(int $id) {
+    public function actionClone(int $id) 
+    {
+        $clonedForm = FormModel::cloneModel($id);
 
-        $form = FormModel::find()
-            ->select(['body', 'title', 'author', 'date_start', 'date_end', 'maximum', 'meta_title', 'url', 'response', 'class', 'id'])
-            ->where(['form_id' => $id])
-            ->one();
-        $form->answer = 0;
-        $this->uniqueUrl($form);
-
-        $db = Yii::$app->{$this->module->db};
-        $db->createCommand()->insert( $this->module->formTable , $form)->execute();
-
-        $last_id = $db->getLastInsertID();
-        $schema = FormBuilder::tableSchema($form->body);
-
-        $db->createCommand()->createTable($this->module->formDataTable.$last_id, $schema, 'CHARACTER SET utf8 COLLATE utf8_general_ci')->execute();
+        $dynamicFormModel = new DynamicFormModel();
+        $dynamicFormModel->createTable(
+            (string) $table_name = $this->module->formDataTable.$clonedForm->form_id,
+            (array) $table_schema = FormBuilder::tableSchema($clonedForm->body)
+        );
 
         $this->redirect(['user']);
     }
@@ -285,7 +278,7 @@ class ModuleController extends \yii\web\Controller {
      * @param $array form
      * @return void
      */
-    public function uniqueUrl(FormModel $form) {
+    public function setUniqueUrl(FormModel $form) {
         do {
             $form->url = $form->url.'_2';
             $count = FormModel::find()->select(['url'])->where(['url' => $form->url])->count();

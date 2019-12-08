@@ -82,7 +82,6 @@ class FormCreateTest extends Unit {
     public function testTableSchema() {
         $schema = $this->form->tableSchema($this->bodyForm);
         $this->assertEquals($schema, [
-                'id' => 'pk',
                 'name' => 'string',
                 'pass' => 'string',
                 'remember' => 'string'

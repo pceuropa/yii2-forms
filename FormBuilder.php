@@ -3,17 +3,17 @@ namespace pceuropa\forms;
 
 use Yii;
 use yii\base\Widget;
-use yii\helpers\{Url, Html, ArrayHelper, Json};
+use yii\helpers\{Url, Json};
 use yii\db\{Query, Exception};
 use yii\web\NotFoundHttpException;
 use pceuropa\forms\{Form, FormBase};
-use pceuropa\forms\models\FormModel;
+use pceuropa\forms\models\{FormModel, DynamicFormModel};
 
 /**
  * FormBuilder: Generate forms, Storage data in databasesand, create tables
  * Generate forms and create tables from json object
  * @author Rafal Marguzewicz <info@pceuropa.net>
- * @version 1.6
+ * @version 3.0.2
  * @license MIT
  *
  * https://github.com/pceuropa/yii2-forms
@@ -30,8 +30,6 @@ use pceuropa\forms\models\FormModel;
  */
 
 class FormBuilder extends Widget {
-
-    use \yii\db\SchemaBuilderTrait;
 
     /**
      * @var array preLoaded data of form
@@ -186,14 +184,14 @@ class FormBuilder extends Widget {
      * @param string Json form
      * @return array Return table shema
     */
-    public function tableSchema($form_body) {
+    public function tableSchema($form_body) 
+    {
         if (!is_string($form_body)) {
             return false;
         }
 
         $form_body = Json::decode($form_body);
-        $schema =  FormBase::tableSchema($form_body);
-        return $schema;
+        return FormBase::tableSchema($form_body);
     }
 
 
@@ -210,25 +208,11 @@ class FormBuilder extends Widget {
             return;
         }
 
-        $tableOptions = null;
-        if (Yii::$app->{$this->db}->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
-        }
-
-        (string) $table_name = $this->formDataTable . $this->model->form_id;
-        (array) $table_schema = $this->tableSchema($this->model->body);
-        $query = Yii::$app->{$this->db}->createCommand()->createTable($table_name, array_merge([
-            'id' => $this->primaryKey() ?? 'pk',
-            '_ip' => $this->string(15),
-            '_csrf' => $this->char(88),
-            '_user_agent' => $this->string(),
-            '_same_site' => $this->string(),
-            '_finger_print' => $this->string(),
-            '_number_fraud' => $this->tinyInteger()->unsigned()->notNull()->defaultValue('0'),
-            '_form_created' => $this->dateTime()->notNull(),
-            '_datetime_response' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-        ], $table_schema), $tableOptions);
-        return $this->execute($query);
+        $dynamicFormModel = new DynamicFormModel();
+        $dynamicFormModel->createTable(
+            (string) $table_name = $this->formDataTable . $this->model->form_id,
+            (array) $table_schema = $this->tableSchema($this->model->body)
+        );
     }
 
     /**

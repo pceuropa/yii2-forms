@@ -1,6 +1,6 @@
 {
   "name": "yii2-forms-tests",
-  "version": "1.0.0",
+  "version": "3.0.2",
   "description": "Depencies necessary to run tests",
   "main": "karma.conf.js",
   "directories": {
