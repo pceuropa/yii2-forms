@@ -81,7 +81,7 @@ class ModuleController extends \yii\web\Controller {
         } 
 
         if ($form->isFormSentOnlyOnce($form_id)) {
-            return $this->render('view_only_once');
+            return $this->render('view_only_once', ['form_id' => (int) $form->form_id]);
         }
 
         if (($data = $request->post()) ) {
@@ -121,7 +121,7 @@ class ModuleController extends \yii\web\Controller {
 
                 $this->sendEmail($data, $form);
             } else {
-                $session->setFlash('warning', Yii::t('builder', 'Form can be completed only once'));
+                $session->setFlash('warning', Yii::t('builder', 'The form can be completed once.'));
             }
 
             return $this->redirect(['list' , 'id' => $form->form_id]);
@@ -242,15 +242,17 @@ class ModuleController extends \yii\web\Controller {
     public function actionDelete(int $id) {
         $form = FormModel::findModel($id);
         $form->delete();
+        (string) $table_name = $this->module->formDataTable.$form->form_id;
+        Yii::$app->{$this->module->db}->createCommand()->dropTable($table_name)->execute();
         return $this->redirect(['user']);
     }
 
     public function actionExport(int $id = 1) {
 
         $dataProvider = new ActiveDataProvider([
-                        'query' => (new Query)->select('*')->from( $this->module->formDataTable.$id ),
-                        'db' => $this->module->db
-                ]);
+            'query' => (new Query)->select('*')->from( $this->module->formDataTable.$id ),
+            'db' => $this->module->db
+        ]);
 
         $exporter = new Spreadsheet([
             'dataProvider' => $dataProvider
