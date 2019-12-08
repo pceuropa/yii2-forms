@@ -16,7 +16,7 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
         }
 
         $this->createTable('{{%forms}}', [
-            'form_id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
+            'form_id' => $this->primaryKey(),
             'body' => $this->text()->notNull(),
             'title' => $this->string(255)->notNull(),
             'author' => $this->integer(11),
@@ -32,6 +32,7 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
             'language' => $this->string(11)->defaultValue('en'),
             'class' => $this->string(255)->Null()->comment('html'),
             'id' => $this->string(255)->Null()->comment('html'),
+            'only_once' => $this->tinyInteger(1)->unsigned()->notNull()->defaultValue('1')->comment('Can be completed only once'),
         ], $tableOptions);
 
         $this->createIndex('url', '{{%forms}}', 'url', true);
@@ -41,5 +42,3 @@ class m170101_000000_create_form_table extends \yii\db\Migration {
         $this->dropTable('{{%forms}}');
     }
 }
-
-
